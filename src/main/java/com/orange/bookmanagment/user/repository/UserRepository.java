@@ -2,7 +2,6 @@ package com.orange.bookmanagment.user.repository;
 
 
 import com.orange.bookmanagment.user.model.User;
-import com.orange.bookmanagment.user.repository.jpa.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

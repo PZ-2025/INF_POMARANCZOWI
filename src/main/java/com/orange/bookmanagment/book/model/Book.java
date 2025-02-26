@@ -20,7 +20,6 @@ import java.util.List;
 @Entity
 @Table(name = "books")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
@@ -28,7 +27,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_authors",
             joinColumns = @JoinColumn(name = "book_id"),

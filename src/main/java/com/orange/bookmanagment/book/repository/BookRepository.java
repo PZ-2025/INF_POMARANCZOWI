@@ -1,17 +1,30 @@
 package com.orange.bookmanagment.book.repository;
 
 import com.orange.bookmanagment.book.model.Book;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface BookRepository {
-    Book saveBook(Book book);
 
-    Optional<Book> findBookById(long id);
+@Repository
+@RequiredArgsConstructor
+public class BookRepository {
 
-    Optional<Book> findBookByTitle(String title);
+    private final BookJpaRepository bookJpaRepository;
 
-    int updateBook(Book book);
+    public Book saveBook(Book book) {
+        return bookJpaRepository.save(book);
+    }
+    public Optional<Book> findBookById(long id){
+        return bookJpaRepository.findById(id);
+    }
 
-    int deleteBookById(long id);
+    public Optional<Book> findBookByTitle(String title){
+        return bookJpaRepository.findBookByTitle(title);
+    }
+
+
+
+
 }

@@ -9,7 +9,5 @@ public interface BookService {
 
     Book findBookByTitle(String title);
 
-    int updateBook(Book book);
-
-    int deleteBookById(long id);
+    Book updateBook(Book book);
 }

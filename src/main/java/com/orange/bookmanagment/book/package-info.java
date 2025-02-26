@@ -1,6 +1,7 @@
 @ApplicationModule(
         type = ApplicationModule.Type.CLOSED,
-        allowedDependencies = {"shared"}
+        allowedDependencies = {"shared"},
+        displayName = "book"
 )
 
 package com.orange.bookmanagment.book;
