@@ -10,5 +10,7 @@ public interface UserRepository {
 
     Optional<User> findUserByFirstName(String firstName);
 
+    User saveUser(User user);
 
+    int updateUser(User user);
 }

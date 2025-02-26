@@ -9,4 +9,10 @@ public interface UserService {
     User getUserById(int id);
 
     User getUserByFirstName(String firstName);
+
+    User registerUser(User user);
+
+    User updateUser(User user);
+
+
 }

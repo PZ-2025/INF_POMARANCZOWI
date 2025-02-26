@@ -36,12 +36,25 @@ public class User {
 
     private String password;
 
+    private boolean blocked;
+
+    private boolean verified;
+
+    private boolean locked;
+
     private Instant createdAt;
 
     private Instant updatedAt;
 
     private Instant changedPasswordAt;
 
+    private Instant blockedAt;
+
+    private Instant verifiedAt;
+
+    private Instant lockedAt;
+
+    @Enumerated(EnumType.STRING)
     private UserType userType;
 
     /**
@@ -62,5 +75,8 @@ public class User {
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
         this.changedPasswordAt = Instant.now();
+        this.blockedAt = Instant.now();
+        this.verifiedAt = Instant.now();
+        this.lockedAt = Instant.now();
     }
 }

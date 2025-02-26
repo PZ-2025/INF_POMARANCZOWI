@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.orange</groupId>
-    <artifactId>BookManagment</artifactId>
+    <artifactId>BookManagement</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>BookManagement</name>
     <description>BookManagement</description>
