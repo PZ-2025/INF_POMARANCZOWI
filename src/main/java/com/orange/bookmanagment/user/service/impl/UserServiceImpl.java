@@ -18,12 +18,12 @@ class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) throws UserNotFoundException {
         return userRepository.findUserByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found by email"));
     }
 
     @Override
-    public User getUserById(long id) {
+    public User getUserById(long id) throws UserNotFoundException {
         return userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException("User not found by id"));
     }
 
@@ -33,7 +33,7 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerUser(User user) {
+    public User registerUser(User user) throws UserAlreadyExistException {
         userRepository.findUserByEmail(user.getEmail()).ifPresent(u -> {
             throw new UserAlreadyExistException("User already exists");
         });
@@ -43,7 +43,7 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) {
+    public User updateUser(User user) throws UserNotFoundException {
         userRepository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found by email"));
 
         return userRepository.updateUser(user);
