@@ -1,16 +1,38 @@
 package com.orange.bookmanagment.user.repository;
 
-import com.orange.bookmanagment.user.model.User;
 
+import com.orange.bookmanagment.user.model.User;
+import com.orange.bookmanagment.user.repository.jpa.UserJpaRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository {
+@Repository
+@RequiredArgsConstructor
+public class UserRepository {
 
-    Optional<User> findUserByEmail(String email);
+    private final UserJpaRepository userJpaRepository;
 
-    Optional<User> findUserByFirstName(String firstName);
+    public Optional<User> findUserByEmail(String email) {
+        return userJpaRepository.findUserByEmail(email);
+    }
 
-    User saveUser(User user);
+    public Optional<User> findUserById(long id){
+        return userJpaRepository.findById(id);
+    }
 
-    int updateUser(User user);
+    public User createUser(User user){
+        return userJpaRepository.save(user);
+    }
+
+    public User updateUser(User user){
+        return userJpaRepository.save(user);
+    }
+
+    public List<User> findUsersByFirstName(String firstName){
+        return userJpaRepository.findUsersByFirstName(firstName);
+    }
+
 }
