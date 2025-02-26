@@ -4,6 +4,7 @@ import com.orange.bookmanagment.book.model.Book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -20,7 +21,7 @@ public class BookRepository {
         return bookJpaRepository.findById(id);
     }
 
-    public Optional<Book> findBookByTitle(String title){
+    public List<Book> findBookByTitle(String title){
         return bookJpaRepository.findBookByTitle(title);
     }
 

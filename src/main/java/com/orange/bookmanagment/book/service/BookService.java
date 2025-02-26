@@ -1,13 +1,17 @@
 package com.orange.bookmanagment.book.service;
 
+import com.orange.bookmanagment.book.exception.BookAlreadyExistException;
+import com.orange.bookmanagment.book.exception.BookNotFoundException;
 import com.orange.bookmanagment.book.model.Book;
 
+import java.util.List;
+
 public interface BookService {
-    Book saveBook(Book book);
+    Book addBook(Book book) throws BookAlreadyExistException;
 
-    Book findBookById(long id);
+    Book getBookById(long id) throws BookNotFoundException;
 
-    Book findBookByTitle(String title);
+    List<Book> getBookByTitle(String title);
 
-    Book updateBook(Book book);
+    Book updateBook(Book book) throws BookNotFoundException;
 }
