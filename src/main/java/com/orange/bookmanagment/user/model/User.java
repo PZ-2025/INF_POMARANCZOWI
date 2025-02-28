@@ -79,4 +79,10 @@ public class User {
         this.verifiedAt = Instant.now();
         this.lockedAt = Instant.now();
     }
+
+    public void changePassword(String password) {
+        this.password = password;
+        this.changedPasswordAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
 }

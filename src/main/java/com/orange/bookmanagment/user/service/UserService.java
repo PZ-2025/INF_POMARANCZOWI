@@ -17,4 +17,6 @@ public interface UserService {
     User registerUser(User user) throws UserAlreadyExistException;
 
     User updateUser(User user) throws UserNotFoundException;
+
+    void changeUserPassword(User user, String oldPassword, String newPassword);
 }
