@@ -72,6 +72,11 @@ public class User {
         this.firstName = firstName;
         this.userType = userType;
 
+        //TODO add verification system
+        this.verified = true;
+        this.blocked = false;
+        this.locked = false;
+
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
         this.changedPasswordAt = Instant.now();

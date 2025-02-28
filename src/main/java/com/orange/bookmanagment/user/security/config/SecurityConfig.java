@@ -54,7 +54,10 @@ class SecurityConfig {
         security.authorizeHttpRequests(
                         auth ->
                                 auth
-                                        .requestMatchers(GET, "*").permitAll()
+                                        .requestMatchers(POST,"/api/v1/auth/register").permitAll()
+                                        .requestMatchers(POST,"/api/v1/auth/login").permitAll()
+                                        .requestMatchers(GET,"/api/v1/auth/me").authenticated()
+                                        .requestMatchers(POST,"/api/v1/auth/changePassword").authenticated()
                 )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
