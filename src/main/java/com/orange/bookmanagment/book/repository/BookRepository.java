@@ -21,6 +21,10 @@ public class BookRepository {
         return bookJpaRepository.findById(id);
     }
 
+    public List<Book> findAllBooks(){
+        return bookJpaRepository.findAll();
+    }
+
     public List<Book> findBookByTitle(String title){
         return bookJpaRepository.findBookByTitle(title);
     }
