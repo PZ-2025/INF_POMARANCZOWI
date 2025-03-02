@@ -5,11 +5,15 @@ import com.orange.bookmanagment.user.exception.IllegalAccountAccessException;
 import com.orange.bookmanagment.user.exception.UserAlreadyExistException;
 import com.orange.bookmanagment.user.exception.UserNotFoundException;
 import com.orange.bookmanagment.user.model.User;
+import com.orange.bookmanagment.user.model.enums.UserType;
 import com.orange.bookmanagment.user.repository.UserRepository;
 import com.orange.bookmanagment.user.service.UserService;
+import com.orange.bookmanagment.user.web.requests.ChangePasswordRequest;
+import com.orange.bookmanagment.user.web.requests.UserRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,13 +40,14 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerUser(User user) throws UserAlreadyExistException {
-        userRepository.findUserByEmail(user.getEmail()).ifPresent(u -> {
+    @Transactional
+    public User registerUser(UserRegisterRequest userRegisterRequest, UserType userType) throws UserAlreadyExistException {
+        userRepository.findUserByEmail(userRegisterRequest.email()).ifPresent(u -> {
             throw new UserAlreadyExistException("User already exists");
         });
 
 
-        return userRepository.createUser(user);
+        return userRepository.createUser(new User(passwordEncoder.encode(userRegisterRequest.password()), userRegisterRequest.email(),userRegisterRequest.lastName(),userRegisterRequest.firstName(), userType));
     }
 
     @Override
@@ -53,11 +58,15 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeUserPassword(User user, String oldPassword, String newPassword) {
-        if(!passwordEncoder.matches(oldPassword, user.getPassword())) {
+    @Transactional
+    public void changeUserPassword(long userId, ChangePasswordRequest changePasswordRequest) {
+        final User user = getUserById(userId);
+
+        if(!passwordEncoder.matches(changePasswordRequest.oldPassword(), user.getPassword())) {
             throw new IllegalAccountAccessException("Old password is not correct");
         }
-        user.changePassword(passwordEncoder.encode(newPassword));
+
+        user.changePassword(passwordEncoder.encode(changePasswordRequest.newPassword()));
 
         updateUser(user);
     }

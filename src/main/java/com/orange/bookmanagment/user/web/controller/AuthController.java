@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -36,7 +35,6 @@ class AuthController {
     private final AccountAuthenticationProvider accountAuthenticationProvider;
     private final UserDtoMapper userDtoMapper;
     private final TokenService tokenService;
-    private final PasswordEncoder passwordEncoder;
 
 
     /**
@@ -70,9 +68,7 @@ class AuthController {
      */
     @PostMapping("/register")
     public ResponseEntity<HttpResponse> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest){
-        final User user = new User(passwordEncoder.encode(userRegisterRequest.password()), userRegisterRequest.email(),userRegisterRequest.lastName(),userRegisterRequest.firstName(), UserType.READER);
-
-        userService.registerUser(user);
+        final User user = userService.registerUser(userRegisterRequest, UserType.READER);
 
         return ResponseEntity.status(CREATED).body(
                 HttpResponse.builder()
@@ -105,14 +101,15 @@ class AuthController {
     /**
      *
      * @param changePasswordRequest - Change password request includes old and new password
-     * @param authentication - Authentication from AuthenticationProvider
+     * @param authHeader - Authorization header with JWT token
      * @return Status of password change
      */
     @PostMapping("/changePassword")
-    public ResponseEntity<HttpResponse> changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest, Authentication authentication){
-        final User user = userService.getUserByEmail(authentication.getName());
+    public ResponseEntity<HttpResponse> changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest,
+                                                       @RequestHeader("Authorization") String authHeader){
+        final String token = authHeader.replace("Bearer ", "");
 
-        userService.changeUserPassword(user,changePasswordRequest.oldPassword(),changePasswordRequest.newPassword());
+         userService.changeUserPassword(tokenService.getUserIdFromJwtToken(token), changePasswordRequest);
 
         return ResponseEntity.status(OK).body(HttpResponse.builder()
                 .timeStamp(TimeUtil.getCurrentTimeWithFormat())

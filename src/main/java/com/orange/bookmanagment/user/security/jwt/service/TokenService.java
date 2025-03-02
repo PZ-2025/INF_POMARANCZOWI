@@ -1,12 +1,11 @@
 package com.orange.bookmanagment.user.security.jwt.service;
 
+import com.orange.bookmanagment.user.exception.IllegalAccountAccessException;
 import com.orange.bookmanagment.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,6 +16,7 @@ import java.time.temporal.ChronoUnit;
 public class TokenService {
 
     private final JwtEncoder jwtEncoder;
+    private final JwtDecoder jwtDecoder;
 
     /**
      *
@@ -38,5 +38,15 @@ public class TokenService {
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
+    }
+
+    public Long getUserIdFromJwtToken(String token) {
+        try {
+            Jwt jwt = jwtDecoder.decode(token);
+
+            return jwt.getClaim("user_id");
+        }catch (JwtException e){
+            throw new IllegalAccountAccessException("Wrong authentication");
+        }
     }
 }
