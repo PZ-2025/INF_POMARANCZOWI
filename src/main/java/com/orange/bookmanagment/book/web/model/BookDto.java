@@ -1,14 +1,12 @@
 package com.orange.bookmanagment.book.web.model;
 
-import com.orange.bookmanagment.book.model.Author;
 import com.orange.bookmanagment.book.model.enums.BookStatus;
 
-import java.time.Instant;
 import java.util.List;
 
 public record BookDto(
         String title,
-        List<Author> authors,
+        List<AuthorDto> authors,
         String publisher,
         String description,
         String genre,

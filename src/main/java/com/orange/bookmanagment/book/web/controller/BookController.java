@@ -1,5 +1,6 @@
 package com.orange.bookmanagment.book.web.controller;
 
+import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.book.service.BookService;
 import com.orange.bookmanagment.book.web.mapper.BookDtoMapper;
 import com.orange.bookmanagment.book.web.request.BookCreateRequest;
@@ -49,7 +50,7 @@ class BookController {
 
     @PostMapping("/create")
     public ResponseEntity<HttpResponse> createBook(@RequestBody BookCreateRequest bookCreateRequest) {
-        bookService.createBook(bookCreateRequest);
+        Book book = bookService.createBook(bookCreateRequest);
         return ResponseEntity.status(OK)
                 .body(HttpResponse.builder()
                         .timeStamp(TimeUtil.getCurrentTimeWithFormat())
@@ -57,6 +58,7 @@ class BookController {
                         .httpStatus(OK)
                         .reason("Book creation request")
                         .message("Book created")
+                        .data(Map.of("book", bookDtoMapper.toDto(book)))
                         .build());
     }
 }
