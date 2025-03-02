@@ -28,6 +28,8 @@ class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
+
+    //TODO always method should return Entity object from service and u can map in application layer (controller) to dto
     public BookDto createBook(BookCreateRequest bookCreateRequest) {
         List<AuthorCreateRequest> authorCreateRequests = bookCreateRequest.authors();
         List<Author> authors = authorService.createAuthors(authorCreateRequests);

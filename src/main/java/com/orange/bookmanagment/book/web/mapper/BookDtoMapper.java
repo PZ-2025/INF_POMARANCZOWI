@@ -23,9 +23,4 @@ public class BookDtoMapper {
                 TimeUtil.getTimeInStandardFormat(book.getUpdatedAt())
         );
     }
-
-    public List<BookDto> toDtoList(List<Book> books){
-        return books.stream().map(this::toDto).toList();
-    }
-
 }

@@ -43,7 +43,7 @@ class BookController {
                         .httpStatus(OK)
                         .reason("All books request")
                         .message("All books")
-                        .data(Map.of("books", bookDtoMapper.toDtoList(bookService.getAllBooks())))
+                        .data(Map.of("books", bookService.getAllBooks().stream().map(bookDtoMapper::toDto).toList()))
                         .build());
     }
 

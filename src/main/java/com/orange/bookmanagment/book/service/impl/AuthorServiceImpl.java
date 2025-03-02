@@ -18,6 +18,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> createAuthors(List<AuthorCreateRequest> authorCreateRequests) {
+        //TODO mapper DTO -> Entity
         List<Author> authors = authorCreateRequests.stream()
                 .map(authorCreateRequest -> new Author(authorCreateRequest.firstName(), authorCreateRequest.lastName(), authorCreateRequest.biography()))
                 .collect(Collectors.toList());
