@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.Instant;
 import java.util.List;
@@ -40,8 +39,8 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private BookStatus status;
     private String coverImage;
-    private Instant created_at;
-    private Instant updated_at;
+    private Instant createdAt;
+    private Instant updatedAt;
 
     /**
      * <p>Constructor for Book entity</p>
@@ -53,10 +52,8 @@ public class Book {
      * @param genre      genre of book
      * @param status     status of book
      * @param coverImage cover image of book
-     * @param created_at created date of book
-     * @param updated_at updated date of book
      */
-    public Book(String title, List<Author> authors, String publisher, String description, String genre, BookStatus status, String coverImage, Instant created_at, Instant updated_at) {
+    public Book(String title, List<Author> authors, String publisher, String description, String genre, BookStatus status, String coverImage) {
         this.title = title;
         this.authors = authors;
         this.publisher = publisher;
@@ -64,7 +61,7 @@ public class Book {
         this.genre = genre;
         this.status = status;
         this.coverImage = coverImage;
-        this.created_at = Instant.now();
-        this.updated_at = Instant.now();
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 }
