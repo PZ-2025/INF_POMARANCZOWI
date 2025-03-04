@@ -12,6 +12,8 @@ import com.orange.bookmanagment.book.web.model.BookDto;
 import com.orange.bookmanagment.book.web.request.AuthorCreateRequest;
 import com.orange.bookmanagment.book.web.request.BookCreateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +42,8 @@ class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getAllBooks() {
-        return bookRepository.findAllBooks();
+    public Page<Book> getAllBooks(Pageable pageable) {
+        return bookRepository.findAllBooks(pageable);
     }
 
     @Override
