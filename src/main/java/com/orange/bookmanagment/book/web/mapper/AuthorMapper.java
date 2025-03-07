@@ -2,7 +2,7 @@ package com.orange.bookmanagment.book.web.mapper;
 
 import com.orange.bookmanagment.book.model.Author;
 import com.orange.bookmanagment.book.web.model.AuthorDto;
-import com.orange.bookmanagment.book.web.request.AuthorCreateRequest;
+import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
 import org.springframework.stereotype.Component;
 
 @Component

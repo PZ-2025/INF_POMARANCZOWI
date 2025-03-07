@@ -3,7 +3,7 @@ package com.orange.bookmanagment.book.web.controller;
 import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.book.service.BookService;
 import com.orange.bookmanagment.book.web.mapper.BookDtoMapper;
-import com.orange.bookmanagment.book.web.request.BookCreateRequest;
+import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
 import com.orange.bookmanagment.shared.model.HttpResponse;
 import com.orange.bookmanagment.shared.util.TimeUtil;
 import lombok.RequiredArgsConstructor;

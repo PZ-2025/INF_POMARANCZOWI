@@ -2,7 +2,7 @@ package com.orange.bookmanagment.book.service;
 
 import com.orange.bookmanagment.book.exception.BookNotFoundException;
 import com.orange.bookmanagment.book.model.Book;
-import com.orange.bookmanagment.book.web.request.BookCreateRequest;
+import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

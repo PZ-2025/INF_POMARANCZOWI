@@ -4,7 +4,7 @@ import com.orange.bookmanagment.book.model.Author;
 import com.orange.bookmanagment.book.repository.AuthorRepository;
 import com.orange.bookmanagment.book.service.AuthorService;
 import com.orange.bookmanagment.book.web.mapper.AuthorMapper;
-import com.orange.bookmanagment.book.web.request.AuthorCreateRequest;
+import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

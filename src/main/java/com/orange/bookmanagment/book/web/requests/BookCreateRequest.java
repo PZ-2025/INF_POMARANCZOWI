@@ -1,6 +1,4 @@
-package com.orange.bookmanagment.book.web.request;
-
-import com.orange.bookmanagment.book.model.Author;
+package com.orange.bookmanagment.book.web.requests;
 
 import java.util.List;
 
