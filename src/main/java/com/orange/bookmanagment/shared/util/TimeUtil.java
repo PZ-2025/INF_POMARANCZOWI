@@ -13,6 +13,6 @@ public class TimeUtil {
     }
 
     public static String getCurrentTimeWithFormat(){
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+        return LocalDateTime.now().format(formatter);
     }
 }
