@@ -6,4 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
-export class ProfileComponent { }
+export class ProfileComponent {
+    activeTab: string = 'profile';
+}

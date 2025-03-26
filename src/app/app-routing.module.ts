@@ -4,14 +4,18 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AddEditBookComponent } from './add-edit-book/add-edit-book.component';
 import { canActivateAuth } from './auth/access.guard';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
 
-  {path: 'me', component: ProfileComponent, canActivate: [canActivateAuth]},
+  // {path: 'me', component: ProfileComponent, canActivate: [canActivateAuth]},
   {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent}
+  {path: 'register', component: RegisterComponent},
+
+  {path: 'me', component: ProfileComponent},
+  {path: 'add-book', component: AddEditBookComponent}
 ];
 
 @NgModule({
