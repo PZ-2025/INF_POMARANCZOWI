@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+<<<<<<< HEAD
 
+=======
+>>>>>>> frontend-develop
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
