@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {AuthService} from '../auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,7 +8,7 @@ import {AuthService} from '../auth/auth.service';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-   isLoggedIn: boolean = false;
+  isLoggedIn: boolean = false;
 
   constructor(private authService: AuthService) {}
   ngOnInit(): void {

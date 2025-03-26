@@ -1,7 +1,7 @@
-import {Component, inject} from '@angular/core';
-import {AuthService} from '../auth/auth.service';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,6 @@ import {Router} from '@angular/router';
 export class LoginComponent {
   authService: AuthService = inject(AuthService);
   router = inject(Router);
-
 
   form = new FormGroup({
     email: new FormControl(null, Validators.required),
@@ -30,6 +29,4 @@ export class LoginComponent {
         });
     }
   }
-
-
 }
