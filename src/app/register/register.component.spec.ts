@@ -1,8 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-
-=======
->>>>>>> frontend-develop
 import { RegisterComponent } from './register.component';
 
 describe('RegisterComponent', () => {

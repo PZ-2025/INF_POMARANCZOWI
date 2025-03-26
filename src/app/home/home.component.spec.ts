@@ -1,8 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-
-=======
->>>>>>> frontend-develop
 import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {

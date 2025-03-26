@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-=======
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
->>>>>>> frontend-develop
 
 @Component({
   selector: 'app-login',
@@ -14,9 +10,6 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-<<<<<<< HEAD
-
-=======
   authService: AuthService = inject(AuthService);
   router = inject(Router);
 
@@ -36,5 +29,4 @@ export class LoginComponent {
         });
     }
   }
->>>>>>> frontend-develop
 }
