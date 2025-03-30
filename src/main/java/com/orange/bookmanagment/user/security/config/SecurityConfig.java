@@ -61,6 +61,7 @@ class SecurityConfig {
                                         .requestMatchers(POST,"/api/v1/book/create").permitAll() //zabezpieczyc
                                         .requestMatchers(GET,"/api/v1/book/all").permitAll() //zabezpieczyc
                                         .requestMatchers(GET,"/api/v1/book/{id}").permitAll() //zabezpieczyc
+                                        .requestMatchers(POST,"/api/v1/reservations/book/{bookId}").authenticated()
                 )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

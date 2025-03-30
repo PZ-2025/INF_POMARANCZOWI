@@ -64,4 +64,9 @@ public class Book {
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
+
+    public void setStatus(BookStatus status) {
+        this.status = status;
+        this.updatedAt = Instant.now();
+    }
 }
