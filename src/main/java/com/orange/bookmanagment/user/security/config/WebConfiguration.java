@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
 @Configuration
 @RequiredArgsConstructor
-public class WebConfiguration {
+class WebConfiguration {
 
     private final RsaKeyProperties rsaKeyProperties;
 

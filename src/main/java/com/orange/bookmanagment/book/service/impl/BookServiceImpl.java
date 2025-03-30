@@ -8,10 +8,11 @@ import com.orange.bookmanagment.book.repository.BookRepository;
 import com.orange.bookmanagment.book.service.AuthorService;
 import com.orange.bookmanagment.book.service.BookService;
 import com.orange.bookmanagment.book.web.mapper.BookDtoMapper;
-import com.orange.bookmanagment.book.web.model.BookDto;
-import com.orange.bookmanagment.book.web.request.AuthorCreateRequest;
-import com.orange.bookmanagment.book.web.request.BookCreateRequest;
+import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
+import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +29,10 @@ class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-
-    //TODO always method should return Entity object from service and u can map in application layer (controller) to dto
-    public BookDto createBook(BookCreateRequest bookCreateRequest) {
+    public Book createBook(BookCreateRequest bookCreateRequest) {
         List<AuthorCreateRequest> authorCreateRequests = bookCreateRequest.authors();
         List<Author> authors = authorService.createAuthors(authorCreateRequests);
-        return bookDtoMapper.toDto(bookRepository.saveBook(new Book(bookCreateRequest.title(), authors, bookCreateRequest.publisher(), bookCreateRequest.description(), bookCreateRequest.genre(), BookStatus.AVAILABLE, bookCreateRequest.coverImage())));
+        return bookRepository.saveBook(new Book(bookCreateRequest.title(), authors, bookCreateRequest.publisher(), bookCreateRequest.description(), bookCreateRequest.genre(), BookStatus.AVAILABLE, bookCreateRequest.coverImage()));
     }
 
     @Override
@@ -42,8 +41,8 @@ class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getAllBooks() {
-        return bookRepository.findAllBooks();
+    public Page<Book> getAllBooks(Pageable pageable) {
+        return bookRepository.findAllBooks(pageable);
     }
 
     @Override

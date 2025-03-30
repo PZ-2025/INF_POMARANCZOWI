@@ -3,7 +3,8 @@ package com.orange.bookmanagment.book.service.impl;
 import com.orange.bookmanagment.book.model.Author;
 import com.orange.bookmanagment.book.repository.AuthorRepository;
 import com.orange.bookmanagment.book.service.AuthorService;
-import com.orange.bookmanagment.book.web.request.AuthorCreateRequest;
+import com.orange.bookmanagment.book.web.mapper.AuthorMapper;
+import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,12 @@ import java.util.stream.Collectors;
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final AuthorMapper authorMapper;
 
     @Override
     public List<Author> createAuthors(List<AuthorCreateRequest> authorCreateRequests) {
-        //TODO mapper DTO -> Entity
         List<Author> authors = authorCreateRequests.stream()
-                .map(authorCreateRequest -> new Author(authorCreateRequest.firstName(), authorCreateRequest.lastName(), authorCreateRequest.biography()))
+                .map(authorMapper::toEntity)
                 .collect(Collectors.toList());
 
         return authorRepository.saveAllAuthors(authors);

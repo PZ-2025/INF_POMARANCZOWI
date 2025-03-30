@@ -1,4 +1,4 @@
-package com.orange.bookmanagment.book.web.request;
+package com.orange.bookmanagment.book.web.requests;
 
 public record AuthorCreateRequest(
         String firstName,
