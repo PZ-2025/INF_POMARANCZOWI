@@ -57,6 +57,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userSettings", referencedColumnName = "id")
+    private Settings userSettings;
+
     /**
      * <p>Default constructor to create a new user with default values for Instant type variables</p>
      * @param password - User password
