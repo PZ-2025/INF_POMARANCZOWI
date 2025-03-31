@@ -7,7 +7,7 @@ import java.util.List;
 public record BookDto(
         String title,
         List<AuthorDto> authors,
-        String publisher,
+        PublisherDto publisher,
         String description,
         String genre,
         BookStatus status,

@@ -33,7 +33,9 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private List<Author> authors;
-    private String publisher;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publisher_id")
+    private Publisher publisher;
     private String description;
     private String genre;
     @Enumerated(EnumType.STRING)
@@ -53,7 +55,7 @@ public class Book {
      * @param status     status of book
      * @param coverImage cover image of book
      */
-    public Book(String title, List<Author> authors, String publisher, String description, String genre, BookStatus status, String coverImage) {
+    public Book(String title, List<Author> authors, Publisher publisher, String description, String genre, BookStatus status, String coverImage) {
         this.title = title;
         this.authors = authors;
         this.publisher = publisher;

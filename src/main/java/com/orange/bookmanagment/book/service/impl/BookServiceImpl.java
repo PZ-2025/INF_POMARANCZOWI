@@ -3,10 +3,12 @@ package com.orange.bookmanagment.book.service.impl;
 import com.orange.bookmanagment.book.exception.BookNotFoundException;
 import com.orange.bookmanagment.book.model.Author;
 import com.orange.bookmanagment.book.model.Book;
+import com.orange.bookmanagment.book.model.Publisher;
 import com.orange.bookmanagment.book.model.enums.BookStatus;
 import com.orange.bookmanagment.book.repository.BookRepository;
 import com.orange.bookmanagment.book.service.AuthorService;
 import com.orange.bookmanagment.book.service.BookService;
+import com.orange.bookmanagment.book.service.PublisherService;
 import com.orange.bookmanagment.book.web.mapper.BookDtoMapper;
 import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
 import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
@@ -26,13 +28,17 @@ class BookServiceImpl implements BookService {
 
     private final AuthorService authorService;
     private final BookDtoMapper bookDtoMapper;
+    private final PublisherService publisherService;
 
     @Override
     @Transactional
     public Book createBook(BookCreateRequest bookCreateRequest) {
         List<AuthorCreateRequest> authorCreateRequests = bookCreateRequest.authors();
         List<Author> authors = authorService.createAuthors(authorCreateRequests);
-        return bookRepository.saveBook(new Book(bookCreateRequest.title(), authors, bookCreateRequest.publisher(), bookCreateRequest.description(), bookCreateRequest.genre(), BookStatus.AVAILABLE, bookCreateRequest.coverImage()));
+
+        Publisher puiblisher = publisherService.createPublisher(bookCreateRequest.publisher());
+
+        return bookRepository.saveBook(new Book(bookCreateRequest.title(), authors, puiblisher, bookCreateRequest.description(), bookCreateRequest.genre(), BookStatus.AVAILABLE, bookCreateRequest.coverImage()));
     }
 
     @Override
