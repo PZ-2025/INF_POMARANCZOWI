@@ -10,6 +10,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
+/**
+ * Represents a reservation of a book by a user.
+ * <p>
+ * This entity contains information about the book being reserved, the user who reserved it,
+ * the status of the reservation, and the queue position of the reservation.
+ */
 @Entity
 @Table(name = "reservations")
 @Getter
@@ -37,6 +43,14 @@ public class Reservation {
 
     private int queuePosition;
 
+    /**
+     * Constructor for creating a new reservation.
+     *
+     * @param book         The book being reserved.
+     * @param user         The user who reserved the book.
+     * @param status       The status of the reservation.
+     * @param queuePosition The position of the reservation in the queue.
+     */
     public Reservation(Book book, User user, ReservationStatus status, int queuePosition) {
         this.book = book;
         this.user = user;
@@ -47,6 +61,11 @@ public class Reservation {
         this.updatedAt = reservedAt;
     }
 
+    /**
+     * Updates the status of the reservation.
+     *
+     * @param status The new status of the reservation.
+     */
     public void setStatus(ReservationStatus status) {
         this.status = status;
         this.updatedAt = Instant.now();

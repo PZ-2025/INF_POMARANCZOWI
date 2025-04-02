@@ -8,6 +8,9 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+/**
+ * Service interface for managing books.
+ */
 public interface BookService {
 
     /**
@@ -35,7 +38,20 @@ public interface BookService {
      */
     Page<Book> getAllBooks(Pageable pageable);
 
+    /**
+     * Retrieves books by their title.
+     *
+     * @param title the title of the book
+     * @return a list of books with the specified title
+     */
     List<Book> getBookByTitle(String title);
 
+    /**
+     * Updates an existing book.
+     *
+     * @param book the book to update
+     * @return the updated book
+     * @throws BookNotFoundException if the book is not found
+     */
     Book updateBook(Book book) throws BookNotFoundException;
 }

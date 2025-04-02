@@ -23,6 +23,9 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
+/**
+ * ReservationController handles the reservation-related endpoints.
+ */
 @RestController
 @RequestMapping("/api/v1/reservations")
  @RequiredArgsConstructor
@@ -33,7 +36,13 @@ public class ReservationController {
     private final UserService userService;
     private final ReservationDtoMapper reservationDtoMapper;
 
-
+    /**
+     * Creates a reservation for a book.
+     *
+     * @param bookId        the ID of the book to reserve
+     * @param authentication the authentication object containing user details
+     * @return a ResponseEntity containing the reservation details or an error message
+     */
     @PostMapping("/book/{bookId}")
     public ResponseEntity<HttpResponse> createReservation(
             @PathVariable("bookId") long bookId,

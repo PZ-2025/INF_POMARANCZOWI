@@ -18,6 +18,10 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
 
+/**
+ * BookController is a REST controller that handles requests related to books.
+ * It provides endpoints for retrieving book information, creating new books, and managing book data.
+ */
 @RestController
 @RequestMapping("/api/v1/book")
 @RequiredArgsConstructor
@@ -25,6 +29,12 @@ class BookController {
     private final BookService bookService;
     private final BookDtoMapper bookDtoMapper;
 
+    /**
+     * Retrieves a book by its ID.
+     *
+     * @param id the ID of the book to retrieve
+     * @return a ResponseEntity containing the book data
+     */
     @GetMapping("/{id}")
     public ResponseEntity<HttpResponse> getBookById(@PathVariable("id") long id) {
         return ResponseEntity.status(OK)
@@ -38,6 +48,15 @@ class BookController {
                         .build());
     }
 
+    /**
+     * Retrieves all books with pagination and sorting options.
+     *
+     * @param page          the page number to retrieve (default is 0)
+     * @param size          the number of items per page (default is 10)
+     * @param sortBy        the field to sort by (default is "id")
+     * @param sortDirection the direction of sorting (default is "asc")
+     * @return a ResponseEntity containing the paginated list of books
+     */
     @GetMapping("/all")
     public ResponseEntity<HttpResponse> getAllBooks(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -69,6 +88,12 @@ class BookController {
                         .build());
     }
 
+    /**
+     * Creates a new book.
+     *
+     * @param bookCreateRequest the request object containing book creation data
+     * @return a ResponseEntity containing the created book data
+     */
     @PostMapping("/create")
     public ResponseEntity<HttpResponse> createBook(@RequestBody BookCreateRequest bookCreateRequest) {
         Book book = bookService.createBook(bookCreateRequest);

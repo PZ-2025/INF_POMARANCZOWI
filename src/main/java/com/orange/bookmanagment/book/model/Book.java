@@ -67,6 +67,11 @@ public class Book {
         this.updatedAt = Instant.now();
     }
 
+    /**
+     * <p>Sets the status of the book.</p>
+     *
+     * @param status new status of the book
+     */
     public void setStatus(BookStatus status) {
         this.status = status;
         this.updatedAt = Instant.now();

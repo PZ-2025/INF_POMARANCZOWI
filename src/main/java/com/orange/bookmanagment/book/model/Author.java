@@ -4,8 +4,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+/**
+ * <p>Entity representing a book author.</p>
+ *
+ * <p>This class contains information about the author, such as first name, last name, and biography.</p>
+ */
 @Entity
 @Table(name = "authors")
 @Getter

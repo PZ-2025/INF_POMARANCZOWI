@@ -1,29 +1,21 @@
 package com.orange.bookmanagment.reservation.model.enums;
 
+/**
+ * Enum representing the status of a reservation.
+ * <p>
+ * The possible statuses are:
+ * <ul>
+ *     <li>PENDING: The book is reserved but not yet available (in queue).</li>
+ *     <li>READY: The book is available and waiting for pickup by the user who reserved it.</li>
+ *     <li>CANCELLED: The reservation was cancelled by the user.</li>
+ *     <li>COMPLETED: The reservation was completed (user picked up the book).</li>
+ *     <li>EXPIRED: The reservation expired (user didn't pick up the book in time).</li>
+ * </ul>
+ */
 public enum ReservationStatus {
-    /**
-     * Book is reserved but not yet available (in queue)
-     */
     PENDING,
-
-    /**
-     * Book is available and waiting for pickup by the user who reserved it
-     */
     READY,
-
-    /**
-     * Reservation was cancelled by user
-     */
     CANCELLED,
-
-    /**
-     * Reservation was completed (user picked up the book)
-     */
     COMPLETED,
-
-    /**
-     * Reservation expired (user didn't pick up the book in time)
-     */
     EXPIRED,
-
 }

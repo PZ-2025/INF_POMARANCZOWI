@@ -5,6 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * <p>Entity representing a book publisher.</p>
+ *
+ * <p>This class contains information about the publisher, such as name and description.</p>
+ */
 @Entity
 @Table(name = "publishers")
 @Getter

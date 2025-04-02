@@ -10,6 +10,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
+/**
+ * Represents a loan of a book to a user.
+ * <p>
+ * This entity contains information about the book being loaned, the user who borrowed it,
+ * the status of the loan, and the librarians involved in the lending and returning process.
+ */
 @Entity
 @Table(name = "loans")
 @Getter
