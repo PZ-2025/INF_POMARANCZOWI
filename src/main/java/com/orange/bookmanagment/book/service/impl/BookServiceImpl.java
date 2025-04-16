@@ -36,9 +36,9 @@ class BookServiceImpl implements BookService {
         List<AuthorCreateRequest> authorCreateRequests = bookCreateRequest.authors();
         List<Author> authors = authorService.createAuthors(authorCreateRequests);
 
-        Publisher puiblisher = publisherService.createPublisher(bookCreateRequest.publisher());
+        Publisher publisher = publisherService.createPublisher(bookCreateRequest.publisher());
 
-        return bookRepository.saveBook(new Book(bookCreateRequest.title(), authors, puiblisher, bookCreateRequest.description(), bookCreateRequest.genre(), BookStatus.AVAILABLE, bookCreateRequest.coverImage()));
+        return bookRepository.saveBook(new Book(bookCreateRequest.title(), authors, publisher, bookCreateRequest.description(), bookCreateRequest.genre(), BookStatus.AVAILABLE, bookCreateRequest.coverImage()));
     }
 
     @Override

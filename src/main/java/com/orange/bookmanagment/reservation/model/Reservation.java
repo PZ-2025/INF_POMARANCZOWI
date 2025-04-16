@@ -70,4 +70,15 @@ public class Reservation {
         this.status = status;
         this.updatedAt = Instant.now();
     }
+
+    /**
+     * Updates the queue position of the reservation.
+     *
+     * @param queuePosition The new queue position of the reservation.
+     */
+    public void setQueuePosition(int queuePosition) {
+        this.queuePosition = queuePosition;
+        this.updatedAt = Instant.now();
+    }
+
 }

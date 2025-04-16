@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -27,5 +28,37 @@ public class ReservationRepository {
         return reservationJpaRepository.countByBookAndStatusIn(book, statusList);
     }
 
+    public Optional<Reservation> findById(Long id) {
+        return reservationJpaRepository.findById(id);
+    }
+
+    public Optional<Reservation> findFirstByBookAndStatusOrderByQueuePosition(Book book, ReservationStatus status) {
+        return reservationJpaRepository.findFirstByBookAndStatusOrderByQueuePosition(book, status);
+    }
+
+    public List<Reservation> findByBookAndStatusOrderByQueuePosition(Book book, ReservationStatus status) {
+        return reservationJpaRepository.findByBookAndStatusOrderByQueuePosition(book, status);
+    }
+
+    public Optional<Reservation> findByBookAndUserAndStatus(Book book, User user, ReservationStatus status) {
+        return reservationJpaRepository.findByBookAndUserAndStatus(book, user, status);
+    }
+
+    public List<Reservation> findByUser(User user) {
+        return reservationJpaRepository.findByUser(user);
+    }
+
+    public List<Reservation> findByBook(Book book) {
+        return reservationJpaRepository.findByBook(book);
+    }
+
+    public List<Reservation> findByBookAndStatusInOrderByQueuePosition(Book book, List<ReservationStatus> statusList) {
+        return reservationJpaRepository.findByBookAndStatusInOrderByQueuePosition(book, statusList);
+    }
+
+    //findByUserAndStatusInOrderByQueuePosition
+    public List<Reservation> findByUserAndStatusInOrderByQueuePosition(User user, List<ReservationStatus> statusList) {
+        return reservationJpaRepository.findByUserAndStatusInOrderByQueuePosition(user, statusList);
+    }
 
 }

@@ -3,7 +3,6 @@ package com.orange.bookmanagment.book.web.mapper;
 import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.book.web.model.AuthorDto;
 import com.orange.bookmanagment.book.web.model.BookDto;
-import com.orange.bookmanagment.book.web.model.PublisherDto;
 import com.orange.bookmanagment.shared.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

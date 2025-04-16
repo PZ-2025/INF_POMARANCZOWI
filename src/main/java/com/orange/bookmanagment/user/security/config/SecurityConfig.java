@@ -58,7 +58,7 @@ class SecurityConfig {
                                         .requestMatchers(POST,"/api/v1/auth/login").permitAll()
                                         .requestMatchers(GET,"/api/v1/auth/me").authenticated()
                                         .requestMatchers(POST,"/api/v1/auth/changePassword").authenticated()
-                                        .requestMatchers(POST,"/api/v1/book/create").permitAll() //zabezpieczyc
+                                        .requestMatchers(POST,"/api/v1/book/create").permitAll() //zabezpieczyc hasAuthority("LIBRARIAN")
                                         .requestMatchers(GET,"/api/v1/book/all").permitAll() //zabezpieczyc
                                         .requestMatchers(GET,"/api/v1/book/{id}").permitAll() //zabezpieczyc
                                         .requestMatchers(POST,"/api/v1/reservations/book/{bookId}").authenticated()
