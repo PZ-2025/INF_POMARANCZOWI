@@ -47,9 +47,9 @@ public class CheckConnectionDatabaseTest {
             DatabaseMetaData metaData = connection.getMetaData();
             assertThat(metaData).isNotNull();
 
-            assertThat(metaData.getURL()).contains(dbUrl.replace("jdbc:postgresql://", ""));
-            assertThat(metaData.getUserName()).isEqualToIgnoringCase(dbUsername);
-            assertThat(metaData.getDriverName()).contains("PostgreSQL");
+            assertThat(metaData.getURL()).contains(dbUrl.replace("jdbc:mysql://", ""));
+            assertThat(metaData.getUserName().split("@")[0]).isEqualToIgnoringCase(dbUsername);
+            assertThat(metaData.getDriverName()).contains("MySQL");
 
             System.out.println("Połączono z bazą danych: " + metaData.getDatabaseProductName() + " " +
                     metaData.getDatabaseProductVersion());
