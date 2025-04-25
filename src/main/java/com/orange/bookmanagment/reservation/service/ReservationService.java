@@ -48,7 +48,7 @@ public interface ReservationService {
       * @param book the returned book
       * @return true if there is an active reservation that is now ready for pickup
       */
-     boolean processReturnedBook(Book book);
+//     boolean processReturnedBook(long bookId);
 
      /**
       * <p>Get all reservations for a user</p>

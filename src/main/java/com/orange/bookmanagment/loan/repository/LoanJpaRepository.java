@@ -12,13 +12,13 @@ import java.util.List;
 @Repository
 public interface LoanJpaRepository extends JpaRepository<Loan, Long> {
 
-    boolean existsByBookAndUserAndStatusIn(Book book, User user, List<LoanStatus> statuses);
+    boolean existsByBookIdAndUserIdAndStatusIn(Long bookId, Long userId, List<LoanStatus> statuses);
 
     List<Loan> findByStatusIn(List<LoanStatus> statuses);
 
-    List<Loan> findByUser(User user);
+    List<Loan> findByUserId(Long userId);
 
-    List<Loan> findByUserAndStatusIn(User user, List<LoanStatus> statuses);
+    List<Loan> findByUserIdAndStatusIn(Long userId, List<LoanStatus> statuses);
 
 
 }

@@ -94,7 +94,7 @@ public class ReservationController {
         }
 
         final User user = userService.getUserByEmail(authentication.getName());
-        if (!reservation.getUser().getEmail().equals(user.getEmail())) {
+        if (reservation.getUserId() != user.getId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(HttpResponse.builder()
                             .statusCode(403)

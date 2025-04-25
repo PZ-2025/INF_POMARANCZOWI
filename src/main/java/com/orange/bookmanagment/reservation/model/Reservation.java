@@ -1,8 +1,6 @@
 package com.orange.bookmanagment.reservation.model;
 
-import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.reservation.model.enums.ReservationStatus;
-import com.orange.bookmanagment.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,13 +24,15 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "book_id", nullable = false)
+//    private Book book;
+    private long bookId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private User user;
+    private long userId;
 
     private Instant reservedAt;
     private Instant expiresAt;
@@ -44,16 +44,16 @@ public class Reservation {
     private int queuePosition;
 
     /**
-     * Constructor for creating a new reservation.
+     * Constructs a new Reservation object with the specified parameters.
      *
-     * @param book         The book being reserved.
-     * @param user         The user who reserved the book.
+     * @param bookId       The ID of the book being reserved.
+     * @param userId       The ID of the user who reserved the book.
      * @param status       The status of the reservation.
-     * @param queuePosition The position of the reservation in the queue.
+     * @param queuePosition The queue position of the reservation.
      */
-    public Reservation(Book book, User user, ReservationStatus status, int queuePosition) {
-        this.book = book;
-        this.user = user;
+    public Reservation(long bookId, long userId, ReservationStatus status, int queuePosition) {
+        this.bookId = bookId;
+        this.userId = userId;
         this.status = status;
         this.queuePosition = queuePosition;
         this.reservedAt = Instant.now();

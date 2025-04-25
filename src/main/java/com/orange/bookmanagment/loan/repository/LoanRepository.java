@@ -17,15 +17,15 @@ public class LoanRepository {
     private final LoanJpaRepository loanJpaRepository;
 
     /**
-     * Checks if a loan exists for a given book, user, and list of statuses.
+     * Checks if a loan exists for a specific book and user with the given statuses.
      *
-     * @param book     the book entity
-     * @param user     the user entity
-     * @param statuses the list of loan statuses to check
-     * @return true if a loan exists with the specified criteria, false otherwise
+     * @param bookId   the ID of the book
+     * @param userId   the ID of the user
+     * @param statuses  the list of loan statuses to check
+     * @return true if a loan exists, false otherwise
      */
-    public boolean existsByBookAndUserAndStatusIn(Book book, User user, List<LoanStatus> statuses) {
-        return loanJpaRepository.existsByBookAndUserAndStatusIn(book, user, statuses);
+    public boolean existsByBookAndUserAndStatusIn(long bookId, long userId, List<LoanStatus> statuses) {
+        return loanJpaRepository.existsByBookIdAndUserIdAndStatusIn(bookId, userId, statuses);
     }
 
     /**
@@ -62,23 +62,22 @@ public class LoanRepository {
     /**
      * Finds all loan entities associated with a specific user.
      *
-     * @param user the user entity to filter by
+     * @param userId the user entity to filter by
      * @return a list of loan entities associated with the specified user
      */
-    public List<Loan> findByUser(User user) {
-        return loanJpaRepository.findByUser(user);
+    public List<Loan> findByUserId(long userId) {
+        return loanJpaRepository.findByUserId(userId);
     }
 
-    //findByUserAndStatusIn
     /**
      * Finds all loan entities associated with a specific user and having the specified statuses.
      *
-     * @param user     the user entity to filter by
-     * @param statuses the list of loan statuses to filter by
+     * @param userId   the ID of the user
+     * @param statuses  the list of loan statuses to filter by
      * @return a list of loan entities associated with the specified user and having the specified statuses
      */
-    public List<Loan> findByUserAndStatusIn(User user, List<LoanStatus> statuses) {
-        return loanJpaRepository.findByUserAndStatusIn(user, statuses);
+    public List<Loan> findByUserAndStatusIn(long userId, List<LoanStatus> statuses) {
+        return loanJpaRepository.findByUserIdAndStatusIn(userId, statuses);
     }
 
 

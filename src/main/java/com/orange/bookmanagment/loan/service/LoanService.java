@@ -79,9 +79,9 @@ public interface LoanService {
 
     List<Loan> getAllActiveLoans();
 
-    List<Loan> getUserLoans(User user);
+    List<Loan> getUserLoans(long userId);
 
-    List<Loan> getActiveUserLoans(User user);
+    List<Loan> getActiveUserLoans(long userId);
 
     Loan getLoanById(long loanId) throws LoanNotFoundException;
 

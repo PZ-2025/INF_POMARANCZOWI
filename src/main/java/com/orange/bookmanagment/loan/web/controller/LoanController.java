@@ -163,7 +163,7 @@ public class LoanController {
             @PathVariable long userId) {
 
         final User user = userService.getUserById(userId);
-        final List<Loan> loans = loanService.getUserLoans(user);
+        final List<Loan> loans = loanService.getUserLoans(user.getId());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())
@@ -178,8 +178,8 @@ public class LoanController {
     public ResponseEntity<HttpResponse> getActiveUserLoans(
             @PathVariable long userId) {
 
-        final User user = userService.getUserById(userId);
-        final List<Loan> loans = loanService.getActiveUserLoans(user);
+//        final User user = userService.getUserById(userId); //todo: check if user exists
+        final List<Loan> loans = loanService.getActiveUserLoans(userId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())
@@ -201,7 +201,7 @@ public class LoanController {
             Authentication authentication) {
 
         final User user = userService.getUserByEmail(authentication.getName());
-        final List<Loan> loans = loanService.getUserLoans(user);
+        final List<Loan> loans = loanService.getUserLoans(user.getId());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())

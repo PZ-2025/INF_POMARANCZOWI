@@ -18,51 +18,50 @@ import java.util.Optional;
 public interface ReservationJpaRepository extends JpaRepository<Reservation,Long> {
 
     /**
-     * Checks if a reservation exists for a given book and user with specified statuses.
+     * Checks if a reservation exists for a specific book and user with the given statuses.
      *
-     * @param book       the book associated with the reservation
-     * @param user       the user associated with the reservation
-     * @param statusList the list of reservation statuses to check against
+     * @param bookId     the ID of the book
+     * @param userId     the ID of the user
+     * @param statusList the list of reservation statuses to check
      * @return true if a reservation exists, false otherwise
      */
-    boolean existsByBookAndUserAndStatusIn(Book book, User user, List<ReservationStatus> statusList);
+    boolean existsByBookIdAndUserIdAndStatusIn(Long bookId, Long userId, List<ReservationStatus> statusList);
 
     /**
-     * Counts the number of reservations for a given book with specified statuses.
+     * Counts the number of reservations for a specific book with the given statuses.
      *
-     * @param book       the book associated with the reservations
-     * @param statusList the list of reservation statuses to count against
-     * @return the count of reservations matching the criteria
+     * @param bookId     the ID of the book
+     * @param statusList the list of reservation statuses to count
+     * @return the number of reservations matching the criteria
      */
-    int countByBookAndStatusIn(Book book, List<ReservationStatus> statusList);
+    int countByBookIdAndStatusIn(Long bookId, List<ReservationStatus> statusList);
 
     /**
-     * Finds the first reservation for a given book with a specified status, ordered by queue position.
+     * Finds a reservation by its ID.
      *
-     * @param book   the book associated with the reservation
-     * @param status the status of the reservation
+     * @param id the ID of the reservation
      * @return an Optional containing the found reservation, or empty if not found
      */
-    Optional<Reservation> findFirstByBookAndStatusOrderByQueuePosition(Book book, ReservationStatus status);
+    Optional<Reservation> findFirstByBookIdAndStatusOrderByQueuePosition(Long bookId, ReservationStatus status);
 
     /**
      * Finds all reservations for a given book with a specified status, ordered by queue position.
      *
-     * @param book   the book associated with the reservations
+     * @param bookId the ID of the book
      * @param status the status of the reservations
      * @return a list of reservations matching the criteria
      */
-    List<Reservation> findByBookAndStatusOrderByQueuePosition(Book book, ReservationStatus status);
+    List<Reservation> findByBookIdAndStatusOrderByQueuePosition(Long bookId, ReservationStatus status);
 
     /**
-     * Finds a reservation for a given book and user with a specified status.
+     * Finds a reservation by book, user, and status.
      *
-     * @param book   the book associated with the reservation
-     * @param user   the user associated with the reservation
-     * @param status the status of the reservation
+     * @param bookId   the ID of the book
+     * @param userId   the ID of the user
+     * @param status   the status of the reservation
      * @return an Optional containing the found reservation, or empty if not found
      */
-    Optional<Reservation> findByBookAndUserAndStatus(Book book, User user, ReservationStatus status);
+    Optional<Reservation> findByBookIdAndUserIdAndStatus(Long bookId, Long userId, ReservationStatus status);
 
     /**
      * Finds all reservations for a given user.
@@ -70,33 +69,33 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation,Long
      * @param user the user associated with the reservations
      * @return a list of reservations for the user
      */
-    List<Reservation> findByUser(User user);
+    List<Reservation> findByUserId(Long userId);
 
     /**
      * Finds all reservations for a given book.
      *
-     * @param book the book associated with the reservations
+        * @param bookId the ID of the book associated with the reservations
      * @return a list of reservations for the book
      */
-    List<Reservation> findByBook(Book book);
+    List<Reservation> findByBookId(Long bookId);
 
     /**
      * Finds all reservations for a given book with specified statuses, ordered by queue position.
      *
-     * @param book       the book associated with the reservations
+        * @param bookId    the ID of the book associated with the reservations
      * @param statusList the list of reservation statuses to filter by
      * @return a list of reservations matching the criteria
      */
-    List<Reservation> findByBookAndStatusInOrderByQueuePosition(Book book, List<ReservationStatus> statusList);
+    List<Reservation> findByBookIdAndStatusInOrderByQueuePosition(Long bookId, List<ReservationStatus> statusList);
 
     /**
      * Finds all reservations for a given user with specified statuses, ordered by queue position.
      *
-     * @param user       the user associated with the reservations
+        * @param userId     the ID of the user associated with the reservations
      * @param statusList the list of reservation statuses to filter by
      * @return a list of reservations matching the criteria
      */
-    List<Reservation> findByUserAndStatusInOrderByQueuePosition(User user, List<ReservationStatus> statusList);
+    List<Reservation> findByUserIdAndStatusInOrderByQueuePosition(Long userId, List<ReservationStatus> statusList);
 
 
 

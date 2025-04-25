@@ -3,7 +3,6 @@ package com.orange.bookmanagment.reservation.service.impl;
 import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.book.model.enums.BookStatus;
 import com.orange.bookmanagment.book.repository.BookRepository;
-import com.orange.bookmanagment.loan.service.LoanService;
 import com.orange.bookmanagment.reservation.exception.BookAlreadyReservedException;
 import com.orange.bookmanagment.reservation.exception.BookNotAvailableException;
 import com.orange.bookmanagment.reservation.exception.ReservationNotFoundException;
@@ -25,7 +24,7 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
-public class ReservationServiceImpl implements ReservationService {
+class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
     //private final LoanService loanService;
@@ -60,8 +59,8 @@ public class ReservationServiceImpl implements ReservationService {
         final int queuePosition = countActiveReservations(book) + 1;
 
         Reservation reservation = new Reservation(
-                book,
-                user,
+                book.getId(),
+                user.getId(),
                 ReservationStatus.PENDING,
                 queuePosition
         );
@@ -85,28 +84,29 @@ public class ReservationServiceImpl implements ReservationService {
             throw new IllegalStateException("Cannot cancel a reservation that is not active");
         }
 
-        if (reservation.getStatus() == ReservationStatus.READY) {
-            Book book = reservation.getBook();
-
-            Optional<Reservation> nextReservation = reservationRepository.findFirstByBookAndStatusOrderByQueuePosition(
-                    book, ReservationStatus.PENDING);
-
-            if (nextReservation.isPresent()) {
-                // Oznacz następną rezerwację jako gotową do odbioru
-                nextReservation.get().setStatus(ReservationStatus.READY);
-                reservationRepository.saveReservation(nextReservation.get());
-            } else {
-                // Brak innych rezerwacji, oznacz książkę jako dostępną
-                book.setStatus(BookStatus.AVAILABLE);
-                bookRepository.saveBook(book);
-            }
-        }
+        // todo: ogarnąć to bez book
+//        if (reservation.getStatus() == ReservationStatus.READY) {
+//            Book book = reservation.getBook();
+//
+//            Optional<Reservation> nextReservation = reservationRepository.findFirstByBookAndStatusOrderByQueuePosition(
+//                    book, ReservationStatus.PENDING);
+//
+//            if (nextReservation.isPresent()) {
+//                // Oznacz następną rezerwację jako gotową do odbioru
+//                nextReservation.get().setStatus(ReservationStatus.READY);
+//                reservationRepository.saveReservation(nextReservation.get());
+//            } else {
+//                // Brak innych rezerwacji, oznacz książkę jako dostępną
+//                book.setStatus(BookStatus.AVAILABLE);
+//                bookRepository.saveBook(book);
+//            }
+//        }
 
         reservation.setStatus(ReservationStatus.CANCELLED);
 
 
         // Aktualizuj pozycje w kolejce pozostałych rezerwacji
-        updateQueuePositions(reservation.getBook());
+//        updateQueuePositions(reservation.getBookId()); //todo: ogarnąć to bez book
 
         return reservationRepository.saveReservation(reservation);
 
@@ -128,31 +128,32 @@ public class ReservationServiceImpl implements ReservationService {
         return false;
     }
 
-    @Override
-    @Transactional
-    public boolean processReturnedBook(Book book) {
-        Optional<Reservation> nextReservation = reservationRepository.findFirstByBookAndStatusOrderByQueuePosition(
-                book, ReservationStatus.PENDING);
-
-        if (nextReservation.isPresent()) {
-            Reservation reservation = nextReservation.get();
-
-            // Oznacz rezerwację jako gotową do odbioru
-            reservation.setStatus(ReservationStatus.READY);
-            reservationRepository.saveReservation(reservation);
-
-            // Zaktualizuj status książki
-            book.setStatus(BookStatus.RESERVED);
-            bookRepository.saveBook(book);
-
-            // Zaktualizuj pozycje w kolejce
-            updateQueuePositions(book);
-
-            return true;
-        }
-
-        return false;
-    }
+    //todo: ogarnąć to bez book
+//    @Override
+//    @Transactional
+//    public boolean processReturnedBook(long bookId) {
+//        Optional<Reservation> nextReservation = reservationRepository.findFirstByBookAndStatusOrderByQueuePosition(
+//                book, ReservationStatus.PENDING);
+//
+//        if (nextReservation.isPresent()) {
+//            Reservation reservation = nextReservation.get();
+//
+//            // Oznacz rezerwację jako gotową do odbioru
+//            reservation.setStatus(ReservationStatus.READY);
+//            reservationRepository.saveReservation(reservation);
+//
+//            // Zaktualizuj status książki
+//            book.setStatus(BookStatus.RESERVED);
+//            bookRepository.saveBook(book);
+//
+//            // Zaktualizuj pozycje w kolejce
+//            updateQueuePositions(book);
+//
+//            return true;
+//        }
+//
+//        return false;
+//    }
 
     @Override
     @Transactional

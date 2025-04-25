@@ -18,8 +18,8 @@ public class ReservationDtoMapper {
      */
     public ReservationDto toDto(Reservation reservation) {
         return new ReservationDto(
-                reservation.getBook().getId(),
-                reservation.getUser().getId(),
+                reservation.getBookId(),
+                reservation.getUserId(),
                 TimeUtil.getTimeInStandardFormat(reservation.getReservedAt()),
                 TimeUtil.getTimeInStandardFormat(reservation.getExpiresAt()),
                 reservation.getStatus(),

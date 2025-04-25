@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class LoanServiceImpl implements LoanService {
+class LoanServiceImpl implements LoanService {
 
     private final LoanRepository loanRepository;
 //    private final BookRepository bookRepository;
@@ -52,7 +52,7 @@ public class LoanServiceImpl implements LoanService {
             reservationService.completeReservation(book, user);
         }
 
-        Loan loan = new Loan(book, user, LoanStatus.ACTIVE, librarian, notes);
+        Loan loan = new Loan(book.getId(), user.getId(), LoanStatus.ACTIVE, librarian.getId(), notes);
 
         book.setStatus(BookStatus.BORROWED);
         bookRepository.saveBook(book);
@@ -77,20 +77,20 @@ public class LoanServiceImpl implements LoanService {
         }
 
         // Mark loan as returned
-        loan.markAsReturned(librarian);
+        loan.markAsReturned(librarian.getId());
         loanRepository.saveLoan(loan);
 
-        // Get the book
-        Book book = loan.getBook();
-
-        // Check if there are waiting reservations
-        boolean hasActiveReservation = reservationService.processReturnedBook(book);
-
-        if (!hasActiveReservation) {
-            // No reservations, mark book as available
-            book.setStatus(BookStatus.AVAILABLE);
-            bookRepository.saveBook(book);
-        }
+        // Get the book //todo ogarnąć to bez book
+//        Book book = loan.getBook();
+//
+//        // Check if there are waiting reservations
+//        boolean hasActiveReservation = reservationService.processReturnedBook(book);
+//
+//        if (!hasActiveReservation) {
+//            // No reservations, mark book as available
+//            book.setStatus(BookStatus.AVAILABLE);
+//            bookRepository.saveBook(book);
+//        }
 
         return loan;
     }
@@ -134,12 +134,12 @@ public class LoanServiceImpl implements LoanService {
         }
 
         // Mark loan as lost
-        loan.markAsLost(librarian, notes);
+        loan.markAsLost(librarian.getId(), notes);
 
-        // Update book status
-        Book book = loan.getBook();
-        book.setStatus(BookStatus.LOST);
-        bookRepository.saveBook(book);
+        // Update book status //todo ogarnąć to bez book
+//        Book book = loan.getBook();
+//        book.setStatus(BookStatus.LOST);
+//        bookRepository.saveBook(book);
 
         return loanRepository.saveLoan(loan);
     }
@@ -152,14 +152,14 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     @Transactional
-    public List<Loan> getUserLoans(User user) {
-        return loanRepository.findByUser(user);
+    public List<Loan> getUserLoans(long userId) {
+        return loanRepository.findByUserId(userId);
     }
 
     @Override
     @Transactional
-    public List<Loan> getActiveUserLoans(User user) {
-        return loanRepository.findByUserAndStatusIn(user, List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE));
+    public List<Loan> getActiveUserLoans(long userId) {
+        return loanRepository.findByUserAndStatusIn(userId, List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE));
     }
 
     @Override
@@ -185,6 +185,6 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public boolean isBookBorrowedByUser(Book book, User user) {
-        return loanRepository.existsByBookAndUserAndStatusIn(book, user, List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE));
+        return loanRepository.existsByBookAndUserAndStatusIn(book.getId(), user.getId(), List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE));
     }
 }
