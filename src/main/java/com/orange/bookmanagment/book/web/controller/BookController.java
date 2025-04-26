@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -106,5 +108,14 @@ class BookController {
                         .message("Book created")
                         .data(Map.of("book", bookDtoMapper.toDto(book)))
                         .build());
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test(Authentication authentication){
+        final Jwt jwt = (Jwt) authentication.getPrincipal();
+
+        final long userId = jwt.getClaim("user_id");
+
+        return ResponseEntity.status(OK).body("test");
     }
 }

@@ -37,24 +37,15 @@ class LoanServiceImpl implements LoanService {
     private final BookService bookService;
     private final UserService userService;
 
+    /*
+    Event-driven design
+     */
     @Override
     @Transactional
     public Loan borrowBook(Long bookId, Long userId, Long librarianId, String notes) {
 
         if (!bookService.existsById(bookId)) {
             throw new EntityNotFoundException("Book not found with ID: " + bookId);
-        }
-
-        // Sprawdzanie czy użytkownik istnieje
-        if (!userService.existsById(userId)) {
-            throw new EntityNotFoundException("User not found with ID: " + userId);
-        }
-
-        // Używamy bookService zamiast repozytorium
-        final BookStatus bookStatus = bookService.getBookStatusById(bookId);
-
-        if (bookStatus != BookStatus.AVAILABLE && bookStatus != BookStatus.RESERVED) {
-            throw new BusinessRuleException("Book is not available for borrowing");
         }
 
         // Jeśli książka jest zarezerwowana, sprawdź czy dla tego użytkownika
@@ -69,8 +60,6 @@ class LoanServiceImpl implements LoanService {
             eventPublisher.publishEvent(new ReservationCompletedEvent(bookId, userId));
         }
 
-        Loan loan = new Loan(bookId, userId, LoanStatus.ACTIVE, librarianId, notes);
-
         // Aktualizuj status książki przez serwis
 //        bookService.updateBookStatus(bookId, BookStatus.BORROWED);
         // Publikuj zdarzenie o zmianie statusu książki zamiast bezpośredniego wywołania
@@ -78,6 +67,8 @@ class LoanServiceImpl implements LoanService {
 
         eventPublisher.publishEvent(new LoanBookEvent(bookId, LoanBookEvent.BookStatus.BORROWED));
 
+
+        final Loan loan = new Loan(bookId, userId, LoanStatus.ACTIVE, librarianId, notes);
         // Publikuj zdarzenie o utworzeniu wypożyczenia. To do notyfikacji
 //        eventPublisher.publishEvent(new LoanCreatedEvent(savedLoan.getId(), bookId, userId, librarianId));
 
@@ -88,12 +79,6 @@ class LoanServiceImpl implements LoanService {
     @Transactional
     public Loan returnBook(long loanId, Long librarianId) {
         // Używamy userService
-        UserType librarianType = userService.getUserTypeById(librarianId);
-
-        if (librarianType != UserType.LIBRARIAN && librarianType != UserType.ADMIN) {
-            throw new IllegalArgumentException("Only a librarian can process book returns");
-        }
-
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan not found with ID: " + loanId));
 
