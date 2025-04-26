@@ -87,6 +87,14 @@ public class User {
         this.blockedAt = Instant.now();
         this.verifiedAt = Instant.now();
         this.lockedAt = Instant.now();
+
+        this.userSettings = new Settings(
+                false,
+                true,
+                true,
+                true,
+                true
+        );
     }
 
     public void changePassword(String password) {

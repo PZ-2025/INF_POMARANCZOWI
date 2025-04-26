@@ -12,5 +12,18 @@ package com.orange.bookmanagment.book.model.enums;
  * </ul>
  */
 public enum BookStatus {
-    AVAILABLE, BORROWED, RESERVED, LOST
+    AVAILABLE, BORROWED, RESERVED, LOST;
+
+
+    BookStatus() {
+    }
+
+    public static boolean existsByName(String name){
+        for(BookStatus bookStatus : BookStatus.values()){
+            if(bookStatus.name().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

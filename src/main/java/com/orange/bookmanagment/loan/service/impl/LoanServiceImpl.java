@@ -11,6 +11,7 @@ import com.orange.bookmanagment.loan.repository.LoanRepository;
 import com.orange.bookmanagment.loan.service.LoanService;
 import com.orange.bookmanagment.reservation.exception.BookNotAvailableException;
 import com.orange.bookmanagment.reservation.service.ReservationService;
+import com.orange.bookmanagment.shared.events.LoanBookEvent;
 import com.orange.bookmanagment.shared.events.ReservationCompletedEvent;
 import com.orange.bookmanagment.shared.exceptions.BusinessRuleException;
 import com.orange.bookmanagment.shared.exceptions.EntityNotFoundException;
@@ -73,7 +74,9 @@ class LoanServiceImpl implements LoanService {
         // Aktualizuj status książki przez serwis
 //        bookService.updateBookStatus(bookId, BookStatus.BORROWED);
         // Publikuj zdarzenie o zmianie statusu książki zamiast bezpośredniego wywołania
-        eventPublisher.publishEvent(new BookStatusChangedEvent(bookId, BookStatus.BORROWED));
+        //eventPublisher.publishEvent(new BookStatusChangedEvent(bookId, BookStatus.BORROWED));
+
+        eventPublisher.publishEvent(new LoanBookEvent(bookId, LoanBookEvent.BookStatus.BORROWED));
 
         // Publikuj zdarzenie o utworzeniu wypożyczenia. To do notyfikacji
 //        eventPublisher.publishEvent(new LoanCreatedEvent(savedLoan.getId(), bookId, userId, librarianId));
@@ -111,7 +114,8 @@ class LoanServiceImpl implements LoanService {
 
         if (!hasActiveReservation) {
             // Brak rezerwacji, oznacz książkę jako dostępną przez serwis
-            bookService.updateBookStatus(bookId, BookStatus.AVAILABLE);
+           // bookService.updateBookStatus(bookId, BookStatus.AVAILABLE);
+            eventPublisher.publishEvent(new LoanBookEvent(bookId, LoanBookEvent.BookStatus.AVAILABLE));
         }
 
         return loan;
@@ -121,12 +125,6 @@ class LoanServiceImpl implements LoanService {
     @Transactional
     public Loan extendLoan(long loanId, int days, Long librarianId) {
         // Używamy userService
-        UserType librarianType = userService.getUserTypeById(librarianId);
-
-        if (librarianType != UserType.LIBRARIAN && librarianType != UserType.ADMIN) {
-            throw new IllegalArgumentException("Only a librarian can extend loans");
-        }
-
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan not found with ID: " + loanId));
 
@@ -164,7 +162,8 @@ class LoanServiceImpl implements LoanService {
 
         // Aktualizuj status książki przez serwis
         Long bookId = loan.getBookId();
-        bookService.updateBookStatus(bookId, BookStatus.LOST);
+        //bookService.updateBookStatus(bookId, BookStatus.LOST);
+        eventPublisher.publishEvent(new LoanBookEvent(bookId, LoanBookEvent.BookStatus.LOST));
 
         return loanRepository.saveLoan(loan);
     }
