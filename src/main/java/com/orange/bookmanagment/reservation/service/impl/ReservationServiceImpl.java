@@ -114,9 +114,9 @@ class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional
-    public boolean completeReservation(Book book, User user) {
-        Optional<Reservation> reservationOpt = reservationRepository.findByBookAndUserAndStatus(
-                book, user, ReservationStatus.READY);
+    public boolean completeReservation(long bookId, long userId) {
+        Optional<Reservation> reservationOpt = reservationRepository.findByBookIdAndUserIdAndStatus(
+                bookId, userId, ReservationStatus.READY);
 
         if (reservationOpt.isPresent()) {
             Reservation reservation = reservationOpt.get();
@@ -188,13 +188,13 @@ class ReservationServiceImpl implements ReservationService {
     /**
      * Checks if a book is reserved for a specific user.
      *
-     * @param book the book to check
-     * @param user the user to check for
+     * @param bookId the book to check
+     * @param userId the user to check
      * @return true if the book is reserved for the user, false otherwise
      */
-    public boolean isBookReservedForUser(Book book, User user) {
-        return reservationRepository.existsByBookAndUserAndStatusIn(
-                book, user, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
+    public boolean isBookReservedForUser(Long bookId, Long userId) {
+        return reservationRepository.existsByBookIdAndUserIdAndStatusIn(
+                bookId, userId, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
     }
 
     /**

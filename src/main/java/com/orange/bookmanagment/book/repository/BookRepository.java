@@ -61,7 +61,16 @@ public class BookRepository {
         return bookJpaRepository.findBookByTitle(title);
     }
 
-
+    //existsById
+    /**
+     * Checks if a book entity exists by its ID.
+     *
+     * @param id the ID of the book entity to check
+     * @return true if the book entity exists, false otherwise
+     */
+    public boolean existsById(long id) {
+        return bookJpaRepository.existsById(id);
+    }
 
 
 }

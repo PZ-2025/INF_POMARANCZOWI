@@ -24,7 +24,7 @@ public class LoanRepository {
      * @param statuses  the list of loan statuses to check
      * @return true if a loan exists, false otherwise
      */
-    public boolean existsByBookAndUserAndStatusIn(long bookId, long userId, List<LoanStatus> statuses) {
+    public boolean existsByBookIdAndUserIdAndStatusIn(long bookId, long userId, List<LoanStatus> statuses) {
         return loanJpaRepository.existsByBookIdAndUserIdAndStatusIn(bookId, userId, statuses);
     }
 

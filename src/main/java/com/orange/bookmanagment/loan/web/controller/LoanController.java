@@ -6,6 +6,8 @@ import com.orange.bookmanagment.loan.model.Loan;
 import com.orange.bookmanagment.loan.service.LoanService;
 import com.orange.bookmanagment.loan.web.mapper.LoanMapper;
 import com.orange.bookmanagment.loan.web.requests.CreateLoanRequest;
+import com.orange.bookmanagment.shared.exceptions.BusinessRuleException;
+import com.orange.bookmanagment.shared.exceptions.EntityNotFoundException;
 import com.orange.bookmanagment.shared.model.HttpResponse;
 import com.orange.bookmanagment.user.model.User;
 import com.orange.bookmanagment.user.service.UserService;
@@ -42,19 +44,44 @@ public class LoanController {
             @RequestBody CreateLoanRequest request,
             Authentication authentication) {
 
-        Book book = bookService.getBookById(request.bookId());
-        User user = userService.getUserById(request.userId()); // probably better to get by email
-        User librarian = userService.getUserByEmail(authentication.getName());
+        // Pobieramy tylko ID książki i użytkownika z request
+        final Long bookId = request.bookId();
+        final Long userId = request.userId();
 
-        Loan loan = loanService.borrowBook(book, user, librarian, request.notes());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(HttpResponse.builder()
-                        .statusCode(HttpStatus.CREATED.value())
-                        .httpStatus(HttpStatus.CREATED)
-                        .reason("Book borrowed successfully")
-                        .message("Book borrowed")
-                        .data(Map.of("loan", loanMapper.toDto(loan)))
-                        .build());
+        // Pobieramy ID bibliotekarza na podstawie autoryzacji
+        final Long librarianId = userService.getUserIdByEmail(authentication.getName());
+
+        try {
+            // Przekazujemy ID bibliotekarza zamiast emaila
+            Loan loan = loanService.borrowBook(bookId, userId, librarianId, request.notes());
+
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(HttpResponse.builder()
+                            .statusCode(HttpStatus.CREATED.value())
+                            .httpStatus(HttpStatus.CREATED)
+                            .reason("Book borrowed successfully")
+                            .message("Book borrowed")
+                            .data(Map.of("loan", loanMapper.toDto(loan)))
+                            .build());
+        } catch (EntityNotFoundException e) {
+            // Obsługa wyjątku dla nieznalezionych encji (książka, użytkownik)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(HttpResponse.builder()
+                            .statusCode(HttpStatus.NOT_FOUND.value())
+                            .httpStatus(HttpStatus.NOT_FOUND)
+                            .reason(e.getMessage())
+                            .message("Failed to borrow book")
+                            .build());
+        } catch (BusinessRuleException e) {
+            // Obsługa wyjątku dla naruszenia reguł biznesowych
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(HttpResponse.builder()
+                            .statusCode(HttpStatus.BAD_REQUEST.value())
+                            .httpStatus(HttpStatus.BAD_REQUEST)
+                            .reason(e.getMessage())
+                            .message("Failed to borrow book")
+                            .build());
+        }
     }
 
     /**

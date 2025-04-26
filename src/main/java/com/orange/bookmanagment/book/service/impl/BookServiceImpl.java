@@ -62,4 +62,15 @@ class BookServiceImpl implements BookService {
 
         return bookRepository.saveBook(book);
     }
+
+    @Override
+    public boolean existsById(long id) {
+        return bookRepository.existsById(id);
+    }
+
+    //getBookStatusById
+    @Override
+    public BookStatus getBookStatusById(long id) {
+        return bookRepository.findBookById(id).orElseThrow(() -> new BookNotFoundException("Book not found by id")).getStatus();
+    }
 }

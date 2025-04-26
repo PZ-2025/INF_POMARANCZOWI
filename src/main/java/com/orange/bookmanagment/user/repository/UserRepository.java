@@ -34,4 +34,9 @@ public class UserRepository {
         return userJpaRepository.findUsersByFirstName(firstName);
     }
 
+    //existsById
+    public boolean existsById(Long id) {
+        return userJpaRepository.existsById(id);
+    }
+
 }

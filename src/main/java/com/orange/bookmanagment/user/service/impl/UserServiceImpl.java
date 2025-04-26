@@ -30,6 +30,11 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
+    public long getUserIdByEmail(String email) throws UserNotFoundException {
+        return userRepository.findUserByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found by email")).getId();
+    }
+
+    @Override
     public User getUserById(long id) throws UserNotFoundException {
         return userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException("User not found by id"));
     }
@@ -70,4 +75,10 @@ class UserServiceImpl implements UserService {
 
         updateUser(user);
     }
+
+    @Override
+    public boolean existsById(long id) {
+        return userRepository.existsById(id);
+    }
+
 }

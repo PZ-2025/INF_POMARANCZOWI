@@ -13,6 +13,8 @@ public interface UserService {
 
     User getUserByEmail(String email) throws UserNotFoundException;
 
+    long getUserIdByEmail(String email) throws UserNotFoundException;
+
     User getUserById(long id) throws UserNotFoundException;
 
     List<User> getUserByFirstName(String firstName);
@@ -22,4 +24,7 @@ public interface UserService {
     User updateUser(User user) throws UserNotFoundException;
 
     void changeUserPassword(long userId, ChangePasswordRequest changePasswordRequest) throws UserNotFoundException;
+
+    boolean existsById(long id);
+
 }

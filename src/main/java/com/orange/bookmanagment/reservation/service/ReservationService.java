@@ -36,11 +36,11 @@ public interface ReservationService {
      /**
       * Completes a reservation for a book by a user.
       *
-      * @param book the book to be reserved
-      * @param user the user who wants to reserve the book
+      * @param bookId the book to be reserved
+      * @param userId the user who wants to reserve the book
       * @return true if the reservation was completed successfully, false otherwise
       */
-     boolean completeReservation(Book book, User user);
+     boolean completeReservation(long bookId, long userId);
 
      /**
       * <p>Process returned book - check for pending reservations</p>
@@ -85,11 +85,11 @@ public interface ReservationService {
      /**
       * <p>Check if book is reserved for user</p>
       *
-      * @param book book to check
-      * @param user user to check
+      * @param bookId book to check
+      * @param userId user to check
       * @return true if the book is reserved for the user
       */
-     boolean isBookReservedForUser(Book book, User user);
+     boolean isBookReservedForUser(Long bookId, Long userId);
 
      /**
      * <p>Get reservation by ID</p>

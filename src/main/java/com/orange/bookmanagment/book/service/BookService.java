@@ -2,6 +2,7 @@ package com.orange.bookmanagment.book.service;
 
 import com.orange.bookmanagment.book.exception.BookNotFoundException;
 import com.orange.bookmanagment.book.model.Book;
+import com.orange.bookmanagment.book.model.enums.BookStatus;
 import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,4 +55,9 @@ public interface BookService {
      * @throws BookNotFoundException if the book is not found
      */
     Book updateBook(Book book) throws BookNotFoundException;
+
+    boolean existsById(long id);
+
+    //getBookStatusById
+    BookStatus getBookStatusById(long id);
 }

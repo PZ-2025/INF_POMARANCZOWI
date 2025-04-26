@@ -20,8 +20,8 @@ public class ReservationRepository {
         return reservationJpaRepository.save(reservation);
     }
 
-    public boolean existsByBookAndUserAndStatusIn(Book book, User user, List<ReservationStatus> statusList) {
-        return reservationJpaRepository.existsByBookIdAndUserIdAndStatusIn(book.getId(), user.getId(), statusList);
+    public boolean existsByBookIdAndUserIdAndStatusIn(long bookId, long userId, List<ReservationStatus> statuses) {
+        return reservationJpaRepository.existsByBookIdAndUserIdAndStatusIn(bookId, userId, statuses);
     }
 
     public int countByBookAndStatusIn(Book book, List<ReservationStatus> statusList) {
@@ -40,8 +40,8 @@ public class ReservationRepository {
         return reservationJpaRepository.findByBookIdAndStatusOrderByQueuePosition(book.getId(), status);
     }
 
-    public Optional<Reservation> findByBookAndUserAndStatus(Book book, User user, ReservationStatus status) {
-        return reservationJpaRepository.findByBookIdAndUserIdAndStatus(book.getId(), user.getId(), status);
+    public Optional<Reservation> findByBookIdAndUserIdAndStatus(long bookId, long userId, ReservationStatus status) {
+        return reservationJpaRepository.findByBookIdAndUserIdAndStatus(bookId, userId, status);
     }
 
     public List<Reservation> findByUser(User user) {
