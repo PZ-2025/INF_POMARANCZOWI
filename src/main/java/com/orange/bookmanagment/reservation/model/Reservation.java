@@ -1,6 +1,6 @@
 package com.orange.bookmanagment.reservation.model;
 
-import com.orange.bookmanagment.reservation.model.enums.ReservationStatus;
+import com.orange.bookmanagment.shared.enums.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

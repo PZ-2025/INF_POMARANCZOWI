@@ -1,4 +1,4 @@
-package com.orange.bookmanagment.reservation.model.enums;
+package com.orange.bookmanagment.shared.enums;
 
 /**
  * Enum representing the status of a reservation.

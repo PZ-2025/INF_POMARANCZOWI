@@ -1,9 +1,7 @@
 package com.orange.bookmanagment.reservation.repository;
 
-import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.reservation.model.Reservation;
-import com.orange.bookmanagment.reservation.model.enums.ReservationStatus;
-import com.orange.bookmanagment.user.model.User;
+import com.orange.bookmanagment.shared.enums.ReservationStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -24,41 +22,41 @@ public class ReservationRepository {
         return reservationJpaRepository.existsByBookIdAndUserIdAndStatusIn(bookId, userId, statuses);
     }
 
-    public int countByBookAndStatusIn(Book book, List<ReservationStatus> statusList) {
-        return reservationJpaRepository.countByBookIdAndStatusIn(book.getId(), statusList);
+    public int countByBookIdAndStatusIn(long bookId, List<ReservationStatus> statusList) {
+        return reservationJpaRepository.countByBookIdAndStatusIn(bookId, statusList);
     }
 
     public Optional<Reservation> findById(Long id) {
         return reservationJpaRepository.findById(id);
     }
 
-    public Optional<Reservation> findFirstByBookAndStatusOrderByQueuePosition(Book book, ReservationStatus status) {
-        return reservationJpaRepository.findFirstByBookIdAndStatusOrderByQueuePosition(book.getId(), status);
+    public Optional<Reservation> findFirstByBookIdAndStatusOrderByQueuePosition(long bookId, ReservationStatus status) {
+        return reservationJpaRepository.findFirstByBookIdAndStatusOrderByQueuePosition(bookId, status);
     }
 
-    public List<Reservation> findByBookAndStatusOrderByQueuePosition(Book book, ReservationStatus status) {
-        return reservationJpaRepository.findByBookIdAndStatusOrderByQueuePosition(book.getId(), status);
+    public List<Reservation> findByBookIdAndStatusOrderByQueuePosition(long bookId, ReservationStatus status) {
+        return reservationJpaRepository.findByBookIdAndStatusOrderByQueuePosition(bookId, status);
     }
 
     public Optional<Reservation> findByBookIdAndUserIdAndStatus(long bookId, long userId, ReservationStatus status) {
         return reservationJpaRepository.findByBookIdAndUserIdAndStatus(bookId, userId, status);
     }
 
-    public List<Reservation> findByUser(User user) {
-        return reservationJpaRepository.findByUserId(user.getId());
+    public List<Reservation> findByUser(long userId) {
+        return reservationJpaRepository.findByUserId(userId);
     }
 
-    public List<Reservation> findByBook(Book book) {
-        return reservationJpaRepository.findByBookId(book.getId());
+    public List<Reservation> findByBookId(long bookId) {
+        return reservationJpaRepository.findByBookId(bookId);
     }
 
-    public List<Reservation> findByBookAndStatusInOrderByQueuePosition(Book book, List<ReservationStatus> statusList) {
-        return reservationJpaRepository.findByBookIdAndStatusInOrderByQueuePosition(book.getId(), statusList);
+    public List<Reservation> findByBookIdAndStatusInOrderByQueuePosition(long bookId, List<ReservationStatus> statusList) {
+        return reservationJpaRepository.findByBookIdAndStatusInOrderByQueuePosition(bookId, statusList);
     }
 
     //findByUserAndStatusInOrderByQueuePosition
-    public List<Reservation> findByUserAndStatusInOrderByQueuePosition(User user, List<ReservationStatus> statusList) {
-        return reservationJpaRepository.findByUserIdAndStatusInOrderByQueuePosition(user.getId(), statusList);
+    public List<Reservation> findByUserIdAndStatusInOrderByQueuePosition(Long userId, List<ReservationStatus> statusList) {
+        return reservationJpaRepository.findByUserIdAndStatusInOrderByQueuePosition(userId, statusList);
     }
 
 }

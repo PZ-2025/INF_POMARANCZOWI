@@ -1,9 +1,7 @@
 package com.orange.bookmanagment.reservation.repository;
 
-import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.reservation.model.Reservation;
-import com.orange.bookmanagment.reservation.model.enums.ReservationStatus;
-import com.orange.bookmanagment.user.model.User;
+import com.orange.bookmanagment.shared.enums.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,7 @@
 package com.orange.bookmanagment.user.service.impl;
 
 
+import com.orange.bookmanagment.user.api.UserExternalService;
 import com.orange.bookmanagment.user.exception.IllegalAccountAccessException;
 import com.orange.bookmanagment.user.exception.UserAlreadyExistException;
 import com.orange.bookmanagment.user.exception.UserNotFoundException;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService, UserExternalService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

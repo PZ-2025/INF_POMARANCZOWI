@@ -1,10 +1,8 @@
 package com.orange.bookmanagment.loan.service;
 
-import com.orange.bookmanagment.book.model.Book;
-import com.orange.bookmanagment.loan.exception.LoanNotFoundException;
+
 import com.orange.bookmanagment.loan.model.Loan;
-import com.orange.bookmanagment.reservation.exception.BookNotAvailableException;
-import com.orange.bookmanagment.user.model.User;
+import com.orange.bookmanagment.loan.exception.BookNotAvailableException;
 
 import java.util.List;
 
@@ -23,65 +21,65 @@ public interface LoanService {
      */
     Loan borrowBook(Long bookId, Long userId, Long librarianId, String notes) throws BookNotAvailableException, IllegalArgumentException;
 
-    /**
-     * <p>Return a book (must be processed by a librarian)</p>
-     *
-     * @param loanId ID of the loan to return
-     * @param librarianId ID of the librarian who is processing the return
-     * @return the updated loan
-     * @throws LoanNotFoundException if the loan is not found
-     * @throws IllegalArgumentException if the librarian is not a valid librarian
-     */
-    Loan returnBook(long loanId, Long librarianId) throws LoanNotFoundException, IllegalArgumentException;
-
-    /**
-     * <p>Extend loan period (must be done by a librarian)</p>
-     *
-     * @param loanId ID of the loan to extend
-     * @param days number of days to extend the loan by
-     * @param librarianId ID of the librarian who is approving the extension
-     * @return the updated loan
-     * @throws LoanNotFoundException if the loan is not found
-     * @throws IllegalArgumentException if the librarian is not a valid librarian
-     */
-    Loan extendLoan(long loanId, int days, Long librarianId) throws LoanNotFoundException, IllegalArgumentException;
-
-    /**
-     * <p>Mark a book as lost (must be done by a librarian)</p>
-     *
-     * @param loanId ID of the loan to mark as lost
-     * @param notes notes about the lost book
-     * @param librarianId ID of the librarian who is processing the lost report
-     * @return the updated loan
-     * @throws LoanNotFoundException if the loan is not found
-     * @throws IllegalArgumentException if the librarian is not a valid librarian
-     */
-    Loan markBookAsLost(long loanId, String notes, Long librarianId) throws LoanNotFoundException, IllegalArgumentException;
-
-    /**
-     * <p>Update overdue loans status</p>
-     * Updates the status of all loans that are past their due date to OVERDUE
-     * This method should be called regularly (e.g., by a scheduled task)
-     *
-     * @return number of loans updated
-     */
-//    int updateOverdueLoans();
-
-    /**
-     * Checks if a book is currently borrowed.
-     *
-     * @param bookId the ID of the book
-     * @return true if the book is borrowed, false otherwise
-     */
-    boolean isBookBorrowedByUser(Long bookId, Long userId);
-
-
-    List<Loan> getAllActiveLoans();
-
-    List<Loan> getUserLoans(long userId);
-
-    List<Loan> getActiveUserLoans(long userId);
-
-    Loan getLoanById(long loanId) throws LoanNotFoundException;
+//    /**
+//     * <p>Return a book (must be processed by a librarian)</p>
+//     *
+//     * @param loanId ID of the loan to return
+//     * @param librarianId ID of the librarian who is processing the return
+//     * @return the updated loan
+//     * @throws LoanNotFoundException if the loan is not found
+//     * @throws IllegalArgumentException if the librarian is not a valid librarian
+//     */
+//    Loan returnBook(long loanId, Long librarianId) throws LoanNotFoundException, IllegalArgumentException;
+//
+//    /**
+//     * <p>Extend loan period (must be done by a librarian)</p>
+//     *
+//     * @param loanId ID of the loan to extend
+//     * @param days number of days to extend the loan by
+//     * @param librarianId ID of the librarian who is approving the extension
+//     * @return the updated loan
+//     * @throws LoanNotFoundException if the loan is not found
+//     * @throws IllegalArgumentException if the librarian is not a valid librarian
+//     */
+//    Loan extendLoan(long loanId, int days, Long librarianId) throws LoanNotFoundException, IllegalArgumentException;
+//
+//    /**
+//     * <p>Mark a book as lost (must be done by a librarian)</p>
+//     *
+//     * @param loanId ID of the loan to mark as lost
+//     * @param notes notes about the lost book
+//     * @param librarianId ID of the librarian who is processing the lost report
+//     * @return the updated loan
+//     * @throws LoanNotFoundException if the loan is not found
+//     * @throws IllegalArgumentException if the librarian is not a valid librarian
+//     */
+//    Loan markBookAsLost(long loanId, String notes, Long librarianId) throws LoanNotFoundException, IllegalArgumentException;
+//
+//    /**
+//     * <p>Update overdue loans status</p>
+//     * Updates the status of all loans that are past their due date to OVERDUE
+//     * This method should be called regularly (e.g., by a scheduled task)
+//     *
+//     * @return number of loans updated
+//     */
+////    int updateOverdueLoans();
+//
+//    /**
+//     * Checks if a book is currently borrowed.
+//     *
+//     * @param bookId the ID of the book
+//     * @return true if the book is borrowed, false otherwise
+//     */
+//    boolean isBookBorrowedByUser(Long bookId, Long userId);
+//
+//
+//    List<Loan> getAllActiveLoans();
+//
+//    List<Loan> getUserLoans(long userId);
+//
+//    List<Loan> getActiveUserLoans(long userId);
+//
+//    Loan getLoanById(long loanId) throws LoanNotFoundException;
 
 }

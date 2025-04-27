@@ -2,7 +2,7 @@ package com.orange.bookmanagment.book.service;
 
 import com.orange.bookmanagment.book.exception.BookNotFoundException;
 import com.orange.bookmanagment.book.model.Book;
-import com.orange.bookmanagment.book.model.enums.BookStatus;
+import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -60,4 +60,6 @@ public interface BookService {
 
     //getBookStatusById
     BookStatus getBookStatusById(long id);
+
+//    void updateBookStatus(long id, BookStatus status);
 }

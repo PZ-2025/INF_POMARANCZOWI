@@ -1,15 +1,17 @@
 package com.orange.bookmanagment.book.service.impl;
 
+import com.orange.bookmanagment.book.api.BookExternalService;
+import com.orange.bookmanagment.book.api.BookInternalDto;
 import com.orange.bookmanagment.book.exception.BookNotFoundException;
 import com.orange.bookmanagment.book.model.Author;
 import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.book.model.Publisher;
-import com.orange.bookmanagment.book.model.enums.BookStatus;
+import com.orange.bookmanagment.book.service.mapper.BookInternalMapper;
+import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.book.repository.BookRepository;
 import com.orange.bookmanagment.book.service.AuthorService;
 import com.orange.bookmanagment.book.service.BookService;
 import com.orange.bookmanagment.book.service.PublisherService;
-import com.orange.bookmanagment.book.web.mapper.BookDtoMapper;
 import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
 import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +24,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-class BookServiceImpl implements BookService {
+class BookServiceImpl implements BookService, BookExternalService {
 
     private final BookRepository bookRepository;
 
     private final AuthorService authorService;
-    private final BookDtoMapper bookDtoMapper;
+    private final BookInternalMapper bookInternalMapper;
     private final PublisherService publisherService;
 
     @Override
@@ -72,5 +74,31 @@ class BookServiceImpl implements BookService {
     @Override
     public BookStatus getBookStatusById(long id) {
         return bookRepository.findBookById(id).orElseThrow(() -> new BookNotFoundException("Book not found by id")).getStatus();
+    }
+
+    @Override
+    @Transactional
+    public void updateBookStatus(long id, BookStatus status) {
+        Book book = bookRepository.findBookById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book not found by id"));
+        book.setStatus(status);
+        bookRepository.saveBook(book);
+    }
+
+    // Implementacje metod BookExternalService
+    @Override
+    public BookInternalDto getBookForExternal(long id) {
+        Book book = this.getBookById(id);
+        return bookInternalMapper.toDto(book);
+    }
+
+    @Override
+    public BookStatus getBookStatusForExternal(long id) {
+        return this.getBookStatusById(id);
+    }
+
+    @Override
+    public boolean existsBookById(long id) {
+        return this.existsById(id);
     }
 }

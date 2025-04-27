@@ -1,6 +1,6 @@
 package com.orange.bookmanagment.book.model;
 
-import com.orange.bookmanagment.book.model.enums.BookStatus;
+import com.orange.bookmanagment.shared.enums.BookStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

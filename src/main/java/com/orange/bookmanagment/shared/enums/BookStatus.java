@@ -1,4 +1,4 @@
-package com.orange.bookmanagment.book.model.enums;
+package com.orange.bookmanagment.shared.enums;
 
 /**
  * <p>Enum representing the status of a book in the system.</p>

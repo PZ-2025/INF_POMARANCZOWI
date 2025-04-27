@@ -1,6 +1,6 @@
 package com.orange.bookmanagment.book.web.model;
 
-import com.orange.bookmanagment.book.model.enums.BookStatus;
+import com.orange.bookmanagment.shared.enums.BookStatus;
 
 import java.util.List;
 
