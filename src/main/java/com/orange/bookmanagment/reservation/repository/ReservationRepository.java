@@ -42,7 +42,7 @@ public class ReservationRepository {
         return reservationJpaRepository.findByBookIdAndUserIdAndStatus(bookId, userId, status);
     }
 
-    public List<Reservation> findByUser(long userId) {
+    public List<Reservation> findByUserId(long userId) {
         return reservationJpaRepository.findByUserId(userId);
     }
 
@@ -54,7 +54,6 @@ public class ReservationRepository {
         return reservationJpaRepository.findByBookIdAndStatusInOrderByQueuePosition(bookId, statusList);
     }
 
-    //findByUserAndStatusInOrderByQueuePosition
     public List<Reservation> findByUserIdAndStatusInOrderByQueuePosition(Long userId, List<ReservationStatus> statusList) {
         return reservationJpaRepository.findByUserIdAndStatusInOrderByQueuePosition(userId, statusList);
     }

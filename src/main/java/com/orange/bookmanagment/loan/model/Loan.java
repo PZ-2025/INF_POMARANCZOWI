@@ -24,14 +24,8 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "book_id", nullable = false)
-//    private Book book;
     private long bookId;
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
     private long userId;
 
     @Enumerated(EnumType.STRING)
@@ -39,16 +33,10 @@ public class Loan {
 
     private String notes;
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "lending_librarian_id")
-//    private User lendingLibrarian;
     private long lendingLibrarianId;
 
     private Instant borrowedAt;
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "returning_librarian_id")
-//    private User returningLibrarian;
     private long returningLibrarianId;
 
     private Instant returnedAt;

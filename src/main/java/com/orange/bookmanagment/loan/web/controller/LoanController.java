@@ -4,8 +4,6 @@ import com.orange.bookmanagment.loan.model.Loan;
 import com.orange.bookmanagment.loan.service.LoanService;
 import com.orange.bookmanagment.loan.web.mapper.LoanMapper;
 import com.orange.bookmanagment.loan.web.requests.CreateLoanRequest;
-import com.orange.bookmanagment.shared.exceptions.BusinessRuleException;
-import com.orange.bookmanagment.shared.exceptions.EntityNotFoundException;
 import com.orange.bookmanagment.shared.model.HttpResponse;
 import com.orange.bookmanagment.user.api.UserExternalService;
 import lombok.RequiredArgsConstructor;
@@ -86,7 +84,6 @@ public class LoanController {
      * <p>Extend loan period (librarian only)</p>
      *
      * @param loanId ID of the loan to extend
-     * @param days number of days to extend the loan by
      * @param authentication authenticated librarian
      * @return the updated loan
      */

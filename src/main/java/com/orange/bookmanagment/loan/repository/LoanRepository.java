@@ -1,9 +1,7 @@
 package com.orange.bookmanagment.loan.repository;
 
-import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.loan.model.Loan;
 import com.orange.bookmanagment.loan.model.enums.LoanStatus;
-import com.orange.bookmanagment.user.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 

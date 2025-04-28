@@ -2,10 +2,10 @@ package com.orange.bookmanagment.loan.service.impl;
 
 import com.orange.bookmanagment.book.api.BookExternalService;
 import com.orange.bookmanagment.book.api.BookInternalDto;
-import com.orange.bookmanagment.loan.api.LoanExternalService;
 import com.orange.bookmanagment.loan.exception.BookNotAvailableException;
 import com.orange.bookmanagment.loan.exception.LoanNotFoundException;
 import com.orange.bookmanagment.reservation.api.ReservationExternalService;
+import com.orange.bookmanagment.reservation.api.dto.ReservationInternalDto;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.loan.model.Loan;
 import com.orange.bookmanagment.loan.model.enums.LoanStatus;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-class LoanServiceImpl implements LoanService, LoanExternalService {
+class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
     private final BookExternalService bookExternalService;
     private final ReservationExternalService reservationExternalService;
@@ -156,8 +156,5 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
 ////        return overdueLoans.size();
 ////    }
 
-    @Override
-    public boolean isBookBorrowedByUser(Long bookId, Long userId) {
-        return loanRepository.existsByBookIdAndUserIdAndStatusIn(bookId, userId, List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE));
-    }
+
 }

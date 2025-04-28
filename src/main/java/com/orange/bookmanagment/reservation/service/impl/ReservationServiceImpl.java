@@ -2,6 +2,8 @@ package com.orange.bookmanagment.reservation.service.impl;
 
 import com.orange.bookmanagment.book.api.BookExternalService;
 import com.orange.bookmanagment.reservation.api.ReservationExternalService;
+import com.orange.bookmanagment.reservation.api.dto.ReservationInternalDto;
+import com.orange.bookmanagment.reservation.exception.ReservationNotFoundException;
 import com.orange.bookmanagment.reservation.service.mapper.ReservationInternalMapper;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.reservation.exception.BookAlreadyReservedException;
@@ -29,50 +31,6 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
     private final BookExternalService bookExternalService;
     private final ReservationInternalMapper reservationInternalMapper;
 
-//    @Override
-//    @Transactional
-//    public Reservation createReservation(Book book, User user) {
-//
-//        if (book.getStatus() == BookStatus.BORROWED) {
-//            // Sprawdź czy to użytkownik wypożyczył tę książkę
-//            //if (loanService.isBookBorrowedByUser(book, user)) {
-//            //    throw new IllegalStateException("You already have this book borrowed");
-//           // }
-//            // Książka jest wypożyczona przez kogoś innego - można kontynuować rezerwację
-//        } else if (book.getStatus() == BookStatus.LOST) {
-//            throw new BookNotAvailableException("This book is currently reported as lost and cannot be reserved");
-//        }
-//
-//        // Sprawdz czy użytkownik nie ma już aktywnej rezerwacji na tę książkę
-//        if (isBookReservedForUser(book, user)) {
-//            throw new BookAlreadyReservedException("You already have an active reservation for this book");
-//        }
-//
-//        // Sprawdz czy użytkownik nie przekroczył limitu rezerwacji
-////        List<Reservation> activeReservations = getActiveReservations(user);
-////        if (activeReservations.size() >= maxReservationsPerUser) {
-////            throw new IllegalStateException("You have reached the maximum number of active reservations ("
-////                    + maxReservationsPerUser + ")");
-////        }
-//
-//        final int queuePosition = countActiveReservations(book) + 1;
-//
-//        Reservation reservation = new Reservation(
-//                book.getId(),
-//                user.getId(),
-//                ReservationStatus.PENDING,
-//                queuePosition
-//        );
-//
-//        if (book.getStatus() == BookStatus.AVAILABLE) {
-//            reservation.setStatus(ReservationStatus.READY);
-//
-//            book.setStatus(BookStatus.RESERVED);
-//            bookExternalService.saveBook(book);
-//        }
-//
-//        return reservationRepository.saveReservation(reservation);
-//    }
 
     @Override
     @Transactional
@@ -109,66 +67,60 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         return reservationRepository.saveReservation(reservation);
     }
 
-//    // Implementacje metod interfejsu zewnętrznego
-//    @Override
-//    public ReservationInternalDto createReservation(long bookId, long userId) {
-//        Reservation reservation = this.createReservation(bookId, userId);
-//        return reservationInternalMapper.toDto(reservation);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public Reservation cancelReservation(Reservation reservation) {
-//
-//        if (reservation.getStatus() != ReservationStatus.PENDING
-//                && reservation.getStatus() != ReservationStatus.READY) {
-//            throw new IllegalStateException("Cannot cancel a reservation that is not active");
-//        }
-//
-//        // todo: ogarnąć to bez book
-////        if (reservation.getStatus() == ReservationStatus.READY) {
-////            Book book = reservation.getBook();
-////
-////            Optional<Reservation> nextReservation = reservationRepository.findFirstByBookAndStatusOrderByQueuePosition(
-////                    book, ReservationStatus.PENDING);
-////
-////            if (nextReservation.isPresent()) {
-////                // Oznacz następną rezerwację jako gotową do odbioru
-////                nextReservation.get().setStatus(ReservationStatus.READY);
-////                reservationRepository.saveReservation(nextReservation.get());
-////            } else {
-////                // Brak innych rezerwacji, oznacz książkę jako dostępną
-////                book.setStatus(BookStatus.AVAILABLE);
-////                bookRepository.saveBook(book);
-////            }
-////        }
-//
-//        reservation.setStatus(ReservationStatus.CANCELLED);
-//
-//
-//        // Aktualizuj pozycje w kolejce pozostałych rezerwacji
-////        updateQueuePositions(reservation.getBookId()); //todo: ogarnąć to bez book
-//
-//        return reservationRepository.saveReservation(reservation);
-//
-//    }
-//
-//    @Override
-//    public ReservationInternalDto createReservationExternal(long bookId, long userId) {
-//        Reservation reservation = this.createReservation(bookId, userId);
-//        return reservationMapper.toDto(reservation);
-//    }
-//
     @Override
     @Transactional
-    public void completeReservation(long bookId, long userId) {
+    public Reservation cancelReservation(Reservation reservation) {
+
+        if (reservation.getStatus() == ReservationStatus.CANCELLED) {
+            return reservation;
+        }
+
+        if (reservation.getStatus() != ReservationStatus.PENDING
+                && reservation.getStatus() != ReservationStatus.READY) {
+            throw new IllegalStateException("Cannot cancel a reservation that is not active");
+        }
+
+        final long bookId = reservation.getBookId();
+
+        if (reservation.getStatus() == ReservationStatus.READY) {
+
+            Optional<Reservation> nextReservation = reservationRepository.findFirstByBookIdAndStatusOrderByQueuePosition(
+                    bookId, ReservationStatus.PENDING);
+
+            if (nextReservation.isPresent()) {
+                // Oznacz następną rezerwację jako gotową do odbioru
+                nextReservation.get().setStatus(ReservationStatus.READY);
+                reservationRepository.saveReservation(nextReservation.get());
+            } else {
+                // Brak innych rezerwacji, oznacz książkę jako dostępną
+                bookExternalService.updateBookStatus(bookId, BookStatus.AVAILABLE);
+            }
+        }
+
+        reservation.setStatus(ReservationStatus.CANCELLED);
+
+
+        // Aktualizuj pozycje w kolejce pozostałych rezerwacji
+        updateQueuePositions(bookId);
+
+        return reservationRepository.saveReservation(reservation);
+
+    }
+
+    @Override
+    @Transactional
+    public ReservationInternalDto completeReservation(long bookId, long userId) {
         Optional<Reservation> reservationOpt = reservationRepository.findByBookIdAndUserIdAndStatus(
                 bookId, userId, ReservationStatus.READY);
 
         if (reservationOpt.isPresent()) {
             Reservation reservation = reservationOpt.get();
             reservation.setStatus(ReservationStatus.COMPLETED);
-            reservationRepository.saveReservation(reservation);
+            final Reservation savedReservation = reservationRepository.saveReservation(reservation);
+
+            return reservationInternalMapper.toDto(savedReservation);
+        } else {
+            throw new ReservationNotFoundException("Reservation not found");
         }
 
     }
@@ -198,35 +150,35 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         return false;
     }
 
-//    @Override
-//    @Transactional
-//    public Reservation getReservationById(Long reservationId) {
-//        return reservationRepository.findById(reservationId)
-//                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
-//    }
-//
-//    @Override
-//    @Transactional
-//    public List<Reservation> getUserReservations(User user) {
-//        return reservationRepository.findByUser(user);
-//    }
-//
-//    @Override
-//    public List<Reservation> getActiveUserReservations(User user) {
-//        return reservationRepository.findByUserAndStatusInOrderByQueuePosition(
-//                user, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
-//    }
-//
-//    @Override
-//    public List<Reservation> getBookReservations(Book book) {
-//        return reservationRepository.findByBook(book);
-//    }
-//
-//    @Override
-//    public List<Reservation> getActiveBookReservations(Book book) {
-//        return reservationRepository.findByBookAndStatusInOrderByQueuePosition(
-//                book, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
-//    }
+    @Override
+    @Transactional
+    public Reservation getReservationById(Long reservationId) {
+        return reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
+    }
+
+    @Override
+    @Transactional
+    public List<Reservation> getUserReservations(long userId) {
+        return reservationRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<Reservation> getActiveUserReservations(long userId) {
+        return reservationRepository.findByUserIdAndStatusInOrderByQueuePosition(
+                userId, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
+    }
+
+    @Override
+    public List<Reservation> getBookReservations(long bookId) {
+        return reservationRepository.findByBookId(bookId);
+    }
+
+    @Override
+    public List<Reservation> getActiveBookReservations(long bookId) {
+        return reservationRepository.findByBookIdAndStatusInOrderByQueuePosition(
+                bookId, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
+    }
 
     /**
      * Checks if a book is reserved for a specific user.

@@ -85,7 +85,6 @@ class BookServiceImpl implements BookService, BookExternalService {
         bookRepository.saveBook(book);
     }
 
-    // Implementacje metod BookExternalService
     @Override
     public BookInternalDto getBookForExternal(long id) {
         Book book = this.getBookById(id);
