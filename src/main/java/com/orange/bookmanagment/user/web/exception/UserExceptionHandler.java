@@ -3,6 +3,7 @@ package com.orange.bookmanagment.user.web.exception;
 
 import com.orange.bookmanagment.shared.model.HttpResponse;
 import com.orange.bookmanagment.shared.util.TimeUtil;
+import com.orange.bookmanagment.user.exception.IllegalAccountAccessException;
 import com.orange.bookmanagment.user.exception.UserAlreadyExistException;
 import com.orange.bookmanagment.user.exception.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 class UserExceptionHandler {
-
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<HttpResponse> handleUserNotFoundException(UserNotFoundException e) {
@@ -27,6 +27,7 @@ class UserExceptionHandler {
                         .build()
         );
     }
+
     @ExceptionHandler(UserAlreadyExistException.class)
     public ResponseEntity<HttpResponse> handleUserAlreadyExistException(UserAlreadyExistException e) {
         return ResponseEntity.status(BAD_REQUEST).body(
@@ -36,6 +37,19 @@ class UserExceptionHandler {
                         .httpStatus(BAD_REQUEST)
                         .message(e.getMessage())
                         .reason("User already exist")
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(IllegalAccountAccessException.class)
+    public ResponseEntity<HttpResponse> handleIllegalAccountAccessException(IllegalAccountAccessException e) {
+        return ResponseEntity.status(FORBIDDEN).body(
+                HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(FORBIDDEN.value())
+                        .httpStatus(FORBIDDEN)
+                        .message(e.getMessage())
+                        .reason("Unauthorized access to account")
                         .build()
         );
     }
