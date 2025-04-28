@@ -1,20 +1,15 @@
 package com.orange.bookmanagment.reservation.service.impl;
 
 import com.orange.bookmanagment.book.api.BookExternalService;
-import com.orange.bookmanagment.book.model.Book;
-import com.orange.bookmanagment.loan.api.LoanExternalService;
 import com.orange.bookmanagment.reservation.api.ReservationExternalService;
-import com.orange.bookmanagment.reservation.api.dto.ReservationInternalDto;
 import com.orange.bookmanagment.reservation.service.mapper.ReservationInternalMapper;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.reservation.exception.BookAlreadyReservedException;
 import com.orange.bookmanagment.reservation.exception.BookNotAvailableException;
-import com.orange.bookmanagment.reservation.exception.ReservationNotFoundException;
 import com.orange.bookmanagment.reservation.model.Reservation;
 import com.orange.bookmanagment.shared.enums.ReservationStatus;
 import com.orange.bookmanagment.reservation.repository.ReservationRepository;
 import com.orange.bookmanagment.reservation.service.ReservationService;
-import com.orange.bookmanagment.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +26,6 @@ import java.util.Optional;
 class ReservationServiceImpl implements ReservationService, ReservationExternalService {
 
     private final ReservationRepository reservationRepository;
-//    private final LoanExternalService loanExternalService;
     private final BookExternalService bookExternalService;
     private final ReservationInternalMapper reservationInternalMapper;
 
@@ -179,33 +173,31 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
 
     }
 
-    //todo: ogarnąć to bez book
-////    @Override
-////    @Transactional
-////    public boolean processReturnedBook(long bookId) {
-////        Optional<Reservation> nextReservation = reservationRepository.findFirstByBookAndStatusOrderByQueuePosition(
-////                book, ReservationStatus.PENDING);
-////
-////        if (nextReservation.isPresent()) {
-////            Reservation reservation = nextReservation.get();
-////
-////            // Oznacz rezerwację jako gotową do odbioru
-////            reservation.setStatus(ReservationStatus.READY);
-////            reservationRepository.saveReservation(reservation);
-////
-////            // Zaktualizuj status książki
-////            book.setStatus(BookStatus.RESERVED);
-////            bookRepository.saveBook(book);
-////
-////            // Zaktualizuj pozycje w kolejce
-////            updateQueuePositions(book);
-////
-////            return true;
-////        }
-////
-////        return false;
-////    }
-//
+    @Override
+    @Transactional
+    public boolean processReturnedBook(long bookId) {
+        Optional<Reservation> nextReservation = reservationRepository.findFirstByBookIdAndStatusOrderByQueuePosition(
+                bookId, ReservationStatus.PENDING);
+
+        if (nextReservation.isPresent()) {
+            Reservation reservation = nextReservation.get();
+
+            // Oznacz rezerwację jako gotową do odbioru
+            reservation.setStatus(ReservationStatus.READY);
+            reservationRepository.saveReservation(reservation);
+
+            // Zaktualizuj status książki
+            bookExternalService.updateBookStatus(bookId, BookStatus.RESERVED);
+
+            // Zaktualizuj pozycje w kolejce
+            updateQueuePositions(bookId);
+
+            return true;
+        }
+
+        return false;
+    }
+
 //    @Override
 //    @Transactional
 //    public Reservation getReservationById(Long reservationId) {
@@ -258,23 +250,23 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         return reservationRepository.countByBookIdAndStatusIn(
                 bookId, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
     }
-//
-//    /**
-//     * <p>Update queue positions for pending reservations</p>
-//     *
-//     * @param book book to update queue positions for
-//     */
-//    private void updateQueuePositions(Book book) {
-//        List<Reservation> pendingReservations = reservationRepository.findByBookAndStatusOrderByQueuePosition(
-//                book, ReservationStatus.PENDING);
-//
-//        int position = 1;
-//        for (Reservation reservation : pendingReservations) {
-//            reservation.setQueuePosition(position++);
-//            reservationRepository.saveReservation(reservation);
-//        }
-//    }
-//
+
+    /**
+     * <p>Update queue positions for pending reservations</p>
+     *
+     * @param bookId book to update queue positions for
+     */
+    private void updateQueuePositions(long bookId) {
+        List<Reservation> pendingReservations = reservationRepository.findByBookIdAndStatusOrderByQueuePosition(
+                bookId, ReservationStatus.PENDING);
+
+        int position = 1;
+        for (Reservation reservation : pendingReservations) {
+            reservation.setQueuePosition(position++);
+            reservationRepository.saveReservation(reservation);
+        }
+    }
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.orange.bookmanagment.loan.api;
 
+//todo: do usunięcie bo to najwyższy service
 public interface LoanExternalService {
     //    @Override
     //    @Transactional
