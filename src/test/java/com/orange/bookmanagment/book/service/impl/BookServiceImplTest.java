@@ -1,6 +1,6 @@
 package com.orange.bookmanagment.book.service.impl;
 
-import com.orange.bookmanagment.book.api.BookInternalDto;
+import com.orange.bookmanagment.book.api.dto.BookExternalDto;
 import com.orange.bookmanagment.book.exception.BookNotFoundException;
 import com.orange.bookmanagment.book.model.Author;
 import com.orange.bookmanagment.book.model.Book;
@@ -65,7 +65,7 @@ class BookServiceImplTest {
     private BookCreateRequest bookCreateRequest;
     private PublisherCreateRequest publisherCreateRequest;
     private List<AuthorCreateRequest> authorCreateRequests;
-    private BookInternalDto bookInternalDto;
+    private BookExternalDto bookExternalDto;
 
     private static final long BOOK_ID = 1L;
     private static final String BOOK_TITLE = "Test Book";
@@ -124,7 +124,7 @@ class BookServiceImplTest {
         );
 
         // DTO for external service
-        bookInternalDto = new BookInternalDto(
+        bookExternalDto = new BookExternalDto(
                 BOOK_ID,
                 BOOK_TITLE,
                 null,
@@ -386,10 +386,10 @@ class BookServiceImplTest {
     void getBookForExternal_shouldReturnMappedDto() {
         // given
         when(bookRepository.findBookById(BOOK_ID)).thenReturn(Optional.of(testBook));
-        when(bookInternalMapper.toDto(testBook)).thenReturn(bookInternalDto);
+        when(bookInternalMapper.toDto(testBook)).thenReturn(bookExternalDto);
 
         // when
-        BookInternalDto result = bookService.getBookForExternal(BOOK_ID);
+        BookExternalDto result = bookService.getBookForExternal(BOOK_ID);
 
         // then
         assertThat(result).isNotNull();

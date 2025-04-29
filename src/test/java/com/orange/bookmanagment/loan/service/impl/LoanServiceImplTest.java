@@ -1,7 +1,7 @@
 package com.orange.bookmanagment.loan.service.impl;
 
 import com.orange.bookmanagment.book.api.BookExternalService;
-import com.orange.bookmanagment.book.api.BookInternalDto;
+import com.orange.bookmanagment.book.api.dto.BookExternalDto;
 import com.orange.bookmanagment.loan.exception.BookNotAvailableException;
 import com.orange.bookmanagment.loan.exception.LoanNotFoundException;
 import com.orange.bookmanagment.loan.model.Loan;
@@ -57,14 +57,14 @@ class LoanServiceImplTest {
     private static final String NOTES = "Test notes";
 
     private Loan testLoan;
-    private BookInternalDto testBook;
+    private BookExternalDto testBook;
 
     @BeforeEach
     void setUp() {
         testLoan = new Loan(BOOK_ID, USER_ID, LoanStatus.ACTIVE, LIBRARIAN_ID, NOTES);
         testLoan.setId(LOAN_ID);
 
-        testBook = new BookInternalDto(
+        testBook = new BookExternalDto(
                 BOOK_ID,
                 "Test Book",
                 List.of(),
@@ -102,7 +102,7 @@ class LoanServiceImplTest {
     @Test
     void borrowBook_whenBookIsReservedForUser_shouldCreateLoanAndCompleteReservation() {
         // given
-        BookInternalDto reservedBook = new BookInternalDto(
+        BookExternalDto reservedBook = new BookExternalDto(
                 BOOK_ID,
                 "Test Book",
                 List.of(),
@@ -135,7 +135,7 @@ class LoanServiceImplTest {
     @Test
     void borrowBook_whenBookIsReservedForAnotherUser_shouldThrowException() {
         // given
-        BookInternalDto reservedBook = new BookInternalDto(
+        BookExternalDto reservedBook = new BookExternalDto(
                 BOOK_ID,
                 "Test Book",
                 List.of(),
@@ -166,7 +166,7 @@ class LoanServiceImplTest {
     @Test
     void borrowBook_whenBookIsAlreadyBorrowed_shouldThrowException() {
         // given
-        BookInternalDto borrowedBook = new BookInternalDto(
+        BookExternalDto borrowedBook = new BookExternalDto(
                 BOOK_ID,
                 "Test Book",
                 List.of(),
