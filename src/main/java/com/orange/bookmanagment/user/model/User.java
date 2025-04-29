@@ -3,10 +3,7 @@ package com.orange.bookmanagment.user.model;
 
 import com.orange.bookmanagment.user.model.enums.UserType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.Instant;
 
@@ -22,6 +19,7 @@ import java.time.Instant;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 public class User {
 
     @Id

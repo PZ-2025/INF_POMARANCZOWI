@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * <p>Entity representing a book author.</p>
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 //@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
