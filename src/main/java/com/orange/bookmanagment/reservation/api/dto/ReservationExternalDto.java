@@ -4,7 +4,7 @@ import com.orange.bookmanagment.shared.enums.ReservationStatus;
 
 import java.time.Instant;
 
-public record ReservationInternalDto(
+public record ReservationExternalDto(
         Long id,
         Long bookId,
         Long userId,

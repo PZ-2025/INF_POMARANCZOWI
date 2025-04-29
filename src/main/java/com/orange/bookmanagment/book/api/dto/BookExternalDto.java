@@ -1,17 +1,15 @@
-package com.orange.bookmanagment.book.api;
+package com.orange.bookmanagment.book.api.dto;
 
-import com.orange.bookmanagment.book.api.dto.AuthorInternalDto;
-import com.orange.bookmanagment.book.api.dto.PublisherInternalDto;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 
 import java.time.Instant;
 import java.util.List;
 
-public record BookInternalDto(
+public record BookExternalDto(
         Long id,
         String title,
-        List<AuthorInternalDto> authors,
-        PublisherInternalDto publisher,
+        List<AuthorExternalDto> authors,
+        PublisherExternalDto publisher,
         String description,
         String genre,
         BookStatus status,

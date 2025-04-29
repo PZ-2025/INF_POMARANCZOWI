@@ -2,7 +2,7 @@ package com.orange.bookmanagment.reservation.service.impl;
 
 import com.orange.bookmanagment.book.api.BookExternalService;
 import com.orange.bookmanagment.reservation.api.ReservationExternalService;
-import com.orange.bookmanagment.reservation.api.dto.ReservationInternalDto;
+import com.orange.bookmanagment.reservation.api.dto.ReservationExternalDto;
 import com.orange.bookmanagment.reservation.exception.ReservationNotFoundException;
 import com.orange.bookmanagment.reservation.service.mapper.ReservationInternalMapper;
 import com.orange.bookmanagment.shared.enums.BookStatus;
@@ -109,7 +109,7 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
 
     @Override
     @Transactional
-    public ReservationInternalDto completeReservation(long bookId, long userId) {
+    public ReservationExternalDto completeReservation(long bookId, long userId) {
         Optional<Reservation> reservationOpt = reservationRepository.findByBookIdAndUserIdAndStatus(
                 bookId, userId, ReservationStatus.READY);
 

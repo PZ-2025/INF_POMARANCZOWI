@@ -1,6 +1,6 @@
 package com.orange.bookmanagment.book.api.dto;
 
-public record PublisherInternalDto(
+public record PublisherExternalDto(
         Long id,
         String name
 ) {}

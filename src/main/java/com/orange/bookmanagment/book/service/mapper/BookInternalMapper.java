@@ -1,8 +1,8 @@
 package com.orange.bookmanagment.book.service.mapper;
 
-import com.orange.bookmanagment.book.api.dto.AuthorInternalDto;
-import com.orange.bookmanagment.book.api.BookInternalDto;
-import com.orange.bookmanagment.book.api.dto.PublisherInternalDto;
+import com.orange.bookmanagment.book.api.dto.AuthorExternalDto;
+import com.orange.bookmanagment.book.api.dto.BookExternalDto;
+import com.orange.bookmanagment.book.api.dto.PublisherExternalDto;
 import com.orange.bookmanagment.book.model.Author;
 import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.book.model.Publisher;
@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 @Component
 public class BookInternalMapper {
 
-    public BookInternalDto toDto(Book book) {
+    public BookExternalDto toDto(Book book) {
         if (book == null) {
             return null;
         }
 
-        return new BookInternalDto(
+        return new BookExternalDto(
                 book.getId(),
                 book.getTitle(),
                 mapAuthorsToDto(book.getAuthors()),
@@ -33,17 +33,17 @@ public class BookInternalMapper {
         );
     }
 
-    private List<AuthorInternalDto> mapAuthorsToDto(List<Author> authors) {
+    private List<AuthorExternalDto> mapAuthorsToDto(List<Author> authors) {
         return authors.stream()
-                .map(author -> new AuthorInternalDto(
+                .map(author -> new AuthorExternalDto(
                         author.getId(),
                         author.getFirstName(),
                         author.getLastName()))
                 .collect(Collectors.toList());
     }
 
-    private PublisherInternalDto mapPublisherToDto(Publisher publisher) {
-        return new PublisherInternalDto(
+    private PublisherExternalDto mapPublisherToDto(Publisher publisher) {
+        return new PublisherExternalDto(
                 publisher.getId(),
                 publisher.getName()
         );

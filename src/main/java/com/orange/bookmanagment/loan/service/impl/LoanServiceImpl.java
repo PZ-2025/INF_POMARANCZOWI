@@ -1,11 +1,10 @@
 package com.orange.bookmanagment.loan.service.impl;
 
 import com.orange.bookmanagment.book.api.BookExternalService;
-import com.orange.bookmanagment.book.api.BookInternalDto;
+import com.orange.bookmanagment.book.api.dto.BookExternalDto;
 import com.orange.bookmanagment.loan.exception.BookNotAvailableException;
 import com.orange.bookmanagment.loan.exception.LoanNotFoundException;
 import com.orange.bookmanagment.reservation.api.ReservationExternalService;
-import com.orange.bookmanagment.reservation.api.dto.ReservationInternalDto;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.loan.model.Loan;
 import com.orange.bookmanagment.loan.model.enums.LoanStatus;
@@ -27,7 +26,7 @@ class LoanServiceImpl implements LoanService {
     @Override
     @Transactional
     public Loan borrowBook(Long bookId, Long userId, Long librarianId, String notes) {
-        BookInternalDto book = bookExternalService.getBookForExternal(bookId);
+        BookExternalDto book = bookExternalService.getBookForExternal(bookId);
 
         if (book.status() == BookStatus.RESERVED) {
             boolean isReservedForUser = reservationExternalService.isBookReservedForUser(bookId, userId);

@@ -1,7 +1,7 @@
 package com.orange.bookmanagment.reservation.api;
 
 
-import com.orange.bookmanagment.reservation.api.dto.ReservationInternalDto;
+import com.orange.bookmanagment.reservation.api.dto.ReservationExternalDto;
 
 public interface ReservationExternalService {
 
@@ -9,6 +9,6 @@ public interface ReservationExternalService {
 
     boolean isBookReservedForUser(Long bookId, Long userId);
 
-    ReservationInternalDto completeReservation(long bookId, long userId);
+    ReservationExternalDto completeReservation(long bookId, long userId);
 
 }

@@ -1,6 +1,6 @@
 package com.orange.bookmanagment.reservation.service.mapper;
 
-import com.orange.bookmanagment.reservation.api.dto.ReservationInternalDto;
+import com.orange.bookmanagment.reservation.api.dto.ReservationExternalDto;
 import com.orange.bookmanagment.reservation.model.Reservation;
 import org.springframework.stereotype.Component;
 
@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 @Component
 public class ReservationInternalMapper {
 
-    public ReservationInternalDto toDto(Reservation reservation) {
+    public ReservationExternalDto toDto(Reservation reservation) {
         if (reservation == null) {
             return null;
         }
 
-        return new ReservationInternalDto(
+        return new ReservationExternalDto(
                 reservation.getId(),
                 reservation.getBookId(),
                 reservation.getUserId(),
@@ -27,7 +27,7 @@ public class ReservationInternalMapper {
         );
     }
 
-    public List<ReservationInternalDto> toDtoList(List<Reservation> reservations) {
+    public List<ReservationExternalDto> toDtoList(List<Reservation> reservations) {
         if (reservations == null) {
             return List.of();
         }

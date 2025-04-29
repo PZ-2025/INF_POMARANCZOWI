@@ -1,7 +1,7 @@
 package com.orange.bookmanagment.book.service.impl;
 
 import com.orange.bookmanagment.book.api.BookExternalService;
-import com.orange.bookmanagment.book.api.BookInternalDto;
+import com.orange.bookmanagment.book.api.dto.BookExternalDto;
 import com.orange.bookmanagment.book.exception.BookNotFoundException;
 import com.orange.bookmanagment.book.model.Author;
 import com.orange.bookmanagment.book.model.Book;
@@ -86,7 +86,7 @@ class BookServiceImpl implements BookService, BookExternalService {
     }
 
     @Override
-    public BookInternalDto getBookForExternal(long id) {
+    public BookExternalDto getBookForExternal(long id) {
         Book book = this.getBookById(id);
         return bookInternalMapper.toDto(book);
     }
