@@ -1,33 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --bg-main: #fff;
-  --bg-content: #f5f5f5;
-  --text-color: #000;
-  --box-color: #fff;
-  --input-bg: #d9d9d9;
-
-  --bg-content: #FFFCF0;
-  --box-color: #ffffff;
-  --inner-box: #f2f2f2;
+  --bg-main: #ffffff;
+  --bg-content: #ececec;
   --text-color: #000000;
+  --box-color: #ffffff;
+  --input-bg: #d9d9d9;
+  --inner-box: #f2f2f2;
   --button-bg: #e0e0e0;
   --button-text: #000000;
+  --divider-color: #e5e7eb;
 }
 
 .dark {
   --bg-main: #121212;
-  --bg-content: #1e1e1e;
+  --bg-content: #2f2f2f;
   --text-color: #f5f5f5;
   --box-color: #2b2b2b;
   --input-bg: #2c2c2c;
-
-  --bg-content: #1a1a1a;
-  --box-color: #2a2a2a;
   --inner-box: #333333;
-  --text-color: #ffffff;
   --button-bg: #444444;
   --button-text: #ffffff;
+  --divider-color: #444;
 }
 
 body {
