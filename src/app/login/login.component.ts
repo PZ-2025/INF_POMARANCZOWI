@@ -18,15 +18,26 @@ export class LoginComponent {
     password: new FormControl(null, Validators.required)
   })
 
+  errorMessage: string | null = null;
+
   onSubmit() {
+    this.errorMessage = null;
+
     console.log(this.form.value)
     if (this.form.valid) {
       //@ts-ignore
-      this.authService.login(this.form.value)
-        .subscribe(res => {
+      this.authService.login(this.form.value).subscribe({
+        next: res => {
           this.router.navigate(['']);
-          console.log(res)
-        });
+          console.log(res);
+        },
+        error: err => {
+          console.error('Błąd logowania:', err);
+          this.errorMessage = 'Nieprawidłowy email lub hasło';
+        }
+      });
+    } else {
+      this.errorMessage = 'Wszystkie pola są wymagane.';
     }
   }
 }

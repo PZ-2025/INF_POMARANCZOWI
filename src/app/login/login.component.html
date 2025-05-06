@@ -18,6 +18,9 @@
           required
         />
         <a href="#" class="text-blue-500 text-3xl self-center mt-2">Nie pamiętasz hasła?</a>
+        <div *ngIf="errorMessage" class="text-red-600 text-center text-xl font-semibold">
+          {{ errorMessage }}
+        </div>
         <button
           type="submit"
           class="bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-all text-3xl mt-2 cursor-pointer"
