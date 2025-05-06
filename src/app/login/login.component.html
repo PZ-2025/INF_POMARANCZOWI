@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
-<div class="p-4 bg-[#FFFCF0] min-h-screen">
+<div class="p-4 min-h-screen" style="background-color: var(--bg-content)">
   <div class="flex flex-col items-center justify-center flex-1 w-full mt-32">
-    <div class="bg-white p-8 rounded-3xl shadow-lg w-[600px] border-1 border-black-400">
+    <div class="p-8 rounded-3xl shadow-lg w-[600px] border-1 border-black-400" style="background-color: var(--box-color)">
       <form class="flex flex-col space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
         <input
           formControlName="email"

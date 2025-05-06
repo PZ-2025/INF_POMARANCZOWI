@@ -1,44 +1,44 @@
 <app-navbar></app-navbar>
-<div class="p-4 bg-[#FFFCF0] min-h-screen">
+<div class="p-4 min-h-screen" style="background-color: var(--bg-content); color: var(--text-color)">
   <div class="flex flex-col items-center justify-center flex-1 w-full mt-32">
-    <div class="bg-white p-8 rounded-3xl shadow-lg w-[600px] border-1 border-black-400">
+    <div class="p-8 rounded-3xl shadow-lg w-[600px] border border-black-400" style="background-color: var(--box-color)">
       <form class="flex flex-col space-y-6" [formGroup]="form">
         <div class="mt-0 flex gap-x-6 rounded-lg w-full max-w-full">
           <input
             type="file"
-            class="h-[200px] border rounded-lg w-full max-w-full bg-[#D9D9D9] cursor-pointer"
+            class="h-[200px] border rounded-lg w-full max-w-full bg-[var(--input-bg)] cursor-pointer"
           />
           <input
             type="file"
-            class="h-[200px] border rounded-lg w-full max-w-full bg-[#D9D9D9] cursor-pointer"
+            class="h-[200px] border rounded-lg w-full max-w-full bg-[var(--input-bg)] cursor-pointer"
           />
         </div>
         <input
           formControlName="title"
           type="text"
           placeholder="Tytuł"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl text-[var(--text-color)]"
           required
         />
         <input
           formControlName="author"
           type="text"
           placeholder="Autor"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl text-[var(--text-color)]"
           required
         />
         <input
           formControlName="genre"
           type="text"
           placeholder="Gatunek"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl text-[var(--text-color)]"
           required
         />
         <input
           formControlName="publisher"
           type="text"
           placeholder="Wydawnictwo"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl text-[var(--text-color)]"
           required
         />
         <div class="flex gap-x-6 w-full max-w-full">
@@ -46,14 +46,14 @@
             formControlName="year_of_publication"
             type="text"
             placeholder="Rok wydania"
-            class="flex-1 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl w-full max-w-full"
+            class="flex-1 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl w-full max-w-full text-[var(--text-color)]"
             required
           />
           <input
             formControlName="pages"
             type="text"
             placeholder="Liczba stron"
-            class="flex-1 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl w-full max-w-full"
+            class="flex-1 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl w-full max-w-full text-[var(--text-color)]"
             required
           />
         </div>
@@ -61,13 +61,13 @@
           formControlName="description"
           placeholder="Opis"
           rows="3"
-          class="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl text-[var(--text-color)]"
         ></textarea>
         <button
           type="submit"
           class="bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-all text-3xl mt-2 cursor-pointer"
         >
-        Dodaj
+          Dodaj
         </button>
       </form>
     </div>

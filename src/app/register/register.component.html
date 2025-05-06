@@ -1,52 +1,62 @@
 <app-navbar></app-navbar>
-<div class="p-4 bg-[#FFFCF0] min-h-screen">
+<div class="p-4 min-h-screen" style="background-color: var(--bg-content)">
   <div class="flex flex-col items-center justify-center flex-1 w-full mt-32">
-    <div class="bg-white p-8 rounded-3xl shadow-lg w-[600px] border-1 border-black-400">
+    <div
+      class="p-8 rounded-3xl shadow-lg w-[600px] border-1 border-black-400"
+      style="background-color: var(--box-color); color: var(--text-color);"
+    >
       <form class="flex flex-col space-y-6" [formGroup]="form">
         <input
           formControlName="name"
           type="text"
-          placeholder="Imie"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          placeholder="Imię"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg); color: var(--text-color);"
           required
         />
         <input
           formControlName="surname"
           type="text"
           placeholder="Nazwisko"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg); color: var(--text-color);"
           required
         />
         <input
           formControlName="email"
           type="email"
           placeholder="Email"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg); color: var(--text-color);"
           required
         />
         <input
           formControlName="password"
           type="password"
           placeholder="Hasło"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg); color: var(--text-color);"
           required
         />
         <input
           formControlName="repeat_password"
           type="password"
           placeholder="Powtórz hasło"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg); color: var(--text-color);"
           required
         />
         <div class="flex items-center space-x-4 self-center mt-2">
-          <input type="checkbox" formControlName="terms" class="w-5 h-5 cursor-pointer">
-          <label class="text-2xl">Akceptuję <a href="#" class="text-blue-500 underline">regulamin strony</a></label>
+          <input type="checkbox" formControlName="terms" class="w-5 h-5 cursor-pointer" />
+          <label class="text-2xl" style="color: var(--text-color);">
+            Akceptuję <a href="#" class="text-blue-500 underline">regulamin strony</a>
+          </label>
         </div>
         <button
           type="submit"
           class="bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-all text-3xl mt-2 cursor-pointer"
         >
-        Zarejestruj
+          Zarejestruj
         </button>
       </form>
     </div>
