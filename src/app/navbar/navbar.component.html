@@ -1,15 +1,33 @@
-<header class="w-full bg-[#D9D9D9] flex items-center justify-between p-4 shadow-md">
-  <div class="flex items-center space-x-2">
-    <img src="/assets/imgs/logo-book.png" alt="Logo" class="w-9 h-9 rounded-full" />
-    <h1 class="text-3xl font-bold">MiBP w Rzeszowie</h1>
+<header
+  class="w-full flex items-center justify-between p-4 shadow-md transition-all border-b box-border"
+  style="min-width: 696px; background-color: var(--nav-bg); color: var(--text-color);"
+>
+  <div class="flex items-center space-x-6">
+    <a href="/">
+      <!-- Obrazek Logo -->
+      <img src="/assets/imgs/logo-book.png" alt="Logo" [class.invert]="isDarkTheme" class="w-9 h-9 transition-all duration-300 hover:contrast-125"/>
+    </a>
+    <a href="/" class="text-2xl font-bold mr-5">MiPBP w Rzeszowie</a>
   </div>
-  <div class="flex items-center space-x-4">
-    <a *ngIf="!isLoggedIn" href="/login" class="text-2xl">Zaloguj się</a>
-    <a *ngIf="!isLoggedIn" href="/register" class="text-2xl">Zarejestruj się</a>
+
+  <div class="flex items-center space-x-6">
+    <!-- Navbar dla niezalogowanego użytkownika -->
+    <a *ngIf="!isLoggedIn" href="/login" class="text-xl">Zaloguj się</a>
+    <a *ngIf="!isLoggedIn" href="/register" class="text-xl">Zarejestruj się</a>
 
     <!-- Navbar dla zalogowanego użytkownika -->
-    <a *ngIf="isLoggedIn" href="/me" class="text-2xl">Moje konto</a>
-    <a *ngIf="isLoggedIn" (click)="logout()" href="#" class="text-2xl">Wyloguj się</a>
-    <img src="/assets/imgs/moon.png" alt="Moom" class="w-9 h-9 rounded-full" />
+    <a *ngIf="isLoggedIn" href="/me" class="text-xl">Mój profil</a>
+    <a *ngIf="isLoggedIn" (click)="logout()" href="#" class="text-xl">Wyloguj się</a>
+
+    <!-- Ikona zmiany motywu -->
+    <button (click)="toggleTheme()" aria-label="Przełącz motyw" class="cursor-pointer">
+      <!-- Obrazek Księżyc -->
+      <img
+        src="/assets/imgs/moon.png"
+        alt="Moon"
+        [class.invert]="isDarkTheme"
+        class="w-9 h-9 rounded-full transition-all duration-300 hover:contrast-125 cursor-pointer"
+      />
+    </button>
   </div>
 </header>

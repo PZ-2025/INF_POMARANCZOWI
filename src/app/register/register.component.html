@@ -1,0 +1,65 @@
+<app-navbar></app-navbar>
+<main class="w-full" style="background-color: var(--bg-content);">
+  <div class="max-w-[624px] px-8 py-12 mx-auto">
+    <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Rejestracja</h1>
+    <div class="w-full p-8 rounded-3xl shadow-lg border border-black-400 box-border mt-8" style="background-color: var(--box-color);">
+      <form class="flex flex-col space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <input
+          formControlName="firstName"
+          type="text"
+          placeholder="Imię"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg);"
+          required
+        />
+        <input
+          formControlName="lastName"
+          type="text"
+          placeholder="Nazwisko"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg);"
+          required
+        />
+        <input
+          formControlName="email"
+          type="email"
+          placeholder="Email"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg);"
+          required
+        />
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="Hasło"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg);"
+          required
+        />
+        <input
+          formControlName="repeat_password"
+          type="password"
+          placeholder="Powtórz hasło"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg);"
+          required
+        />
+        <div class="flex items-center space-x-4 self-center mt-2">
+          <input type="checkbox" formControlName="terms" class="w-5 h-5 cursor-pointer" />
+          <label class="text-2xl" style="color: var(--text-color);">
+            Akceptuję <a href="#" class="underline" style="color: var(--link-color)">regulamin strony</a>
+          </label>
+        </div>
+        <div *ngIf="errorMessage" class="text-red-600 text-center text-xl font-semibold px-4 break-words">
+          {{ errorMessage }}
+        </div>
+        <button
+          type="submit" style="background-color: var(--button-login-bg); color: var(--button-login-text)"
+          class="py-3 pb-1 px-4 rounded-lg transition-all text-3xl mt-4 cursor-pointer w-full text-center overflow-hidden"
+        >
+          <span class="inline-block w-full text-center overflow-hidden whitespace-nowrap">Zarejestruj</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</main>

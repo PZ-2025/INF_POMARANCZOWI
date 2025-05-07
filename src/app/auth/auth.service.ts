@@ -1,18 +1,16 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {tap} from 'rxjs';
-import {TokenResponse} from './auth.interface';
-import {CookieService} from 'ngx-cookie-service';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs';
+import { TokenResponse } from './auth.interface';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
   http =inject(HttpClient);
   baseApiUrl= 'http://localhost:8080/api/v1/auth/'
   cookieService =inject(CookieService)
-
 
   token: string |null = null;
   refreshToken: string |null = null;
@@ -46,4 +44,15 @@ export class AuthService {
     this.refreshToken = null;
   }
 
+
+  register(payload: RegisterPayload) {
+    return this.http.post(`${this.baseApiUrl}register`, payload);
+  }
+}
+
+export interface RegisterPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 }
