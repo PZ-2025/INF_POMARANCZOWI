@@ -1,5 +1,11 @@
 <app-navbar></app-navbar>
 <main class="w-full" style="background-color: var(--bg-content);">
+  <div *ngIf="message"
+    class="text-center mt-10 mx-10 p-4 font-semibold rounded-md shadow-md border"
+    style="background-color: var(--box-login-color); color: var(--text-color);"
+  >
+    {{ message }}
+  </div>
   <div class="min-w-[624px] max-w-[1284px] px-16 py-12 mx-auto">
     <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Strona główna</h1>
 
@@ -58,8 +64,8 @@
 
     <!-- Lista książek -->
     <div class="w-full flex flex-wrap justify-center gap-8">
-      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-color);">
-        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-box);">
+      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-book-color);">
+        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-book-box);">
           <img
             src="/assets/imgs/book.png"
             alt="Okładka książki"
@@ -73,8 +79,8 @@
         </div>
       </div>
 
-      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-color);">
-        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-box);">
+      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-book-color);">
+        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-book-box);">
           <img
             src="/assets/imgs/book.png"
             alt="Okładka książki"
@@ -88,8 +94,8 @@
         </div>
       </div>
 
-      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-color);">
-        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-box);">
+      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-book-color);">
+        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-book-box);">
           <img
             src="/assets/imgs/book.png"
             alt="Okładka książki"

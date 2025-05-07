@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { ThemeService } from '../services/theme.service';
+import { Router } from '@angular/router';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,10 +11,10 @@ import { ThemeService } from '../services/theme.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  isLoggedIn: boolean = false;
-  isDarkTheme: boolean = false;
+  isLoggedIn = false;
+  isDarkTheme = false;
 
-  constructor(private authService: AuthService, private themeService: ThemeService) {}
+  constructor(private authService: AuthService, private themeService: ThemeService, private router: Router, private messageService: MessageService) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isAuth;
@@ -26,6 +28,12 @@ export class NavbarComponent {
   logout() {
     this.authService.logout();
     this.isLoggedIn = false;
+
+    this.router.navigate(['']).then(() => {
+      setTimeout(() => {
+        this.messageService.setMessage('Wylogowano pomyślnie!');
+      }, 100);
+    });
   }
 
   toggleTheme() {

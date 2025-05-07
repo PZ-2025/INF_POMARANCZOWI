@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-login',
@@ -18,18 +19,18 @@ export class LoginComponent {
     password: new FormControl(null, Validators.required)
   })
 
+  constructor(private messageService: MessageService) {}
   errorMessage: string | null = null;
 
   onSubmit() {
     this.errorMessage = null;
 
-    console.log(this.form.value)
     if (this.form.valid) {
       //@ts-ignore
       this.authService.login(this.form.value).subscribe({
         next: res => {
+          this.messageService.setMessage('Zalogowano pomyślnie!');
           this.router.navigate(['']);
-          console.log(res);
         },
         error: err => {
           console.error('Błąd logowania:', err);
