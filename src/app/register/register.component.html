@@ -1,17 +1,15 @@
 <app-navbar></app-navbar>
-<div class="p-4 min-h-screen" style="background-color: var(--bg-content)">
-  <div class="flex flex-col items-center justify-center flex-1 w-full mt-32">
-    <div
-      class="p-8 rounded-3xl shadow-lg w-[600px] border-1 border-black-400"
-      style="background-color: var(--box-color); color: var(--text-color);"
-    >
+<main class="w-full" style="background-color: var(--bg-content);">
+  <div class="max-w-[624px] px-8 py-12 mx-auto">
+    <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Rejestracja</h1>
+    <div class="w-full p-8 rounded-3xl shadow-lg border border-black-400 box-border mt-8" style="background-color: var(--box-color);">
       <form class="flex flex-col space-y-6" [formGroup]="form">
         <input
           formControlName="name"
           type="text"
           placeholder="Imię"
           class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
-          style="background-color: var(--input-bg); color: var(--text-color);"
+          style="background-color: var(--input-bg);"
           required
         />
         <input
@@ -19,7 +17,7 @@
           type="text"
           placeholder="Nazwisko"
           class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
-          style="background-color: var(--input-bg); color: var(--text-color);"
+          style="background-color: var(--input-bg);"
           required
         />
         <input
@@ -27,7 +25,7 @@
           type="email"
           placeholder="Email"
           class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
-          style="background-color: var(--input-bg); color: var(--text-color);"
+          style="background-color: var(--input-bg);"
           required
         />
         <input
@@ -35,7 +33,7 @@
           type="password"
           placeholder="Hasło"
           class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
-          style="background-color: var(--input-bg); color: var(--text-color);"
+          style="background-color: var(--input-bg);"
           required
         />
         <input
@@ -43,22 +41,22 @@
           type="password"
           placeholder="Powtórz hasło"
           class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
-          style="background-color: var(--input-bg); color: var(--text-color);"
+          style="background-color: var(--input-bg);"
           required
         />
         <div class="flex items-center space-x-4 self-center mt-2">
           <input type="checkbox" formControlName="terms" class="w-5 h-5 cursor-pointer" />
           <label class="text-2xl" style="color: var(--text-color);">
-            Akceptuję <a href="#" class="text-blue-500 underline">regulamin strony</a>
+            Akceptuję <a href="#" class="underline" style="color: var(--link-color)">regulamin strony</a>
           </label>
         </div>
         <button
-          type="submit"
-          class="bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-all text-3xl mt-2 cursor-pointer"
+          type="submit" style="background-color: var(--button-login-bg); color: var(--button-login-text)"
+          class="py-3 pb-1 px-4 rounded-lg transition-all text-3xl mt-4 cursor-pointer w-full text-center overflow-hidden"
         >
-          Zarejestruj
+          <span class="inline-block w-full text-center overflow-hidden whitespace-nowrap">Zarejestruj</span>
         </button>
       </form>
     </div>
   </div>
-</div>
+</main>

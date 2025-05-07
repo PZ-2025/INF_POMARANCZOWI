@@ -1,33 +1,38 @@
 <app-navbar></app-navbar>
-<div class="p-4 min-h-screen" style="background-color: var(--bg-content)">
-  <div class="mt-32 w-full" style="padding-left: max(32px, env(safe-area-inset-left)); padding-right: max(32px, env(safe-area-inset-right));">
-    <div class="max-w-[600px] mx-auto p-8 rounded-3xl shadow-lg border border-black-400" style="background-color: var(--box-color)">
+<main class="w-full" style="background-color: var(--bg-content);">
+  <div class="max-w-[624px] px-8 py-12 mx-auto">
+    <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Logowanie</h1>
+    <div class="w-full p-8 rounded-3xl shadow-lg border border-black-400 box-border mt-8" style="background-color: var(--box-color);">
       <form class="flex flex-col space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
         <input
           formControlName="email"
           type="email"
           placeholder="Email"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg);"
           required
         />
         <input
           formControlName="password"
           type="password"
           placeholder="Hasło"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9] text-2xl"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg);"
           required
         />
-        <a href="#" class="text-blue-500 text-3xl self-center mt-2">Nie pamiętasz hasła?</a>
-        <div *ngIf="errorMessage" class="text-red-600 text-center text-xl font-semibold">
+        <div class="w-full text-center my-5">
+          <a href="#" style="color: var(--link-color)" class="text-3xl transition-colors inline-block">Nie pamiętasz hasła?</a>
+        </div>
+        <div *ngIf="errorMessage" class="text-red-600 text-center text-xl font-semibold px-4 break-words">
           {{ errorMessage }}
         </div>
         <button
-          type="submit"
-          class="bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-all text-3xl mt-2 cursor-pointer"
+          type="submit" style="background-color: var(--button-login-bg); color: var(--button-login-text)"
+          class="py-3 pb-1 px-4 rounded-lg transition-all text-3xl mt-4 cursor-pointer w-full text-center overflow-hidden"
         >
-        Zaloguj
+          <span class="inline-block w-full text-center overflow-hidden whitespace-nowrap">Zaloguj</span>
         </button>
       </form>
     </div>
   </div>
-</div>
+</main>

@@ -37,7 +37,7 @@ export class LoginComponent {
         }
       });
     } else {
-      this.errorMessage = 'Wszystkie pola są wymagane.';
+      this.errorMessage = 'Wszystkie pola są wymagane';
     }
   }
 }
