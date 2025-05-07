@@ -43,4 +43,16 @@ export class AuthService {
     this.token = null;
     this.refreshToken = null;
   }
+
+
+  register(payload: RegisterPayload) {
+    return this.http.post(`${this.baseApiUrl}register`, payload);
+  }
+}
+
+export interface RegisterPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 }

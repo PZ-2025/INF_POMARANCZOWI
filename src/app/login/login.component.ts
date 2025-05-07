@@ -34,7 +34,11 @@ export class LoginComponent {
         },
         error: err => {
           console.error('Błąd logowania:', err);
-          this.errorMessage = 'Nieprawidłowy email lub hasło';
+          if (err.status === 0 || err.status >= 500) {
+            this.errorMessage = 'Nie udało się zalogować, spróbuj ponownie później';
+          } else {
+            this.errorMessage = 'Nieprawidłowy email lub hasło';
+          }
         }
       });
     } else {

@@ -3,9 +3,9 @@
   <div class="max-w-[624px] px-8 py-12 mx-auto">
     <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Rejestracja</h1>
     <div class="w-full p-8 rounded-3xl shadow-lg border border-black-400 box-border mt-8" style="background-color: var(--box-color);">
-      <form class="flex flex-col space-y-6" [formGroup]="form">
+      <form class="flex flex-col space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
         <input
-          formControlName="name"
+          formControlName="firstName"
           type="text"
           placeholder="Imię"
           class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
@@ -13,7 +13,7 @@
           required
         />
         <input
-          formControlName="surname"
+          formControlName="lastName"
           type="text"
           placeholder="Nazwisko"
           class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
@@ -49,6 +49,9 @@
           <label class="text-2xl" style="color: var(--text-color);">
             Akceptuję <a href="#" class="underline" style="color: var(--link-color)">regulamin strony</a>
           </label>
+        </div>
+        <div *ngIf="errorMessage" class="text-red-600 text-center text-xl font-semibold px-4 break-words">
+          {{ errorMessage }}
         </div>
         <button
           type="submit" style="background-color: var(--button-login-bg); color: var(--button-login-text)"
