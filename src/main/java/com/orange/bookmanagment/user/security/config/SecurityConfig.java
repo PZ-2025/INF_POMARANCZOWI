@@ -1,6 +1,5 @@
 package com.orange.bookmanagment.user.security.config;
 
-
 import com.orange.bookmanagment.user.security.jwt.filter.JwtAuthenticationFilter;
 import com.orange.bookmanagment.user.security.provider.AccountAuthenticationProvider;
 import com.orange.bookmanagment.user.security.service.CustomUserDetailsService;
@@ -44,13 +43,9 @@ class SecurityConfig {
         authenticationManagerBuilder.authenticationProvider(authenticationProvider);
         authenticationManagerBuilder.userDetailsService(detailsService);
         security.csrf(AbstractHttpConfigurer::disable);
-        security.oauth2ResourceServer(Customizer.withDefaults());
         security.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
-        security.oauth2ResourceServer(o2auth -> o2auth.jwt(jwtConfigurer -> {
-            jwtConfigurer.decoder(jwtDecoder);
-            jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter());
-        }));
-        //Authenticate endpoint
+
+        // Authenticate endpoint
         security.authorizeHttpRequests(
                         auth ->
                                 auth
@@ -69,8 +64,15 @@ class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         //here
 
+        security.oauth2ResourceServer(oauth -> oauth.jwt(jwtConfigurer -> {
+                    jwtConfigurer.decoder(jwtDecoder);
+                    jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter());
+                })
+        );
+
         return security.build();
     }
+
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         final org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -81,6 +83,7 @@ class SecurityConfig {
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
     }
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
