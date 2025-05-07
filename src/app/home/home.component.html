@@ -1,55 +1,108 @@
 <app-navbar></app-navbar>
-<main class="min-h-screen w-full" style="background-color: var(--bg-content);">
-  <div class="min-w-[696px] max-w-[1284px] px-8 py-12 mx-auto">
+<main class="w-full" style="background-color: var(--bg-content);">
+  <div class="min-w-[624px] max-w-[1284px] px-16 py-12 mx-auto">
+    <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Strona główna</h1>
+
     <!-- Wyszukiwarka -->
-    <div class="max-w-[1284px] w-full mx-auto flex items-center rounded-md overflow-hidden shadow-sm border" style="background-color: var(--box-color)">
+    <div class="w-full flex items-center rounded-md overflow-hidden shadow-sm border" style="background-color: var(--search-input-bg);">
       <span class="p-1"><i class="fas fa-search"></i></span>
-      <img src="/assets/imgs/search.png" class="w-8 h-8 invert dark:invert-0 transition-all duration-300" />
-      <input type="text" placeholder="Wyszukaj książkę..." class="flex-1 p-2 outline-none bg-transparent text-xl" />
-      <button class="px-8 py-2 cursor-pointer border rounded" style="background-color: var(--button-bg); color: var(--button-text)">
+      <img src="/assets/imgs/search.png" alt="Lupa" [class.invert]="isDarkTheme" class="w-8 h-8 transition-all duration-300 hover:contrast-125"/>
+      <span class="p-1"><i class="fas fa-search"></i></span>
+      <input
+        type="text"
+        placeholder="Wyszukaj książkę..."
+        class="flex-1 text-xl outline-none bg-transparent"
+        style="color: var(--text-color);"
+      />
+      <button
+        class="px-8 py-2 cursor-pointer border-l"
+        style="background-color: var(--search-button-bg); color: var(--search-button-text); border-left-color: var(--text-color);"
+      >
         Szukaj
       </button>
     </div>
 
     <!-- Kategorie -->
-    <div class="max-w-[1284px] w-full mx-auto flex flex-wrap justify-center gap-x-6 gap-y-4 px-8 m-[32px]">
-      <button class="px-8 py-3 text-lg rounded shadow-sm cursor-pointer border"
-              style="background-color: var(--button-bg); color: var(--button-text)">
+    <div class="w-full flex flex-wrap justify-center gap-x-6 gap-y-6 mt-12 mb-12">
+      <button
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
+        style="background-color: var(--button-category-bg); color: var(--button-text);"
+      >
         Kategoria1
       </button>
-      <button class="px-8 py-3 text-lg rounded shadow-sm cursor-pointer border"
-              style="background-color: var(--button-bg); color: var(--button-text)">
+      <button
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
+        style="background-color: var(--button-category-bg); color: var(--button-text);"
+      >
         Kategoria2
       </button>
-      <button class="px-8 py-3 text-lg rounded shadow-sm cursor-pointer border"
-              style="background-color: var(--button-bg); color: var(--button-text)">
+      <button
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
+        style="background-color: var(--button-category-bg); color: var(--button-text);"
+      >
         Kategoria3
       </button>
-      <button class="px-8 py-3 text-lg rounded shadow-sm cursor-pointer border"
-              style="background-color: var(--button-bg); color: var(--button-text)">
+      <button
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
+        style="background-color: var(--button-category-bg); color: var(--button-text);"
+      >
         Kategoria4
       </button>
-      <button class="px-8 py-3 text-lg rounded shadow-sm cursor-pointer border"
-              style="background-color: var(--button-bg); color: var(--button-text)">
+      <button
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
+        style="background-color: var(--button-category-bg); color: var(--button-text);"
+      >
         Kategoria5
       </button>
     </div>
 
     <!-- Lista książek -->
-    <div class="max-w-[1284px] w-full mx-auto flex justify-center space-x-6">
-      <div class="rounded-lg shadow-md p-4 w-[412px] border" style="background-color: var(--box-color)">
-        <div class="flex justify-center py-[48px] px-[48px] rounded-md border"
-            style="background-color: var(--inner-box)">
-          <img src="/assets/imgs/book.png" alt="Okładka książki" class="w-[248px] h-[248px] object-cover transition-all duration-300 invert dark:invert-0" />
+    <div class="w-full flex flex-wrap justify-center gap-8">
+      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-color);">
+        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-box);">
+          <img
+            src="/assets/imgs/book.png"
+            alt="Okładka książki"
+            class="max-w-[216px] max-h-[216px] w-full h-auto aspect-square object-cover transition-all duration-300 invert dark:invert-0"
+          />
         </div>
         <div class="mt-4">
-          <p class="font-semibold text-lg">Harry Potter i Kamień Fizjologiczny</p>
+          <p class="font-semibold text-lg mb-4 leading-tight">Harry Potter i Kamień Fizjologiczny</p>
           <p class="opacity-80">Fantazy</p>
           <p class="opacity-70 text-sm">J.K. Rowling</p>
         </div>
       </div>
 
-      <!-- Skopiuj div powyżej dla kolejnych książek, jeśli potrzebujesz więcej -->
+      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-color);">
+        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-box);">
+          <img
+            src="/assets/imgs/book.png"
+            alt="Okładka książki"
+            class="max-w-[216px] max-h-[216px] w-full h-auto aspect-square object-cover transition-all duration-300 invert dark:invert-0"
+          />
+        </div>
+        <div class="mt-4">
+          <p class="font-semibold text-lg mb-4 leading-tight">Harry Potter i Kamień Fizjologiczny</p>
+          <p class="opacity-80">Fantazy</p>
+          <p class="opacity-70 text-sm">J.K. Rowling</p>
+        </div>
+      </div>
+
+      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-color);">
+        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-box);">
+          <img
+            src="/assets/imgs/book.png"
+            alt="Okładka książki"
+            class="max-w-[216px] max-h-[216px] w-full h-auto aspect-square object-cover transition-all duration-300 invert dark:invert-0"
+          />
+        </div>
+        <div class="mt-4">
+          <p class="font-semibold text-lg mb-4 leading-tight">Harry Potter i Kamień Fizjologiczny</p>
+          <p class="opacity-80">Fantazy</p>
+          <p class="opacity-70 text-sm">J.K. Rowling</p>
+        </div>
+      </div>
+      <!-- Kolejne książki -->
     </div>
   </div>
 </main>

@@ -18,6 +18,10 @@
   --autofill-text: #000000;
   --border-color: #555555;
   --nav-bg: #ffffff;
+  --search-input-bg: #bac1d0;
+  --search-button-bg: #333c4f;
+  --search-button-text: #ffffff;
+  --button-category-bg: #cbcbcb;
 }
 
 .dark {
@@ -38,6 +42,10 @@
   --autofill-text: #ffffff;
   --border-color: #c0c0c0;
   --nav-bg: #121212;
+  --search-input-bg: #414448;
+  --search-button-bg: #363f52;
+  --search-button-text: #ffffff;
+  --button-category-bg: #4c4c4c;
 }
 
 html, body {
