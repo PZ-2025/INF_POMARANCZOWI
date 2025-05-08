@@ -11,20 +11,6 @@ import java.util.List;
 
 public interface UserExternalService {
 
-//    User getUserByEmail(String email) throws UserNotFoundException;
-
     long getUserIdByEmail(String email) throws UserNotFoundException;
-
-//    User getUserById(long id) throws UserNotFoundException;
-
-//    List<User> getUserByFirstName(String firstName);
-
-//    User registerUser(UserRegisterRequest registerRequest, UserType userType) throws UserAlreadyExistException;
-
-//    User updateUser(User user) throws UserNotFoundException;
-
-//    void changeUserPassword(long userId, ChangePasswordRequest changePasswordRequest) throws UserNotFoundException;
-
-//    boolean existsById(long id);
 
 }

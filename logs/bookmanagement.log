@@ -2229,3 +2229,115 @@ com.orange.bookmanagment.user.exception.UserNotFoundException: User not found by
 2025-05-08 21:28:23.825 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@176230: (connection evicted)
 2025-05-08 21:28:23.827 [SpringApplicationShutdownHook] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After shutdown stats (total=0, active=0, idle=0, waiting=0)
 2025-05-08 21:28:23.827 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-05-08 21:28:26.928 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-05-08 21:28:26.980 [main] INFO  com.orange.bookmanagment.BookManagementApplication - Starting BookManagementApplication using Java 18.0.2 with PID 29140 (C:\Users\Piotr\Desktop\Studia\Semestr 6\PZ\Zadania\APLIKACJA\BACK-END\target\classes started by Piotr in C:\Users\Piotr\Desktop\Studia\Semestr 6\PZ\Zadania\APLIKACJA\BACK-END)
+2025-05-08 21:28:26.980 [main] DEBUG com.orange.bookmanagment.BookManagementApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-05-08 21:28:26.981 [main] INFO  com.orange.bookmanagment.BookManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2025-05-08 21:28:27.658 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-08 21:28:27.739 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 71 ms. Found 6 JPA repository interfaces.
+2025-05-08 21:28:28.469 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-05-08 21:28:28.501 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-05-08 21:28:28.506 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-05-08 21:28:28.507 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-05-08 21:28:28.565 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-05-08 21:28:28.567 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1544 ms
+2025-05-08 21:28:28.731 [main] DEBUG com.orange.bookmanagment.user.security.jwt.filter.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2025-05-08 21:28:28.772 [main] DEBUG com.zaxxer.hikari.HikariConfig - Driver class com.mysql.cj.jdbc.Driver found in Thread context class loader jdk.internal.loader.ClassLoaders$AppClassLoader@2f0e140b
+2025-05-08 21:28:29.038 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-08 21:28:29.113 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.8.Final
+2025-05-08 21:28:29.167 [main] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-05-08 21:28:29.375 [main] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-08 21:28:29.396 [main] DEBUG com.zaxxer.hikari.HikariConfig - HikariPool-1 - configuration:
+2025-05-08 21:28:29.398 [main] DEBUG com.zaxxer.hikari.HikariConfig - allowPoolSuspension.............false
+2025-05-08 21:28:29.398 [main] DEBUG com.zaxxer.hikari.HikariConfig - autoCommit......................true
+2025-05-08 21:28:29.398 [main] DEBUG com.zaxxer.hikari.HikariConfig - catalog.........................none
+2025-05-08 21:28:29.398 [main] DEBUG com.zaxxer.hikari.HikariConfig - connectionInitSql...............none
+2025-05-08 21:28:29.398 [main] DEBUG com.zaxxer.hikari.HikariConfig - connectionTestQuery.............none
+2025-05-08 21:28:29.399 [main] DEBUG com.zaxxer.hikari.HikariConfig - connectionTimeout...............30000
+2025-05-08 21:28:29.399 [main] DEBUG com.zaxxer.hikari.HikariConfig - dataSource......................none
+2025-05-08 21:28:29.399 [main] DEBUG com.zaxxer.hikari.HikariConfig - dataSourceClassName.............none
+2025-05-08 21:28:29.399 [main] DEBUG com.zaxxer.hikari.HikariConfig - dataSourceJNDI..................none
+2025-05-08 21:28:29.399 [main] DEBUG com.zaxxer.hikari.HikariConfig - dataSourceProperties............{password=<masked>}
+2025-05-08 21:28:29.400 [main] DEBUG com.zaxxer.hikari.HikariConfig - driverClassName................."com.mysql.cj.jdbc.Driver"
+2025-05-08 21:28:29.400 [main] DEBUG com.zaxxer.hikari.HikariConfig - exceptionOverrideClassName......none
+2025-05-08 21:28:29.400 [main] DEBUG com.zaxxer.hikari.HikariConfig - healthCheckProperties...........{}
+2025-05-08 21:28:29.400 [main] DEBUG com.zaxxer.hikari.HikariConfig - healthCheckRegistry.............none
+2025-05-08 21:28:29.400 [main] DEBUG com.zaxxer.hikari.HikariConfig - idleTimeout.....................600000
+2025-05-08 21:28:29.400 [main] DEBUG com.zaxxer.hikari.HikariConfig - initializationFailTimeout.......1
+2025-05-08 21:28:29.400 [main] DEBUG com.zaxxer.hikari.HikariConfig - isolateInternalQueries..........false
+2025-05-08 21:28:29.400 [main] DEBUG com.zaxxer.hikari.HikariConfig - jdbcUrl.........................jdbc:mysql://localhost:3306/librarydb
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - keepaliveTime...................0
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - leakDetectionThreshold..........0
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - maxLifetime.....................1800000
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - maximumPoolSize.................10
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - metricRegistry..................none
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - metricsTrackerFactory...........none
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - minimumIdle.....................10
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - password........................<masked>
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - poolName........................"HikariPool-1"
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - readOnly........................false
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - registerMbeans..................false
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - scheduledExecutor...............none
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - schema..........................none
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - threadFactory...................internal
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - transactionIsolation............default
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - username........................"root"
+2025-05-08 21:28:29.401 [main] DEBUG com.zaxxer.hikari.HikariConfig - validationTimeout...............5000
+2025-05-08 21:28:29.401 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-05-08 21:28:29.633 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5f9ebd5a
+2025-05-08 21:28:29.635 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-05-08 21:28:29.674 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-08 21:28:29.691 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.4.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-08 21:28:29.698 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(12, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@18be3205) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@6fd97fd1)
+2025-05-08 21:28:29.698 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(-9, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@12c78f36) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@7bdb4d69)
+2025-05-08 21:28:29.698 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(-3, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@129c760d) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@361fa478)
+2025-05-08 21:28:29.699 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(4003, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@180f33b2) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@391e85df)
+2025-05-08 21:28:29.699 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(4001, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@48c3a0ef) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@3b4f1eb)
+2025-05-08 21:28:29.699 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(4002, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@6247c08c) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@2f3a8166)
+2025-05-08 21:28:29.699 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(2004, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@7aab98b6) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@5e3405a1)
+2025-05-08 21:28:29.700 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(2005, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@22bfd4b) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@79e16dd9)
+2025-05-08 21:28:29.700 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(2011, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@5fa9247b) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@21ce3b22)
+2025-05-08 21:28:29.735 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=1, active=0, idle=1, waiting=0)
+2025-05-08 21:28:29.757 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@c250ab2
+2025-05-08 21:28:29.788 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=2, active=0, idle=2, waiting=0)
+2025-05-08 21:28:29.807 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4d180089
+2025-05-08 21:28:29.839 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=3, active=0, idle=3, waiting=0)
+2025-05-08 21:28:29.860 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7c1f2a81
+2025-05-08 21:28:29.892 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=4, active=0, idle=4, waiting=0)
+2025-05-08 21:28:29.912 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2d37ffc6
+2025-05-08 21:28:29.943 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=5, active=0, idle=5, waiting=0)
+2025-05-08 21:28:29.962 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@29792648
+2025-05-08 21:28:29.993 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=6, active=0, idle=6, waiting=0)
+2025-05-08 21:28:30.009 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5f27581a
+2025-05-08 21:28:30.040 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=7, active=0, idle=7, waiting=0)
+2025-05-08 21:28:30.058 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@153d64d8
+2025-05-08 21:28:30.089 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=8, active=0, idle=8, waiting=0)
+2025-05-08 21:28:30.107 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4d6a2fa8
+2025-05-08 21:28:30.138 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=9, active=0, idle=9, waiting=0)
+2025-05-08 21:28:30.156 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7464431a
+2025-05-08 21:28:30.186 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=10, active=0, idle=10, waiting=0)
+2025-05-08 21:28:30.597 [main] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-08 21:28:30.677 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-08 21:28:31.214 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-08 21:28:31.232 [main] INFO  org.springframework.security.config.annotation.authentication.configuration.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Found 2 AuthenticationProvider beans, with names [accountAuthenticationProvider, jwtAuthenticationProvider]. Global Authentication Manager will not be configured with AuthenticationProviders. Consider publishing a single AuthenticationProvider bean, or wiring your Providers directly using the DSL.
+2025-05-08 21:28:31.234 [main] INFO  org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-05-08 21:28:32.135 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2025-05-08 21:28:32.159 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-05-08 21:28:32.169 [main] INFO  org.springframework.scheduling.config.TaskSchedulerRouter - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2025-05-08 21:28:32.172 [main] INFO  com.orange.bookmanagment.BookManagementApplication - Started BookManagementApplication in 5.493 seconds (process running for 6.083)
+2025-05-08 21:28:41.089 [http-nio-8080-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-08 21:28:41.089 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-05-08 21:28:41.092 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2025-05-08 21:28:42.795 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - select u1_0.id,u1_0.avatar_path,u1_0.blocked,u1_0.blocked_at,u1_0.changed_password_at,u1_0.created_at,u1_0.email,u1_0.first_name,u1_0.last_name,u1_0.locked,u1_0.locked_at,u1_0.password,u1_0.updated_at,us1_0.id,us1_0.dark_mode,us1_0.email_notifications_enabled,us1_0.email_reminders_enabled,us1_0.new_books_notifications_enabled,us1_0.notifications_enabled,u1_0.user_type,u1_0.verified,u1_0.verified_at from users u1_0 left join user_settings us1_0 on us1_0.id=u1_0.user_settings where u1_0.id=?
+2025-05-08 21:28:42.839 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - update users set avatar_path=?,blocked=?,blocked_at=?,changed_password_at=?,created_at=?,email=?,first_name=?,last_name=?,locked=?,locked_at=?,password=?,updated_at=?,user_settings=?,user_type=?,verified=?,verified_at=? where id=?
+2025-05-08 21:28:59.735 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-05-08 21:28:59.735 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-05-08 21:29:29.737 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-05-08 21:29:29.737 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.

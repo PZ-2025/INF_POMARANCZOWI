@@ -60,6 +60,8 @@ class SecurityConfig {
                                 .requestMatchers(POST, "/api/v1/user/upload-avatar").authenticated()
                                 .requestMatchers("/uploads/**").permitAll()
                                 .requestMatchers(DELETE, "/api/v1/user/delete-avatar").authenticated()
+                                .requestMatchers(GET, "/api/v1/reports/inventory").permitAll()
+                                .requestMatchers(GET, "/api/v1/reports/filtered").permitAll()
                 )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
