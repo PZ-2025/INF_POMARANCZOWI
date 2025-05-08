@@ -46,7 +46,7 @@ class AuthController {
 
             User user = userService.getUserByEmail(userLoginRequest.email());
             String accessToken = tokenService.generateJwtToken(authentication, user);
-            String refreshToken = "";  // jeśli masz taką metodę
+            String refreshToken = "";
 
             Map<String, Object> response = Map.of(
                     "access_token", accessToken,
