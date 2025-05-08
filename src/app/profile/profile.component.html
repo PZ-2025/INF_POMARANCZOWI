@@ -1,46 +1,88 @@
 <app-navbar></app-navbar>
 <main class="w-full" style="background-color: var(--bg-content);">
   <div class="min-w-[624px] max-w-[1284px] px-16 py-12 mx-auto">
-
-
+    <h1 *ngIf="activeTab === 'profile'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Mój profil</h1>
+    <h1 *ngIf="activeTab === 'history' && userType === 'READER'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Historia</h1>
+    <h1 *ngIf="activeTab === 'users' && userType === 'ADMIN'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Użytkownicy</h1>
+    <h1 *ngIf="activeTab === 'orders' && userType === 'ADMIN'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Zamówienia</h1>
+    <h1 *ngIf="activeTab === 'library' && (userType === 'LIBRARIAN' || userType === 'ADMIN')" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Księgozbiór</h1>
+    <h1 *ngIf="activeTab === 'reports' && (userType === 'LIBRARIAN' || userType === 'ADMIN')" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Raporty</h1>
 
     <!-- Przyciski zakładek -->
-    <div class="flex justify-center gap-6 mb-12">
+    <div class="flex flex-wrap justify-center gap-x-6 gap-y-6 mt-12 mb-12">
       <button
         *ngIf="userType === 'READER'"
         (click)="activeTab = 'history'"
-        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
-        style="background-color: var(--input-bg); color: var(--text-color);"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
+        [ngStyle]="{
+          'background-color': activeTab === 'history' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
+          'color': 'var(--text-color)'
+        }"
       >
-        Historia wypożyczeń
+        Historia
       </button>
 
       <button
-        *ngIf="userType === 'LIBRARIAN'"
-        (click)="activeTab = 'all-loans'"
-        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
-        style="background-color: var(--input-bg); color: var(--text-color);"
+        *ngIf="userType === 'LIBRARIAN' || userType === 'ADMIN'"
+        (click)="activeTab = 'reports'"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
+        [ngStyle]="{
+          'background-color': activeTab === 'reports' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
+          'color': 'var(--text-color)'
+        }"
       >
-        Wszystkie wypożyczenia
+        Raporty
+      </button>
+
+      <button
+        *ngIf="userType === 'LIBRARIAN' || userType === 'ADMIN'"
+        (click)="activeTab = 'library'"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
+        [ngStyle]="{
+          'background-color': activeTab === 'library' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
+          'color': 'var(--text-color)'
+        }"
+      >
+        Księgozbiór
       </button>
 
       <button
         *ngIf="userType === 'ADMIN'"
-        (click)="activeTab = 'admin-panel'"
-        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
-        style="background-color: var(--input-bg); color: var(--text-color);"
+        (click)="activeTab = 'users'"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
+        [ngStyle]="{
+          'background-color': activeTab === 'users' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
+          'color': 'var(--text-color)'
+        }"
       >
-        Panel administracyjny
+        Użytkownicy
+      </button>
+
+      <button
+        *ngIf="userType === 'ADMIN'"
+        (click)="activeTab = 'orders'"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
+        [ngStyle]="{
+          'background-color': activeTab === 'orders' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
+          'color': 'var(--text-color)'
+        }"
+      >
+        Zamówienia
       </button>
 
       <button
         (click)="activeTab = 'profile'"
-        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
-        style="background-color: var(--input-bg); color: var(--text-color);"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
+        [ngStyle]="{
+          'background-color': activeTab === 'profile' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
+          'color': 'var(--text-color)'
+        }"
       >
         Mój profil
       </button>
     </div>
+
+
 
 
 
@@ -109,5 +151,7 @@
 
 
 
+
+    
   </div>
 </main>

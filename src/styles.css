@@ -22,6 +22,7 @@
   --search-button-bg: #333c4f;
   --search-button-text: #ffffff;
   --button-category-bg: #cbcbcb;
+  --selected-button-bg: #9a9a9a;
 
   --box-book-color: #cfe3c3;
   --inner-book-box: #c3c7c4;
@@ -50,6 +51,7 @@
   --search-button-bg: #333e57;
   --search-button-text: #ffffff;
   --button-category-bg: #4c4c4c;
+  --selected-button-bg: #7e7e7e;
 
   --box-book-color: #1d4208;
   --inner-book-box: #5e5f5e;
