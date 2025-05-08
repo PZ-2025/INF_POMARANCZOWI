@@ -10,11 +10,10 @@ import { canActivateAuth } from './auth/access.guard';
 const routes: Routes = [
   {path: '', component: HomeComponent},
 
-  // {path: 'me', component: ProfileComponent, canActivate: [canActivateAuth]},
+  {path: 'me', component: ProfileComponent, canActivate: [canActivateAuth]},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
 
-  {path: 'me', component: ProfileComponent},
   {path: 'add-book', component: AddEditBookComponent}
 ];
 

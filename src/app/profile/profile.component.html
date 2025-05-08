@@ -1,92 +1,113 @@
 <app-navbar></app-navbar>
-<div class="p-4 min-h-screen" style="background-color: var(--bg-content); color: var(--text-color)">
-  <div class="flex justify-center space-x-4 w-full max-w-md mx-auto">
-    <button
-      (click)="activeTab = 'history'"
-      class="flex-1 px-6 py-2 rounded border text-center cursor-pointer"
-      style="background-color: var(--input-bg); color: var(--text-color);"
-    >
-      Historia wypożyczeń
-    </button>
-    <button
-      (click)="activeTab = 'profile'"
-      class="flex-1 px-6 py-2 rounded border text-center cursor-pointer"
-      style="background-color: var(--input-bg); color: var(--text-color);"
-    >
-      Mój profil
-    </button>
-  </div>
+<main class="w-full" style="background-color: var(--bg-content);">
+  <div class="min-w-[624px] max-w-[1284px] px-16 py-12 mx-auto">
 
-  <!-- Historia wypożyczeń -->
-  <div
-    *ngIf="activeTab === 'history'"
-    class="mt-4 p-4 rounded max-w-[1284px] w-full flex flex-col mx-auto space-y-4 border"
-    style="background-color: var(--box-color); color: var(--text-color)"
-  >
-    <!-- Książka 1 -->
-    <div class="flex shadow-md rounded-lg border p-4 w-full mx-auto" style="background-color: var(--input-bg)">
-      <div class="w-1/4 flex justify-center border items-center rounded-md py-[16px] px-[16px]" style="background-color: white;">
-        <img src="/assets/imgs/book.png" alt="Okładka książki" class="w-[128px] h-[128px] object-cover"/>
-      </div>
-      <div class="flex-1 flex flex-col justify-between px-4">
-        <div>
+
+
+    <!-- Przyciski zakładek -->
+    <div class="flex justify-center gap-6 mb-12">
+      <button
+        *ngIf="userType === 'READER'"
+        (click)="activeTab = 'history'"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
+        style="background-color: var(--input-bg); color: var(--text-color);"
+      >
+        Historia wypożyczeń
+      </button>
+
+      <button
+        *ngIf="userType === 'LIBRARIAN'"
+        (click)="activeTab = 'all-loans'"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
+        style="background-color: var(--input-bg); color: var(--text-color);"
+      >
+        Wszystkie wypożyczenia
+      </button>
+
+      <button
+        *ngIf="userType === 'ADMIN'"
+        (click)="activeTab = 'admin-panel'"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
+        style="background-color: var(--input-bg); color: var(--text-color);"
+      >
+        Panel administracyjny
+      </button>
+
+      <button
+        (click)="activeTab = 'profile'"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
+        style="background-color: var(--input-bg); color: var(--text-color);"
+      >
+        Mój profil
+      </button>
+    </div>
+
+
+
+
+    <!-- Historia wypożyczeń -->
+    <div *ngIf="activeTab === 'history' && userType === 'READER'" class="flex flex-col gap-6">
+      <!-- Książka 1 -->
+      <div class="flex shadow-md rounded-lg border p-4 w-full" style="background-color: var(--box-color); color: var(--text-color);">
+        <div class="w-[160px] flex justify-center items-center border rounded-md" style="background-color: white;">
+          <img src="/assets/imgs/book.png" alt="Okładka książki" class="w-[128px] h-[128px] object-cover" />
+        </div>
+        <div class="flex-1 px-6">
           <p class="text-lg font-bold">Harry Potter i Komnata Tajemnic</p>
           <p class="opacity-80">J.K. Rowling</p>
           <p class="text-sm">24.02.2025 - ...</p>
           <p>Przedłużono: 0 razy</p>
           <p>Pozostało: 11 dni</p>
         </div>
-      </div>
-      <div class="w-[132px] flex flex-col items-end h-full">
-        <p class="text-lg mb-2">Wypożyczona</p>
-        <div class="flex flex-col space-y-2 mt-auto">
-          <button class="px-4 py-2 rounded w-full border cursor-pointer" style="background-color: white;">Zwróć</button>
-          <button class="px-4 py-2 rounded w-full border cursor-pointer" style="background-color: white;">Przedłuż</button>
+        <div class="w-[132px] flex flex-col items-end justify-between">
+          <p class="text-lg mb-2">Wypożyczona</p>
+          <div class="flex flex-col space-y-2">
+            <button class="px-4 py-2 rounded border cursor-pointer" style="background-color: white;">Zwróć</button>
+            <button class="px-4 py-2 rounded border cursor-pointer" style="background-color: white;">Przedłuż</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Książka 2 -->
-    <div class="flex shadow-md rounded-lg border p-4 w-full mx-auto" style="background-color: var(--input-bg)">
-      <div class="w-1/4 flex justify-center border items-center rounded-md py-[16px] px-[16px]" style="background-color: white;">
-        <img src="/assets/imgs/book.png" alt="Okładka książki" class="w-[128px] h-[128px] object-cover"/>
-      </div>
-      <div class="flex-1 flex flex-col justify-between px-4">
-        <div>
+      <!-- Książka 2 -->
+      <div class="flex shadow-md rounded-lg border p-4 w-full" style="background-color: var(--box-color); color: var(--text-color);">
+        <div class="w-[160px] flex justify-center items-center border rounded-md" style="background-color: white;">
+          <img src="/assets/imgs/book.png" alt="Okładka książki" class="w-[128px] h-[128px] object-cover" />
+        </div>
+        <div class="flex-1 px-6">
           <p class="text-lg font-bold">Harry Potter i więzień Azkabanu</p>
           <p class="opacity-80">J.K. Rowling</p>
           <p class="text-sm">14.01.2025 - 12.03.2025</p>
           <p>Przedłużono: 1 raz</p>
         </div>
-      </div>
-      <div class="w-[132px] flex flex-col justify-between items-end h-full">
-        <p class="text-lg">Zwrócona</p>
+        <div class="w-[132px] flex items-end justify-end">
+          <p class="text-lg">Zwrócona</p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Mój profil -->
-  <div
-    *ngIf="activeTab === 'profile'"
-    class="mt-4 p-4 rounded max-w-[1284px] w-full flex mx-auto space-y-4 border"
-    style="background-color: var(--box-color); color: var(--text-color)"
-  >
-    <div class="w-1/4 flex justify-center border items-center rounded-md py-[16px] px-[16px] mb-0" style="background-color: white;">
-      <img src="/assets/imgs/book.png" alt="Użytkownik" class="w-[128px] h-[128px] object-cover"/>
-    </div>
-    <div class="flex-1 flex flex-col justify-between px-4 mb-0">
-      <div>
-        <p class="text-2xl font-bold">Imię i Nazwisko</p>
-        <p class="text-xl">ul. 3 Maja 137, 39-120 Borek Mały</p>
-        <p class="text-xl">nazwa&#64;gmail.com</p>
+    <!-- Mój profil -->
+    <div *ngIf="activeTab === 'profile'" class="flex gap-6 shadow-md rounded-lg border p-6" style="background-color: var(--box-color); color: var(--text-color);">
+      <div class="w-[160px] flex justify-center items-center border rounded-md" style="background-color: white;">
+        <img src="/assets/imgs/book.png" alt="Użytkownik" class="w-[128px] h-[128px] object-cover" />
+      </div>
+      <div class="flex-1 flex flex-col justify-between">
+        <div>
+          <p class="text-2xl font-bold">Imię i Nazwisko</p>
+          <p class="text-xl">ul. 3 Maja 137, 39-120 Borek Mały</p>
+          <p class="text-xl">nazwa&#64;gmail.com</p>
+        </div>
+      </div>
+      <div class="w-[164px] flex flex-col items-end justify-between">
+        <div class="flex flex-col gap-2">
+          <button class="px-4 py-2 rounded border cursor-pointer" style="background-color: white;">Zmień zdjęcie</button>
+          <button class="px-4 py-2 rounded border cursor-pointer" style="background-color: white;">Zmień hasło</button>
+          <button class="px-4 py-2 rounded border cursor-pointer" style="background-color: white;">Zmień dane</button>
+        </div>
       </div>
     </div>
-    <div class="w-[164px] flex flex-col items-end h-full">
-      <div class="flex flex-col space-y-2 mt-auto">
-        <button class="px-4 py-2 rounded w-full border cursor-pointer" style="background-color: white;">Zmień zdjęcie</button>
-        <button class="px-4 py-2 rounded w-full border cursor-pointer" style="background-color: white;">Zmień hasło</button>
-        <button class="px-4 py-2 rounded w-full border cursor-pointer" style="background-color: white;">Zmień dane</button>
-      </div>
-    </div>
+
+
+
+
   </div>
-</div>
+</main>

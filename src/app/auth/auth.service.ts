@@ -33,6 +33,12 @@ export class AuthService {
 
         this.cookieService.set('token',this.token);
         this.cookieService.set('refreshToken',this.refreshToken);
+        console.log("Login response:", val);
+        const user = val.data.user;
+        localStorage.setItem('userType', user.userType);
+        localStorage.setItem('email', user.email);
+        localStorage.setItem('firstName', user.firstName);
+        localStorage.setItem('lastName', user.lastName);
       } )
     )
   }
@@ -43,7 +49,6 @@ export class AuthService {
     this.token = null;
     this.refreshToken = null;
   }
-
 
   register(payload: RegisterPayload) {
     return this.http.post(`${this.baseApiUrl}register`, payload);
