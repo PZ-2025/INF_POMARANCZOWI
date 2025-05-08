@@ -28,4 +28,6 @@ public interface UserService {
     boolean existsById(long id);
 
     void updateUserData(Long userId, UpdateUserRequest request);
+
+    void updateAvatarPath(Long userId, String path);
 }

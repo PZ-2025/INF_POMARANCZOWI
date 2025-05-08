@@ -50,6 +50,8 @@ public class User {
 
     private Instant lockedAt;
 
+    private String avatarPath;
+
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
@@ -91,6 +93,11 @@ public class User {
                 true,
                 true
         );
+    }
+
+    public User(String password, String email, String lastName, String firstName, UserType userType, String avatarPath) {
+        this(password, email, lastName, firstName, userType);
+        this.avatarPath = avatarPath;
     }
 
     public void changePassword(String password) {

@@ -11,6 +11,12 @@ import com.orange.bookmanagment.user.web.requests.UpdateUserRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -52,5 +58,26 @@ class UserController {
                         .message("User updated successfully")
                         .data(Map.of())
                         .build());
+    }
+
+    @PostMapping("/upload-avatar")
+    public ResponseEntity<HttpResponse> uploadAvatar(
+            @RequestParam("file") MultipartFile file,
+            @RequestHeader("Authorization") String authHeader
+    ) throws IOException {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = jwt.getClaim("user_id");
+
+        String fileName = "user-" + userId + ".jpg";
+        Path uploadPath = Paths.get("uploads/avatars/" + fileName);
+        Files.createDirectories(uploadPath.getParent());
+        Files.write(uploadPath, file.getBytes());
+
+        userService.updateAvatarPath(userId, "/uploads/avatars/" + fileName);
+
+        return ResponseEntity.ok(HttpResponse.builder()
+                .message("Photo saved")
+                .statusCode(200)
+                .build());
     }
 }
