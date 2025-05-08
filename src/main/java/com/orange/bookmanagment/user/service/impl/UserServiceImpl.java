@@ -82,11 +82,19 @@ class UserServiceImpl implements UserService, UserExternalService {
     @Override
     public void updateUserData(Long userId, UpdateUserRequest request) {
         User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new UserNotFoundException("Użytkownik nie istnieje"));
+                .orElseThrow(() -> new UserNotFoundException("User not exists"));
 
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
 
+        userRepository.updateUser(user);
+    }
+
+    @Override
+    public void updateAvatarPath(Long userId, String path) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setAvatarPath(path);
         userRepository.updateUser(user);
     }
 }
