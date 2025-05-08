@@ -7,14 +7,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
 public class TokenService {
-
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
 
@@ -46,7 +44,7 @@ public class TokenService {
             Jwt jwt = jwtDecoder.decode(token);
 
             return jwt.getClaim("user_id");
-        }catch (JwtException e){
+        } catch (JwtException e) {
             throw new IllegalAccountAccessException("Wrong authentication");
         }
     }

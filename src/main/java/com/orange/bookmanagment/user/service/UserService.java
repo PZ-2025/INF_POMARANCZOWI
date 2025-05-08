@@ -30,4 +30,6 @@ public interface UserService {
     void updateUserData(Long userId, UpdateUserRequest request);
 
     void updateAvatarPath(Long userId, String path);
+
+    void deleteUserAvatar(Long userId);
 }

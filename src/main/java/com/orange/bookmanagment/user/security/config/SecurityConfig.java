@@ -58,6 +58,8 @@ class SecurityConfig {
                                 .requestMatchers(POST, "/api/v1/reservations/book/{bookId}").authenticated()
                                 .requestMatchers(PUT, "/api/v1/user/me").authenticated()
                                 .requestMatchers(POST, "/api/v1/user/upload-avatar").authenticated()
+                                .requestMatchers("/uploads/**").permitAll()
+                                .requestMatchers(DELETE, "/api/v1/user/delete-avatar").authenticated()
                 )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
