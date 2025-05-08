@@ -7,6 +7,7 @@ export interface TokenResponse {
       email: string;
       firstName: string;
       lastName: string;
+      id: number;
     }
   }
 }

@@ -39,6 +39,7 @@ export class AuthService {
         localStorage.setItem('email', user.email);
         localStorage.setItem('firstName', user.firstName);
         localStorage.setItem('lastName', user.lastName);
+        localStorage.setItem('userId', user.id.toString());
       } )
     )
   }
@@ -52,6 +53,19 @@ export class AuthService {
 
   register(payload: RegisterPayload) {
     return this.http.post(`${this.baseApiUrl}register`, payload);
+  }
+
+  updateProfile(firstName: string, lastName: string) {
+    const token = this.cookieService.get('token');
+    return this.http.put(
+      'http://localhost:8080/api/v1/user/me',
+      { firstName, lastName },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 }
 

@@ -1,5 +1,18 @@
 <app-navbar></app-navbar>
 <main class="w-full" style="background-color: var(--bg-content);">
+  <div *ngIf="message"
+    class="text-center mt-10 mx-10 p-4 font-semibold rounded-md shadow-md border"
+    style="background-color: var(--box-login-color); color: var(--text-color);"
+  >
+    {{ message }}
+  </div>
+  <div *ngIf="badMessage"
+    class="text-center mt-10 mx-10 p-4 font-semibold rounded-md shadow-md border"
+    style="background-color: var(--box-bad-message-color); color: var(--text-color);"
+  >
+    {{ badMessage }}
+  </div>
+
   <div class="min-w-[624px] max-w-[1284px] px-16 py-12 mx-auto">
     <h1 *ngIf="activeTab === 'profile'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Mój profil</h1>
     <h1 *ngIf="activeTab === 'history' && userType === 'READER'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Historia</h1>
@@ -139,7 +152,7 @@
         style="background-color: var(--inner-book-box);"
       >
         <img
-          src="/assets/imgs/book.png"
+          src="/assets/imgs/user.png"
           alt="Użytkownik"
           class="w-full h-full object-contain rounded-lg"
         />
@@ -148,8 +161,8 @@
       <!-- Dane użytkownika -->
       <div class="flex-1 flex flex-col justify-between text-center min-[900px]:text-left">
         <div>
-          <p class="text-2xl font-bold">Imię i Nazwisko</p>
-          <p class="text-xl">nazwa&#64;gmail.com</p>
+          <p class="text-2xl font-bold">{{ firstName }} {{ lastName }}</p>
+          <p class="text-xl">{{ email }}</p>
         </div>
       </div>
 
@@ -158,7 +171,16 @@
         <div class="flex w-full max-[899px]:justify-between gap-4 min-[900px]:flex-col min-[900px]:w-auto min-[900px]:items-end">
           <button class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień zdjęcie</button>
           <button class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień hasło</button>
-          <button class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień dane</button>
+          <button (click)="toggleModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień dane</button>
+          <app-edit-user-modal
+            *ngIf="showModal"
+            [firstName]="tempFirstName"
+            [lastName]="tempLastName"
+            (firstNameChange)="tempFirstName = $event"
+            (lastNameChange)="tempLastName = $event"
+            (save)="saveChanges()"
+            (cancel)="showModal = false">
+          </app-edit-user-modal>
         </div>
       </div>
     </div>
