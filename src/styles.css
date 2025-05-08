@@ -27,6 +27,7 @@
   --box-book-color: #cfe3c3;
   --inner-book-box: #c3c7c4;
   --box-login-color: #4eaf16;
+  --profile-button-user: #81d7f4;
 }
 
 .dark {
@@ -56,6 +57,7 @@
   --box-book-color: #1d4208;
   --inner-book-box: #5e5f5e;
   --box-login-color: #2e6d0a;
+  --profile-button-user: #0a546d;
 }
 
 html, body {
