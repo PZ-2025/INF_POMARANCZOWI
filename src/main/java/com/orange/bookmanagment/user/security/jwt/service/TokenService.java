@@ -33,6 +33,7 @@ public class TokenService {
                 .issuedAt(Instant.now())
                 .expiresAt(expiredTime)
                 .subject(authentication.getName())
+                .claim("id", user.getId())
                 .claim("authorities", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
                 .claim("user_id", user.getId())
                 .build();

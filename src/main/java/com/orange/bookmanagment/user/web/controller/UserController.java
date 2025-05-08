@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.orange.bookmanagment.user.web.requests.UpdateUserRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -36,9 +37,9 @@ class UserController {
     }
 
     @PutMapping("/me")
-    public ResponseEntity<HttpResponse> updateUser(
-            @RequestBody UpdateUserRequest request,
-            @AuthenticationPrincipal(expression = "id") Long userId) {
+    public ResponseEntity<HttpResponse> updateUser(@RequestBody UpdateUserRequest request) {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = jwt.getClaim("user_id");
 
         userService.updateUserData(userId, request);
 
