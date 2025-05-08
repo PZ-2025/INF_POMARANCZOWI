@@ -6,7 +6,6 @@ import java.util.List;
 
 @Getter
 public enum UserType {
-
     READER(List.of("USER","READER")),
     LIBRARIAN(List.of("USER","LIBRARIAN")),
     ADMIN(List.of("USER","ADMIN", "LIBRARIAN"));
@@ -16,5 +15,4 @@ public enum UserType {
     UserType(List<String> authorities) {
         this.authorities = authorities;
     }
-
 }

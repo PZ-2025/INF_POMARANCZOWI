@@ -10,7 +10,6 @@ import com.orange.bookmanagment.user.web.requests.UserRegisterRequest;
 import java.util.List;
 
 public interface UserService {
-
     User getUserByEmail(String email) throws UserNotFoundException;
 
     long getUserIdByEmail(String email) throws UserNotFoundException;
@@ -26,5 +25,4 @@ public interface UserService {
     void changeUserPassword(long userId, ChangePasswordRequest changePasswordRequest) throws UserNotFoundException;
 
     boolean existsById(long id);
-
 }

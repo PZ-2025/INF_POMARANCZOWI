@@ -1,6 +1,5 @@
 package com.orange.bookmanagment.user.repository;
 
-
 import com.orange.bookmanagment.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -11,7 +10,6 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class UserRepository {
-
     private final UserJpaRepository userJpaRepository;
 
     public Optional<User> findUserByEmail(String email) {
@@ -38,5 +36,4 @@ public class UserRepository {
     public boolean existsById(Long id) {
         return userJpaRepository.existsById(id);
     }
-
 }

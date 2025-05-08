@@ -1,6 +1,5 @@
 package com.orange.bookmanagment.user.web.controller;
 
-
 import com.orange.bookmanagment.shared.model.HttpResponse;
 import com.orange.bookmanagment.shared.util.TimeUtil;
 import com.orange.bookmanagment.user.service.UserService;
@@ -21,7 +20,6 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RequiredArgsConstructor
 class UserController {
-
     private final UserService userService;
     private final UserDtoMapper userDtoMapper;
 
