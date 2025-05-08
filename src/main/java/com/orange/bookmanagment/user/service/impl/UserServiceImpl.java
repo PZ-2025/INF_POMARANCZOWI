@@ -1,6 +1,5 @@
 package com.orange.bookmanagment.user.service.impl;
 
-
 import com.orange.bookmanagment.user.api.UserExternalService;
 import com.orange.bookmanagment.user.exception.IllegalAccountAccessException;
 import com.orange.bookmanagment.user.exception.UserAlreadyExistException;
@@ -10,6 +9,7 @@ import com.orange.bookmanagment.user.model.enums.UserType;
 import com.orange.bookmanagment.user.repository.UserRepository;
 import com.orange.bookmanagment.user.service.UserService;
 import com.orange.bookmanagment.user.web.requests.ChangePasswordRequest;
+import com.orange.bookmanagment.user.web.requests.UpdateUserRequest;
 import com.orange.bookmanagment.user.web.requests.UserRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +21,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 class UserServiceImpl implements UserService, UserExternalService {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -52,7 +51,6 @@ class UserServiceImpl implements UserService, UserExternalService {
             throw new UserAlreadyExistException("User already exists");
         });
 
-
         return userRepository.createUser(new User(passwordEncoder.encode(userRegisterRequest.password()), userRegisterRequest.email(),userRegisterRequest.lastName(),userRegisterRequest.firstName(), userType));
     }
 
@@ -68,12 +66,11 @@ class UserServiceImpl implements UserService, UserExternalService {
     public void changeUserPassword(long userId, ChangePasswordRequest changePasswordRequest) {
         final User user = getUserById(userId);
 
-        if(!passwordEncoder.matches(changePasswordRequest.oldPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(changePasswordRequest.oldPassword(), user.getPassword())) {
             throw new IllegalAccountAccessException("Old password is not correct");
         }
 
         user.changePassword(passwordEncoder.encode(changePasswordRequest.newPassword()));
-
         updateUser(user);
     }
 
@@ -82,4 +79,14 @@ class UserServiceImpl implements UserService, UserExternalService {
         return userRepository.existsById(id);
     }
 
+    @Override
+    public void updateUserData(Long userId, UpdateUserRequest request) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Użytkownik nie istnieje"));
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+
+        userRepository.updateUser(user);
+    }
 }

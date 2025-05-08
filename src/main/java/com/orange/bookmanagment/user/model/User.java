@@ -1,6 +1,5 @@
 package com.orange.bookmanagment.user.model;
 
-
 import com.orange.bookmanagment.user.model.enums.UserType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,10 +20,9 @@ import java.time.Instant;
 @AllArgsConstructor
 @Setter
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String firstName;
 

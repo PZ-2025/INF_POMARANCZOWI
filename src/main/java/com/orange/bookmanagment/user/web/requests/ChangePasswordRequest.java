@@ -10,5 +10,4 @@ public record ChangePasswordRequest(
         @NotBlank
         @Size(min = 6,max = 256)
         String newPassword
-) {
-}
+) { }

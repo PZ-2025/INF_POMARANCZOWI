@@ -15,5 +15,4 @@ public record UserRegisterRequest(
         String firstName,
         @NotBlank
         String lastName
-) {
-}
+) { }

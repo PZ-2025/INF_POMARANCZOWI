@@ -16,5 +16,4 @@ public record UserLoginRequest(
         @NotBlank
         @Size(min = 6,max = 256)
         String password
-) {
-}
+) { }
