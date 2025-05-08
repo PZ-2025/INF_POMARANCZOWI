@@ -9,6 +9,7 @@ import com.orange.bookmanagment.user.model.enums.UserType;
 import com.orange.bookmanagment.user.repository.UserRepository;
 import com.orange.bookmanagment.user.service.UserService;
 import com.orange.bookmanagment.user.web.requests.ChangePasswordRequest;
+import com.orange.bookmanagment.user.web.requests.UpdateUserRequest;
 import com.orange.bookmanagment.user.web.requests.UserRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -76,5 +77,16 @@ class UserServiceImpl implements UserService, UserExternalService {
     @Override
     public boolean existsById(long id) {
         return userRepository.existsById(id);
+    }
+
+    @Override
+    public void updateUserData(Long userId, UpdateUserRequest request) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Użytkownik nie istnieje"));
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+
+        userRepository.updateUser(user);
     }
 }
