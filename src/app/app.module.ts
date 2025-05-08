@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { EditUserModalComponent } from './components/edit-user-modal/edit-user-modal.component';
+import { EditPasswordModalComponent } from './components/edit-password-modal/edit-password-modal.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { EditUserModalComponent } from './components/edit-user-modal/edit-user-m
     HomeComponent,
     ProfileComponent,
     AddEditBookComponent,
-    EditUserModalComponent
+    EditUserModalComponent,
+    EditPasswordModalComponent
   ],
   imports: [
     BrowserModule,

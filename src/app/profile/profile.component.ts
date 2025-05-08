@@ -133,4 +133,49 @@ export class ProfileComponent {
       this.badMessageTimeout = null;
     }, 5000);
   }
+
+  showPasswordModal = false;
+
+  togglePasswordModal() {
+    this.showPasswordModal = !this.showPasswordModal;
+  }
+
+  changePassword(data: { oldPassword: string; newPassword: string; confirmPassword: string }) {
+    this.showPasswordModal = false;
+
+    if (!data.oldPassword || !data.newPassword || !data.confirmPassword) {
+      this.badMessageService.setMessage('Wszystkie pola są wymagane.');
+      return;
+    }
+
+    if (data.newPassword.length < 6 || data.newPassword.length > 256) {
+      this.badMessageService.setMessage('Hasło musi mieć od 6 do 256 znaków.');
+      return;
+    }
+
+    if (data.confirmPassword.length < 6 || data.confirmPassword.length > 256) {
+      this.badMessageService.setMessage('Hasło musi mieć od 6 do 256 znaków.');
+      return;
+    }
+
+    if (data.newPassword !== data.confirmPassword) {
+      this.badMessageService.setMessage('Nowe hasła nie są takie same.');
+      return;
+    }
+
+    this.authService.changePassword(data.oldPassword, data.newPassword).subscribe({
+      next: () => {
+        this.messageService.setMessage('Hasło zostało zmienione.');
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Błąd podczas zmiany hasła:', err);
+
+        if (err.status === 403 || err.error?.message?.includes('Invalid old password')) {
+          this.badMessageService.setMessage('Stare hasło jest niepoprawne.');
+        } else {
+          this.badMessageService.setMessage('Nie udało się zmienić hasła, spróbuj ponownie później.');
+        }
+      }
+    });
+  }
 }

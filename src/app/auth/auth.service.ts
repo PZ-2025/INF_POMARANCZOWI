@@ -67,6 +67,19 @@ export class AuthService {
       }
     );
   }
+
+  changePassword(oldPassword: string, newPassword: string) {
+    const token = this.cookieService.get('token');
+    const body = {
+      oldPassword,
+      newPassword
+    };
+    return this.http.post(`${this.baseApiUrl}changePassword`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
 }
 
 export interface RegisterPayload {

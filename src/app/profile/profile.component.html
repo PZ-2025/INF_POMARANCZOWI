@@ -170,7 +170,12 @@
       <div class="w-full min-[900px]:w-[164px] flex flex-row gap-8 max-[899px]:mt-1 min-[900px]:flex-col min-[900px]:items-end min-[900px]:justify-between">
         <div class="flex w-full max-[899px]:justify-between gap-4 min-[900px]:flex-col min-[900px]:w-auto min-[900px]:items-end">
           <button class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień zdjęcie</button>
-          <button class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień hasło</button>
+          <button (click)="togglePasswordModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień hasło</button>
+          <app-edit-password-modal
+            *ngIf="showPasswordModal"
+            (cancel)="togglePasswordModal()"
+            (save)="changePassword($event)">
+          </app-edit-password-modal>
           <button (click)="toggleModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień dane</button>
           <app-edit-user-modal
             *ngIf="showModal"
