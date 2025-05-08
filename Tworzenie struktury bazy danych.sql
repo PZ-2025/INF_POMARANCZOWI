@@ -20,7 +20,7 @@ create table reservations_seq (next_val bigint) engine=InnoDB;
 insert into reservations_seq values ( 1 );
 create table user_settings_seq (next_val bigint) engine=InnoDB;
 insert into user_settings_seq values ( 1 );
-create table users (blocked bit not null, locked bit not null, verified bit not null, blocked_at datetime(6), changed_password_at datetime(6), created_at datetime(6), id bigint not null, locked_at datetime(6), updated_at datetime(6), user_settings bigint, verified_at datetime(6), email varchar(255), first_name varchar(255), last_name varchar(255), password varchar(255), user_type enum ('ADMIN','LIBRARIAN','READER'), primary key (id)) engine=InnoDB;
+create table users (blocked bit not null, locked bit not null, verified bit not null, blocked_at datetime(6), changed_password_at datetime(6), created_at datetime(6), id bigint not null, locked_at datetime(6), updated_at datetime(6), user_settings bigint, verified_at datetime(6), email varchar(255), first_name varchar(255), last_name varchar(255), password varchar(255), avatar_path varchar(512), user_type enum ('ADMIN','LIBRARIAN','READER'), primary key (id)) engine=InnoDB;
 create table users_seq (next_val bigint) engine=InnoDB;
 insert into users_seq values ( 1 );
 create table user_settings (dark_mode bit not null, email_notifications_enabled bit not null, email_reminders_enabled bit not null, new_books_notifications_enabled bit not null, notifications_enabled bit not null, id bigint not null, primary key (id)) engine=InnoDB;
