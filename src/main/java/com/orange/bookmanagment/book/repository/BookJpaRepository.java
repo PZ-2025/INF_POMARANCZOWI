@@ -1,6 +1,7 @@
 package com.orange.bookmanagment.book.repository;
 
 import com.orange.bookmanagment.book.model.Book;
+import com.orange.bookmanagment.shared.enums.BookStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +22,6 @@ interface BookJpaRepository extends JpaRepository<Book,Long> {
      * @return a list of book entities with the given title
      */
     List<Book> findBookByTitle(String title);
+
+    List<Book> findByStatus(BookStatus status);
 }

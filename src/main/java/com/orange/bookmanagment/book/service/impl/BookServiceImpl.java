@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -99,5 +100,21 @@ class BookServiceImpl implements BookService, BookExternalService {
     @Override
     public boolean existsBookById(long id) {
         return this.existsById(id);
+    }
+
+    @Override
+    public List<BookExternalDto> getAllBooks() {
+        List<Book> books = bookRepository.findAll();
+        return books.stream()
+                .map(bookInternalMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookExternalDto> getBooksByStatus(BookStatus status) {
+        List<Book> books = bookRepository.findByStatus(status);
+        return books.stream()
+                .map(bookInternalMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

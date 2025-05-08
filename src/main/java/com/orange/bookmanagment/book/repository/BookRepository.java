@@ -1,6 +1,7 @@
 package com.orange.bookmanagment.book.repository;
 
 import com.orange.bookmanagment.book.model.Book;
+import com.orange.bookmanagment.shared.enums.BookStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -72,4 +73,11 @@ public class BookRepository {
     }
 
 
+    public List<Book> findAll() {
+        return bookJpaRepository.findAll();
+    }
+
+    public List<Book> findByStatus(BookStatus status) {
+        return bookJpaRepository.findByStatus(status);
+    }
 }
