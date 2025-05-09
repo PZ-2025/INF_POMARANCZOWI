@@ -3,6 +3,10 @@ import { AuthService } from '../auth/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from '../services/message.service';
 import { BadMessageService } from '../services/bad-message.service';
+import { CookieService } from 'ngx-cookie-service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { User } from '../auth/auth.interface';
 
 @Component({
   selector: 'app-profile',
@@ -15,13 +19,15 @@ export class ProfileComponent {
   message: string | null = null;
   badMessage: string | null = null;
 
-  constructor(private authService: AuthService, private messageService: MessageService, private badMessageService: BadMessageService) {}
+  constructor(private authService: AuthService, private messageService: MessageService, private badMessageService: BadMessageService, private cookieService: CookieService, private http: HttpClient) {}
 
   userType: string | null = null;
   email: string | null = null;
   firstName: string = '';
   lastName: string = '';
   userId: number | null = null;
+  avatarPath: string | null = null;
+  user: User | null = null;
 
   showEditForm = false;
 
@@ -31,11 +37,21 @@ export class ProfileComponent {
     this.firstName = localStorage.getItem('firstName') || '';
     this.lastName = localStorage.getItem('lastName') || '';
     this.userId = parseInt(localStorage.getItem('userId') || '0', 10);
+    this.avatarPath = localStorage.getItem('avatarPath');
+    
+    const rawPath = localStorage.getItem('avatarPath');
+    if (!rawPath || rawPath === '/assets/imgs/user.png') {
+      this.avatarPath = '/assets/imgs/user.png';
+    } else {
+      this.avatarPath = rawPath.startsWith('http') ? rawPath : `http://localhost:8080${rawPath}`;
+    }
+    localStorage.setItem('avatarPath', this.avatarPath);
 
     console.log('User type:', this.userType);
     console.log('Rmail:', this.email);
     console.log('First name:', this.firstName);
     console.log('Last name:', this.lastName);
+    console.log('Avatar path:', this.avatarPath);
     console.log('Id:', this.userId);
 
     this.messageService.message$.subscribe(msg => {
@@ -165,7 +181,7 @@ export class ProfileComponent {
 
     this.authService.changePassword(data.oldPassword, data.newPassword).subscribe({
       next: () => {
-        this.messageService.setMessage('Hasło zostało zmienione.');
+        this.messageService.setMessage('Hasło zostało zaktualizowane.');
       },
       error: (err: HttpErrorResponse) => {
         console.error('Błąd podczas zmiany hasła:', err);
@@ -175,6 +191,95 @@ export class ProfileComponent {
         } else {
           this.badMessageService.setMessage('Nie udało się zmienić hasła, spróbuj ponownie później.');
         }
+      }
+    });
+  }
+
+  showAvatarModal = false;
+
+  reloadUserAvatar() {
+    this.avatarPath = `http://localhost:8080/uploads/avatars/user-${this.userId}.jpg?${new Date().getTime()}`;
+    localStorage.setItem('avatarPath', this.avatarPath);
+  }
+
+  toggleAvatarModal() {
+    this.showAvatarModal = !this.showAvatarModal;
+  }
+
+  uploadAvatar(file: File | null) {
+    this.showAvatarModal = false;
+
+    if (!file) {
+      this.badMessageService.setMessage('Nie wybrano pliku.');
+      return;
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      this.badMessageService.setMessage('Nieobsługiwany format pliku, dozwolone formaty to JPG, PNG i WEBP.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const token = this.cookieService.get('token');
+
+    this.http.post('http://localhost:8080/api/v1/user/upload-avatar', formData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
+      next: () => {
+        this.messageService.setMessage('Zdjęcie zostało zaktualizowane.');
+        this.reloadUserAvatar();
+      },
+      error: (err) => {
+        if (err.status === 413) {
+          this.badMessageService.setMessage('Plik jest za duży. Maksymalny rozmiar to 5MB.');
+        } else {
+          this.badMessageService.setMessage('Nie udało się zaktualizować zdjęcia, spróbuj ponownie później.');
+        }
+      }
+    });
+  }
+
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(`http://localhost:8080/api/v1/user/${id}`);
+  }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+
+    img.src = '/assets/imgs/user.png';
+
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  deleteAvatar() {
+    this.showAvatarModal = false;
+
+    if (this.avatarPath == '/assets/imgs/user.png') {
+      this.badMessageService.setMessage('Nie masz żadnego wgranego zdjęcia.');
+      return;
+    }
+
+    const token = this.cookieService.get('token');
+
+    this.http.delete('http://localhost:8080/api/v1/user/delete-avatar', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
+      next: () => {
+        this.messageService.setMessage('Zdjęcie zostało usunięte.');
+        this.avatarPath = '/assets/imgs/user.png';
+        localStorage.removeItem('avatarPath');
+      },
+      error: (err) => {
+        console.error('Błąd podczas usuwania zdjęcia:', err);
+        this.badMessageService.setMessage('Nie udało się usunąć zdjęcia, spróbuj ponownie później.');
       }
     });
   }

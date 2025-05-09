@@ -148,13 +148,14 @@
     <div *ngIf="activeTab === 'profile'" class="flex flex-col min-[900px]:flex-row gap-6 shadow-md rounded-xl border p-4" style="background-color: var(--box-color); color: var(--text-color);">
       <!-- Zdjęcie użytkownika -->
       <div
-        class="border rounded-xl p-4 bg-white max-[900px]:w-full max-[900px]:h-[300px] max-[900px]:flex max-[900px]:justify-center max-[900px]:items-center w-[156px] h-[156px]"
+        class="rounded-xl bg-white max-[900px]:w-full max-[900px]:h-[300px] max-[900px]:flex max-[900px]:justify-center max-[900px]:items-center w-[156px] h-[156px]"
         style="background-color: var(--inner-book-box);"
       >
         <img
-          src="/assets/imgs/user.png"
+          [src]="avatarPath || '/assets/imgs/user.png'"
+          (error)="onImageError($event)"
           alt="Użytkownik"
-          class="w-full h-full object-contain rounded-lg"
+          class="w-full h-full object-contain rounded-lg border"
         />
       </div>
 
@@ -169,7 +170,13 @@
       <!-- Przyciski -->
       <div class="w-full min-[900px]:w-[164px] flex flex-row gap-8 max-[899px]:mt-1 min-[900px]:flex-col min-[900px]:items-end min-[900px]:justify-between">
         <div class="flex w-full max-[899px]:justify-between gap-4 min-[900px]:flex-col min-[900px]:w-auto min-[900px]:items-end">
-          <button class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień zdjęcie</button>
+          <button (click)="toggleAvatarModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień zdjęcie</button>
+          <app-edit-avatar-modal
+            *ngIf="showAvatarModal"
+            (cancel)="toggleAvatarModal()"
+            (save)="uploadAvatar($event)"
+            (delete)="deleteAvatar()">
+          </app-edit-avatar-modal>
           <button (click)="togglePasswordModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień hasło</button>
           <app-edit-password-modal
             *ngIf="showPasswordModal"

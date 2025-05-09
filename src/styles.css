@@ -24,6 +24,7 @@
   --search-button-text: #ffffff;
   --button-category-bg: #cbcbcb;
   --selected-button-bg: #9a9a9a;
+  --button-delete-image-bg: #f8a515;
 
   --box-book-color: #cfe3c3;
   --inner-book-box: #c3c7c4;
@@ -58,6 +59,7 @@
   --search-button-text: #ffffff;
   --button-category-bg: #4c4c4c;
   --selected-button-bg: #7e7e7e;
+  --button-delete-image-bg: #ffa930;
 
   --box-book-color: #1d4208;
   --inner-book-box: #5e5f5e;

@@ -40,7 +40,13 @@ export class AuthService {
         localStorage.setItem('firstName', user.firstName);
         localStorage.setItem('lastName', user.lastName);
         localStorage.setItem('userId', user.id.toString());
-      } )
+
+        if (user.avatarPath == null) {
+          localStorage.setItem('avatarPath', '/assets/imgs/user.png');
+        } else {
+          localStorage.setItem('avatarPath', user.avatarPath);
+        }
+      })
     )
   }
 

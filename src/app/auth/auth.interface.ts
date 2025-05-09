@@ -7,7 +7,17 @@ export interface TokenResponse {
       email: string;
       firstName: string;
       lastName: string;
+      avatarPath: string;
       id: number;
     }
   }
+}
+
+export interface User {
+  id: number;
+  userType: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  avatar_path?: string;
 }

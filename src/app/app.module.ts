@@ -15,6 +15,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { EditUserModalComponent } from './components/edit-user-modal/edit-user-modal.component';
 import { EditPasswordModalComponent } from './components/edit-password-modal/edit-password-modal.component';
+import { EditAvatarModalComponent } from './components/edit-avatar-modal/edit-avatar-modal.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { EditPasswordModalComponent } from './components/edit-password-modal/edi
     ProfileComponent,
     AddEditBookComponent,
     EditUserModalComponent,
-    EditPasswordModalComponent
+    EditPasswordModalComponent,
+    EditAvatarModalComponent
   ],
   imports: [
     BrowserModule,
