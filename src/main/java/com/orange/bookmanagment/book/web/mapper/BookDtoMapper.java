@@ -31,6 +31,7 @@ public class BookDtoMapper {
                 .toList();
 
         return new BookDto(
+                book.getId(),
                 book.getTitle(),
                 authorDtos,
                 publisherMapper.toDto(book.getPublisher()),
