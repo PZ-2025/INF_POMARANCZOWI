@@ -5,7 +5,7 @@ import com.orange.bookmanagment.book.api.dto.BookExternalDto;
 import com.orange.bookmanagment.loan.exception.BookNotAvailableException;
 import com.orange.bookmanagment.loan.exception.LoanNotFoundException;
 import com.orange.bookmanagment.loan.model.Loan;
-import com.orange.bookmanagment.loan.model.enums.LoanStatus;
+import com.orange.bookmanagment.shared.enums.LoanStatus;
 import com.orange.bookmanagment.loan.repository.LoanRepository;
 import com.orange.bookmanagment.reservation.api.ReservationExternalService;
 import com.orange.bookmanagment.shared.enums.BookStatus;
@@ -28,7 +28,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

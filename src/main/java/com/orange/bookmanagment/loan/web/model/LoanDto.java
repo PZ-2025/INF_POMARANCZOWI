@@ -1,6 +1,6 @@
 package com.orange.bookmanagment.loan.web.model;
 
-import com.orange.bookmanagment.loan.model.enums.LoanStatus;
+import com.orange.bookmanagment.shared.enums.LoanStatus;
 
 public record LoanDto(
         long id,

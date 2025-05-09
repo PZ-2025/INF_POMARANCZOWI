@@ -1,5 +1,9 @@
 package com.orange.bookmanagment.report.web.controller;
 
+import com.orange.bookmanagment.book.api.BookExternalService;
+import com.orange.bookmanagment.book.api.dto.BookExternalDto;
+import com.orange.bookmanagment.loan.api.dto.LoanExternalDto;
+import com.orange.bookmanagment.shared.enums.LoanStatus;
 import com.orange.bookmanagment.report.service.ReportService;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.shared.model.HttpResponse;
@@ -16,7 +20,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -29,6 +40,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class ReportController {
     private final ReportService reportService;
+    private final BookExternalService bookExternalService;
 
     /**
      * Generuje raport inwentaryzacyjny wszystkich książek w bibliotece.
@@ -133,61 +145,6 @@ public class ReportController {
         }
     }
 
-//    /**
-//     * Generuje raport książek o określonym statusie.
-//     *
-//     * @param status status książek do uwzględnienia w raporcie
-//     * @param authentication obiekt autentykacji użytkownika
-//     * @return ResponseEntity zawierający plik PDF z raportem
-//     */
-//    @GetMapping("/status/{status}")
-//    public ResponseEntity<?> generateStatusReport(
-//            @PathVariable("status") String status,
-//            Authentication authentication) {
-//        try {
-//            // Konwertuj string statusu na enum
-//            BookStatus bookStatus = BookStatus.valueOf(status.toUpperCase());
-//
-//            // Pobierz informacje o użytkowniku z tokenu JWT
-//            String username = getUsernameFromAuthentication(authentication);
-//
-//            // Wygeneruj raport
-//            String reportPath = reportService.generateStatusReport(bookStatus, username);
-//
-//            // Zwróć plik jako odpowiedź
-//            Resource resource = new UrlResource(Path.of(reportPath).toUri());
-//            return ResponseEntity.ok()
-//                    .contentType(MediaType.APPLICATION_PDF)
-//                    .header(HttpHeaders.CONTENT_DISPOSITION,
-//                            "attachment; filename=\"library_" + status.toLowerCase() + "_report.pdf\"")
-//                    .body(resource);
-//        } catch (IllegalArgumentException e) {
-//            // Zwróć błąd dla nieprawidłowego statusu
-//            return ResponseEntity.status(OK)
-//                    .body(HttpResponse.builder()
-//                            .timeStamp(TimeUtil.getCurrentTimeWithFormat())
-//                            .statusCode(OK.value())
-//                            .httpStatus(OK)
-//                            .reason("Invalid status")
-//                            .message("Error: Status '" + status + "' is not valid. Allowed values: " +
-//                                    String.join(", ",
-//                                            java.util.Arrays.stream(BookStatus.values())
-//                                                    .map(Enum::name)
-//                                                    .toArray(String[]::new)))
-//                            .build());
-//        } catch (Exception e) {
-//            // Zwróć odpowiedź z błędem
-//            return ResponseEntity.status(OK)
-//                    .body(HttpResponse.builder()
-//                            .timeStamp(TimeUtil.getCurrentTimeWithFormat())
-//                            .statusCode(OK.value())
-//                            .httpStatus(OK)
-//                            .reason("Report generation failed")
-//                            .message("Error: " + e.getMessage())
-//                            .build());
-//        }
-//    }
-
     /**
      * Zwraca listę dostępnych typów raportów.
      *
@@ -204,7 +161,8 @@ public class ReportController {
                         .message("List of available report types")
                         .data(Map.of("reports", Map.of(
                                 "inventory", "/api/v1/reports/inventory",
-                                "byStatus", "/api/v1/reports/status/{status}"
+                                "popularity", "/api/v1/reports/popularity"
+
                         )))
                         .build());
     }
@@ -226,4 +184,114 @@ public class ReportController {
         }
         return authentication.getName();
     }
+
+    /**
+     * Generuje raport popularności książek na podstawie wypożyczeń.
+     *
+     * @param genre filtr gatunku (opcjonalny)
+     * @param status filtr statusu (opcjonalny)
+     * @param startDateStr data początkowa okresu w formacie YYYY-MM-DD (opcjonalna)
+     * @param endDateStr data końcowa okresu w formacie YYYY-MM-DD (opcjonalna)
+     * @param limit maksymalna liczba książek w raporcie (opcjonalna, domyślnie 10)
+     * @param authentication obiekt autentykacji użytkownika
+     * @return ResponseEntity zawierający plik PDF z raportem
+     */
+    @GetMapping("/popularity")
+    public ResponseEntity<?> generatePopularityReport(
+            @RequestParam(value = "genre", required = false) String genre,
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "startDate", required = false) String startDateStr,
+            @RequestParam(value = "endDate", required = false) String endDateStr,
+            @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
+            Authentication authentication) {
+        try {
+            // Pobierz informacje o użytkowniku z tokenu JWT
+            String username = getUsernameFromAuthentication(authentication);
+
+            // Konwertuj string statusu na enum (jeśli podany)
+            BookStatus bookStatus = null;
+            if (status != null && !status.isEmpty()) {
+                try {
+                    bookStatus = BookStatus.valueOf(status.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.status(OK)
+                            .body(HttpResponse.builder()
+                                    .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                                    .statusCode(OK.value())
+                                    .httpStatus(OK)
+                                    .reason("Invalid status")
+                                    .message("Error: Status '" + status + "' is not valid. Allowed values: " +
+                                            String.join(", ",
+                                                    java.util.Arrays.stream(BookStatus.values())
+                                                            .map(Enum::name)
+                                                            .toArray(String[]::new)))
+                                    .build());
+                }
+            }
+
+            // Konwertuj string daty na obiekt LocalDate (jeśli podany)
+            LocalDate startDate = null;
+            if (startDateStr != null && !startDateStr.isEmpty()) {
+                try {
+                    startDate = LocalDate.parse(startDateStr);
+                } catch (DateTimeParseException e) {
+                    return ResponseEntity.status(OK)
+                            .body(HttpResponse.builder()
+                                    .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                                    .statusCode(OK.value())
+                                    .httpStatus(OK)
+                                    .reason("Invalid start date format")
+                                    .message("Error: Start date should be in format YYYY-MM-DD")
+                                    .build());
+                }
+            }
+
+            LocalDate endDate = null;
+            if (endDateStr != null && !endDateStr.isEmpty()) {
+                try {
+                    endDate = LocalDate.parse(endDateStr);
+                } catch (DateTimeParseException e) {
+                    return ResponseEntity.status(OK)
+                            .body(HttpResponse.builder()
+                                    .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                                    .statusCode(OK.value())
+                                    .httpStatus(OK)
+                                    .reason("Invalid end date format")
+                                    .message("Error: End date should be in format YYYY-MM-DD")
+                                    .build());
+                }
+            }
+
+            // Wygeneruj raport
+            String reportPath = reportService.generatePopularityReport(genre, bookStatus, startDate, endDate, limit, username);
+
+            // Utwórz odpowiednią nazwę pliku
+            StringBuilder fileName = new StringBuilder("popularity_report");
+            if (genre != null && !genre.isEmpty()) fileName.append("_").append(genre.toLowerCase());
+            if (status != null && !status.isEmpty()) fileName.append("_").append(status.toLowerCase());
+            if (startDateStr != null && !startDateStr.isEmpty()) fileName.append("_from_").append(startDateStr);
+            if (endDateStr != null && !endDateStr.isEmpty()) fileName.append("_to_").append(endDateStr);
+            fileName.append(".pdf");
+
+            // Zwróć plik jako odpowiedź
+            Resource resource = new UrlResource(Path.of(reportPath).toUri());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName.toString() + "\"")
+                    .body(resource);
+        } catch (Exception e) {
+            // Zwróć odpowiedź z błędem
+            return ResponseEntity.status(OK)
+                    .body(HttpResponse.builder()
+                            .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                            .statusCode(OK.value())
+                            .httpStatus(OK)
+                            .reason("Report generation failed")
+                            .message("Error: " + e.getMessage())
+                            .build());
+        }
+    }
+
+
+
 }

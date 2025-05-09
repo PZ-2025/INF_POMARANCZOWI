@@ -1,7 +1,7 @@
 package com.orange.bookmanagment.loan.repository;
 
 import com.orange.bookmanagment.loan.model.Loan;
-import com.orange.bookmanagment.loan.model.enums.LoanStatus;
+import com.orange.bookmanagment.shared.enums.LoanStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -79,5 +79,7 @@ public class LoanRepository {
     }
 
 
-
+    public List<Loan> findAll() {
+        return loanJpaRepository.findAll();
+    }
 }

@@ -1,7 +1,7 @@
 package com.orange.bookmanagment.loan.repository;
 
 import com.orange.bookmanagment.loan.model.Loan;
-import com.orange.bookmanagment.loan.model.enums.LoanStatus;
+import com.orange.bookmanagment.shared.enums.LoanStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

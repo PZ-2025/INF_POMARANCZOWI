@@ -2,12 +2,15 @@ package com.orange.bookmanagment.loan.service.impl;
 
 import com.orange.bookmanagment.book.api.BookExternalService;
 import com.orange.bookmanagment.book.api.dto.BookExternalDto;
+import com.orange.bookmanagment.loan.api.LoanExternalService;
+import com.orange.bookmanagment.loan.api.dto.LoanExternalDto;
 import com.orange.bookmanagment.loan.exception.BookNotAvailableException;
 import com.orange.bookmanagment.loan.exception.LoanNotFoundException;
+import com.orange.bookmanagment.loan.service.mapper.LoanInternalMapper;
 import com.orange.bookmanagment.reservation.api.ReservationExternalService;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.loan.model.Loan;
-import com.orange.bookmanagment.loan.model.enums.LoanStatus;
+import com.orange.bookmanagment.shared.enums.LoanStatus;
 import com.orange.bookmanagment.loan.repository.LoanRepository;
 import com.orange.bookmanagment.loan.service.LoanService;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +21,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-class LoanServiceImpl implements LoanService {
+class LoanServiceImpl implements LoanService, LoanExternalService {
     private final LoanRepository loanRepository;
     private final BookExternalService bookExternalService;
     private final ReservationExternalService reservationExternalService;
+    private final LoanInternalMapper loanInternalMapper;
 
     @Override
     @Transactional
@@ -154,6 +158,16 @@ class LoanServiceImpl implements LoanService {
 ////
 ////        return overdueLoans.size();
 ////    }
+
+    //getAllLoans
+    @Override
+    @Transactional
+    public List<LoanExternalDto> getAllLoans() {
+        return loanRepository.findAll()
+                .stream()
+                .map(loanInternalMapper::toDto)
+                .toList();
+    }
 
 
 }
