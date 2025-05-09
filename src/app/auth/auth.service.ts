@@ -31,8 +31,8 @@ export class AuthService {
         this.token=val.access_token;
         this.refreshToken=val.refresh_token;
 
-        this.cookieService.set('token',this.token);
-        this.cookieService.set('refreshToken',this.refreshToken);
+        this.cookieService.set('token', this.token);
+        this.cookieService.set('refreshToken', this.refreshToken);
         console.log("Login response:", val);
         const user = val.data.user;
         localStorage.setItem('userType', user.userType);
@@ -85,6 +85,10 @@ export class AuthService {
         Authorization: `Bearer ${token}`
       }
     });
+  }
+
+  getToken(): string {
+    return this.cookieService.get('token');
   }
 }
 

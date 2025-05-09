@@ -15,12 +15,15 @@
       <img src="/assets/imgs/search.png" alt="Lupa" [class.invert]="isDarkTheme" class="w-8 h-8 transition-all duration-300 hover:contrast-125"/>
       <span class="p-1"><i class="fas fa-search"></i></span>
       <input
+        [(ngModel)]="searchQuery"
+        (keydown.enter)="searchBooks()"
         type="text"
         placeholder="Wyszukaj książkę..."
         class="flex-1 text-xl outline-none bg-transparent"
         style="color: var(--text-color);"
       />
       <button
+      (click)="searchBooks()"
         class="px-8 py-2 cursor-pointer border-l"
         style="background-color: var(--search-button-bg); color: var(--search-button-text); border-left-color: var(--text-color);"
       >
@@ -30,85 +33,57 @@
 
     <!-- Kategorie -->
     <div class="w-full flex flex-wrap justify-center gap-x-6 gap-y-6 mt-12 mb-12">
-      <button
-        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
-        style="background-color: var(--button-category-bg); color: var(--button-text);"
-      >
-        Kategoria1
-      </button>
-      <button
-        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
-        style="background-color: var(--button-category-bg); color: var(--button-text);"
-      >
-        Kategoria2
-      </button>
-      <button
-        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
-        style="background-color: var(--button-category-bg); color: var(--button-text);"
-      >
-        Kategoria3
-      </button>
-      <button
-        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
-        style="background-color: var(--button-category-bg); color: var(--button-text);"
-      >
-        Kategoria4
-      </button>
-      <button
-        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
-        style="background-color: var(--button-category-bg); color: var(--button-text);"
-      >
-        Kategoria5
-      </button>
+      <ng-container *ngIf="!genreLoadError; else genreError">
+        <button *ngFor="let genre of topGenres"
+          (click)="loadBooksByGenre(genre)"
+          class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border"
+          [ngStyle]="{
+            'background-color': selectedGenre === genre ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
+            'color': 'var(--text-color)'
+          }"
+        >
+          {{ genre }}
+        </button>
+      </ng-container>
+
+      <ng-template #genreError>
+        <p class="text-center text-3xl mt-4 text-red-600 font-semibold">
+          Nie udało się załadować kategorii
+        </p>
+      </ng-template>
     </div>
 
-    <!-- Lista książek -->
+    <!-- KONTENT -->
     <div class="w-full flex flex-wrap justify-center gap-8">
-      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-book-color);">
-        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-book-box);">
-          <img
-            src="/assets/imgs/book.png"
-            alt="Okładka książki"
-            class="max-w-[216px] max-h-[216px] w-full h-auto aspect-square object-cover transition-all duration-300 invert dark:invert-0"
-          />
+      <!-- Lista losowych 12/6 książek lub wyszukanych książek -->
+      <ng-container *ngIf="books.length > 0; else noBooks" >
+        <p class="text-center text-4xl mb-3 font-semibold mt-10 opacity-70 w-full">
+          {{ sectionTitle }}
+        </p>
+        <div *ngFor="let book of books" class="rounded-lg shadow-md p-4 pb-3.5 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border cursor-pointer" style="background-color: var(--box-book-color);" [routerLink]="['/books', book.id]">
+          <div class="flex justify-center rounded-md border" style="background-color: var(--inner-book-box);">
+            <img
+              [src]="book.coverImage"
+              alt="Okładka książki"
+              (error)="onImageError($event)"
+              class="max-w-[216px] max-h-[216px] w-full h-auto aspect-square object-cover transition-all duration-300 invert dark:invert-0"
+            />
+          </div>
+          <div class="mt-4">
+            <p class="mb-5.5 font-semibold italic leading-[1.1] text-2xl">{{ removeDot(book.title) }}</p>
+            <p class="mb-1.5 opacity-80 leading-tight text-lg"><strong>Gatunek:</strong> {{ book.genre }}</p>
+            <p class="mb-1.5 opacity-70 leading-tight"><strong>Autor:</strong> {{ formatAuthors(book.authors) }}</p>
+            <p class="mb-0 opacity-60 leading-tight text-sm"><strong>Wydawca:</strong> {{ book.publisher.name }}</p>
+          </div>
         </div>
-        <div class="mt-4">
-          <p class="font-semibold text-lg mb-4 leading-tight">Harry Potter i Kamień Fizjologiczny</p>
-          <p class="opacity-80">Fantazy</p>
-          <p class="opacity-70 text-sm">J.K. Rowling</p>
-        </div>
-      </div>
+      </ng-container>
 
-      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-book-color);">
-        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-book-box);">
-          <img
-            src="/assets/imgs/book.png"
-            alt="Okładka książki"
-            class="max-w-[216px] max-h-[216px] w-full h-auto aspect-square object-cover transition-all duration-300 invert dark:invert-0"
-          />
-        </div>
-        <div class="mt-4">
-          <p class="font-semibold text-lg mb-4 leading-tight">Harry Potter i Kamień Fizjologiczny</p>
-          <p class="opacity-80">Fantazy</p>
-          <p class="opacity-70 text-sm">J.K. Rowling</p>
-        </div>
-      </div>
-
-      <div class="rounded-lg shadow-md p-4 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border" style="background-color: var(--box-book-color);">
-        <div class="flex justify-center rounded-md border p-4" style="background-color: var(--inner-book-box);">
-          <img
-            src="/assets/imgs/book.png"
-            alt="Okładka książki"
-            class="max-w-[216px] max-h-[216px] w-full h-auto aspect-square object-cover transition-all duration-300 invert dark:invert-0"
-          />
-        </div>
-        <div class="mt-4">
-          <p class="font-semibold text-lg mb-4 leading-tight">Harry Potter i Kamień Fizjologiczny</p>
-          <p class="opacity-80">Fantazy</p>
-          <p class="opacity-70 text-sm">J.K. Rowling</p>
-        </div>
-      </div>
-      <!-- Kolejne książki -->
+      <!-- Komunikat, gdy brak losowych 12/6 książek lub wyszukanych książek -->
+      <ng-template #noBooks>
+        <p class="text-center text-4xl font-semibold mt-10 opacity-70">
+          {{ sectionTitle || 'Brak książek do wyświetlenia' }}
+        </p>
+      </ng-template>
     </div>
   </div>
 </main>

@@ -6,6 +6,7 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AddEditBookComponent } from './add-edit-book/add-edit-book.component';
 import { canActivateAuth } from './auth/access.guard';
+import { BookDetailsComponent } from './pages/book-details/book-details.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -13,8 +14,11 @@ const routes: Routes = [
   {path: 'me', component: ProfileComponent, canActivate: [canActivateAuth]},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
+  {path: 'books/:id', component: BookDetailsComponent},
 
-  {path: 'add-book', component: AddEditBookComponent}
+  {path: 'add-book', component: AddEditBookComponent},
+
+  {path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 
 @NgModule({
