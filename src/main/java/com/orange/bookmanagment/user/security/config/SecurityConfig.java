@@ -62,6 +62,8 @@ class SecurityConfig {
                                 .requestMatchers(DELETE, "/api/v1/user/delete-avatar").authenticated()
                                 .requestMatchers(GET, "/api/v1/reports/inventory").permitAll()
                                 .requestMatchers(GET, "/api/v1/reports/filtered").permitAll()
+                                .requestMatchers(GET, "/api/v1/book/random/category/**").permitAll()
+                                .requestMatchers(GET, "/api/v1/book/search").permitAll()
                 )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
