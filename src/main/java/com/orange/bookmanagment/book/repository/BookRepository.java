@@ -18,7 +18,6 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class BookRepository {
-
     private final BookJpaRepository bookJpaRepository;
 
     /**
@@ -61,7 +60,7 @@ public class BookRepository {
         return bookJpaRepository.findBookByTitle(title);
     }
 
-    //existsById
+    // existsById
     /**
      * Checks if a book entity exists by its ID.
      *
@@ -72,12 +71,29 @@ public class BookRepository {
         return bookJpaRepository.existsById(id);
     }
 
-
     public List<Book> findAll() {
         return bookJpaRepository.findAll();
     }
 
     public List<Book> findByStatus(BookStatus status) {
         return bookJpaRepository.findByStatus(status);
+    }
+
+    public List<Book> findRandomBooks(int limit) {
+        return bookJpaRepository.findRandomBooks(limit);
+    }
+
+    public List<Book> findRandomBooksByGenre(String genre, int limit) {
+        return bookJpaRepository.findRandomBooksByGenre(genre, limit);
+    }
+
+    public List<String> findTop5Genres() {
+        return bookJpaRepository.findTop5Genres().stream()
+                .map(row -> (String) row[0])
+                .toList();
+    }
+
+    public List<Book> searchBooks(String query) {
+        return bookJpaRepository.searchBooks(query);
     }
 }

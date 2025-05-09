@@ -6,6 +6,7 @@ import com.orange.bookmanagment.user.service.UserService;
 import com.orange.bookmanagment.user.web.mapper.UserDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.orange.bookmanagment.user.web.requests.UpdateUserRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -79,5 +80,13 @@ class UserController {
                 .message("Photo saved")
                 .statusCode(200)
                 .build());
+    }
+
+    @DeleteMapping("/delete-avatar")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> deleteAvatar(@AuthenticationPrincipal Jwt jwt) throws IOException {
+        Long userId = Long.parseLong(jwt.getClaimAsString("id"));
+        userService.deleteUserAvatar(userId);
+        return ResponseEntity.ok().build();
     }
 }

@@ -6,6 +6,7 @@ public record UserDto (
         String lastName,
         String email,
         String userType,
+        String avatarPath,
         boolean verified,
         boolean blocked,
         String createdAt,

@@ -16,6 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -96,5 +100,21 @@ class UserServiceImpl implements UserService, UserExternalService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         user.setAvatarPath(path);
         userRepository.updateUser(user);
+    }
+
+    @Override
+    public void deleteUserAvatar(Long userId) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (user.getAvatarPath() != null) {
+            Path path = Paths.get("uploads", "avatars", "user-" + userId + ".jpg");
+            try {
+                Files.deleteIfExists(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            user.setAvatarPath(null);
+            userRepository.updateUser(user);
+        }
     }
 }

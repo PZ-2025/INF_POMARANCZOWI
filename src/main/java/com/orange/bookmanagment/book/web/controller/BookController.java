@@ -3,6 +3,7 @@ package com.orange.bookmanagment.book.web.controller;
 import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.book.service.BookService;
 import com.orange.bookmanagment.book.web.mapper.BookDtoMapper;
+import com.orange.bookmanagment.book.web.model.BookDto;
 import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
 import com.orange.bookmanagment.shared.model.HttpResponse;
 import com.orange.bookmanagment.shared.util.TimeUtil;
@@ -11,11 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -110,8 +113,67 @@ class BookController {
                         .build());
     }
 
+    @GetMapping("/random")
+    public ResponseEntity<HttpResponse> getRandomBooks() {
+        List<BookDto> books = bookService.getRandomBooks(12);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(HttpStatus.OK.value())
+                        .httpStatus(HttpStatus.OK)
+                        .reason("Random books")
+                        .message("Successfully fetched 12 random books")
+                        .data(Map.of("books", books))
+                        .build()
+        );
+    }
+
+    @GetMapping("/random/category/{genre}")
+    public ResponseEntity<HttpResponse> getRandomBooksByGenre(@PathVariable("genre") String genre) {
+        List<BookDto> books = bookService.getRandomBooksByGenre(genre, 6);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(HttpStatus.OK.value())
+                        .httpStatus(HttpStatus.OK)
+                        .reason("Random books by genre")
+                        .message("Returned 6 random books from genre: " + genre)
+                        .data(Map.of("books", books))
+                        .build()
+        );
+    }
+
+    @GetMapping("/top-genres")
+    public ResponseEntity<HttpResponse> getTop5Genres() {
+        List<String> genres = bookService.getTop5Genres();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(HttpStatus.OK.value())
+                        .httpStatus(HttpStatus.OK)
+                        .reason("Top genres request")
+                        .message("Top 5 book genres")
+                        .data(Map.of("genres", genres))
+                        .build()
+        );
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<HttpResponse> searchBooks(@RequestParam("query") String query) {
+        List<Book> books = bookService.searchBooks(query);
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .reason("Book search request")
+                        .message("Books matching query")
+                        .data(Map.of("books", books.stream().map(bookDtoMapper::toDto).toList()))
+                        .build());
+    }
+
     @GetMapping("/test")
-    public ResponseEntity<String> test(Authentication authentication){
+    public ResponseEntity<String> test(Authentication authentication) {
         final Jwt jwt = (Jwt) authentication.getPrincipal();
 
         final long userId = jwt.getClaim("user_id");

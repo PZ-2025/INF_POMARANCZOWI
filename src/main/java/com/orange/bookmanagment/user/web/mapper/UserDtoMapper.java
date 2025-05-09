@@ -15,6 +15,7 @@ public class UserDtoMapper {
                 user.getLastName(),
                 user.getEmail(),
                 user.getUserType().name(),
+                user.getAvatarPath(),
                 user.isVerified(),
                 user.isBlocked(),
                 TimeUtil.getTimeInStandardFormat(user.getCreatedAt()),

@@ -16,7 +16,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class BookDtoMapper {
-
     private final AuthorMapper authorMapper;
     private final PublisherMapper publisherMapper;
 
@@ -31,8 +30,8 @@ public class BookDtoMapper {
                 .map(authorMapper::toDto)
                 .toList();
 
-
         return new BookDto(
+                book.getId(),
                 book.getTitle(),
                 authorDtos,
                 publisherMapper.toDto(book.getPublisher()),

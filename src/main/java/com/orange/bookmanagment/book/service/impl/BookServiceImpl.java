@@ -7,6 +7,8 @@ import com.orange.bookmanagment.book.model.Author;
 import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.book.model.Publisher;
 import com.orange.bookmanagment.book.service.mapper.BookInternalMapper;
+import com.orange.bookmanagment.book.web.mapper.BookDtoMapper;
+import com.orange.bookmanagment.book.web.model.BookDto;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.book.repository.BookRepository;
 import com.orange.bookmanagment.book.service.AuthorService;
@@ -16,6 +18,7 @@ import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
 import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +31,7 @@ import java.util.stream.Collectors;
 class BookServiceImpl implements BookService, BookExternalService {
 
     private final BookRepository bookRepository;
-
+    private final BookDtoMapper bookDtoMapper;
     private final AuthorService authorService;
     private final BookInternalMapper bookInternalMapper;
     private final PublisherService publisherService;
@@ -116,5 +119,27 @@ class BookServiceImpl implements BookService, BookExternalService {
         return books.stream()
                 .map(bookInternalMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> getRandomBooks(int limit) {
+        List<Book> books = bookRepository.findRandomBooks(limit);
+        return books.stream().map(bookDtoMapper::toDto).toList();
+    }
+
+    @Override
+    public List<BookDto> getRandomBooksByGenre(String genre, int limit) {
+        List<Book> books = bookRepository.findRandomBooksByGenre(genre, limit);
+        return books.stream().map(bookDtoMapper::toDto).toList();
+    }
+
+    @Override
+    public List<String> getTop5Genres() {
+        return bookRepository.findTop5Genres();
+    }
+
+    @Override
+    public List<Book> searchBooks(String query) {
+        return bookRepository.searchBooks(query.toLowerCase());
     }
 }
