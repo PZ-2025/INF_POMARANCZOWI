@@ -1,0 +1,44 @@
+<app-navbar></app-navbar>
+<main class="w-full" style="background-color: var(--bg-content);">
+  <div class="min-w-[624px] max-w-[1284px] px-16 py-12 mx-auto">
+    <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Szczegółowy widok książki</h1>
+
+    <p *ngIf="loadError" class="text-center text-2xl mt-4 text-red-600 font-semibold">
+      Nie udało się załadować szczegółowego widoku książki
+    </p>
+
+    <div *ngIf="book" class="rounded-lg shadow-md p-4 border" style="background-color: var(--box-book-color);">
+      <div class="flex flex-col sm:flex-col md:flex-col lg:flex-row gap-6">
+        <!-- Zdjęcie -->
+        <div class="flex justify-center lg:block w-full lg:w-[396px] rounded-md border" style="background-color: var(--inner-book-box);">
+          <img
+            *ngIf="bookImageUrl"
+            [src]="bookImageUrl"
+            alt="Okładka książki"
+            (error)="onImageError($event)"
+            class="w-[296px] md:w-[296px] lg:w-[396px] h-auto aspect-square object-cover lg:rounded invert dark:invert-0"
+          />
+        </div>
+
+        <!-- Tekst -->
+        <div class="flex-1 space-y-3 text-left">
+          <h1 class="text-5xl font-bold lg:mt-1 mb-16 italic">{{ removeDot(book.title) }}</h1>
+          <p class="text-2xl opacity-90 leading-tight mb-1.5"><strong>Gatunek:</strong> {{ book.genre }}</p>
+          <p class="text-2xl opacity-90 leading-tight mb-1.5"><strong>Autor:</strong> {{ formatAuthors(book.authors) }}</p>
+          <p class="text-2xl opacity-90 leading-tight mb-7"><strong>Wydawca:</strong> {{ book.publisher.name }}</p>
+          <p
+            class="text-2xl opacity-70 leading-tight"
+            [ngStyle]="{ color: getStatusColorVar(book.status) }"
+          >
+            <strong>Status:</strong> {{ getPolishStatus(book.status) }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Opis -->
+      <div class="mt-10 lg:mt-4">
+        <p class="text-lg text-base leading-tight leading-relaxed"><strong>Opis:</strong> {{ book.description }}</p>
+      </div>
+    </div>
+  </div>
+</main>

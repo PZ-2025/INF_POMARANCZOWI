@@ -16,6 +16,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { EditUserModalComponent } from './components/edit-user-modal/edit-user-modal.component';
 import { EditPasswordModalComponent } from './components/edit-password-modal/edit-password-modal.component';
 import { EditAvatarModalComponent } from './components/edit-avatar-modal/edit-avatar-modal.component';
+import { BookDetailsComponent } from './pages/book-details/book-details.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { EditAvatarModalComponent } from './components/edit-avatar-modal/edit-av
     AddEditBookComponent,
     EditUserModalComponent,
     EditPasswordModalComponent,
-    EditAvatarModalComponent
+    EditAvatarModalComponent,
+    BookDetailsComponent
   ],
   imports: [
     BrowserModule,

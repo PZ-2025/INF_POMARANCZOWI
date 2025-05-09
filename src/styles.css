@@ -33,6 +33,11 @@
   --profile-button-user: #81d7f4;
   --edit-user-modal: #d1d1d1;
   --edit-user-modal-input: #a4a3a3;
+
+  --status-available: #15803d; /* Książka dosepna: zielony */
+  --status-reserved: #ca8a04;  /* Książka zarezerwowana: żółty */
+  --status-borrowed: #e21111;  /* Książka niedosepna: czerwony */
+  --status-lost: #1154e6;      /* Książka zgubiona: niebieski */
 }
 
 .dark {
@@ -68,6 +73,11 @@
   --profile-button-user: #0a546d;
   --edit-user-modal: #616161;
   --edit-user-modal-input: #3a3a3a;
+
+  --status-available: #81fe90; /* Książka dosepna: jasny zielony */
+  --status-reserved: #eeba2c;  /* Książka zarezerwowana: jasny żółty */
+  --status-borrowed: #fe8181;  /* Książka niedosepna: jasny czerwony */
+  --status-lost: #81bbfe;      /* Książka zgubiona: jasny niebieski */
 }
 
 html, body {
