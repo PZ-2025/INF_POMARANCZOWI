@@ -13,6 +13,7 @@
   --link-color: #1f5de5;
   --button-login-bg: #155df8;
   --button-login-text: #ffffff;
+  --button-cancel-bg: #f81515;
   --input-bg: #dbdbdb;
   --autofill-bg: #dbdbdb;
   --autofill-text: #000000;
@@ -22,10 +23,16 @@
   --search-button-bg: #333c4f;
   --search-button-text: #ffffff;
   --button-category-bg: #cbcbcb;
+  --selected-button-bg: #9a9a9a;
+  --button-delete-image-bg: #f8a515;
 
   --box-book-color: #cfe3c3;
   --inner-book-box: #c3c7c4;
   --box-login-color: #4eaf16;
+  --box-bad-message-color: #af1616;
+  --profile-button-user: #81d7f4;
+  --edit-user-modal: #d1d1d1;
+  --edit-user-modal-input: #a4a3a3;
 }
 
 .dark {
@@ -41,6 +48,7 @@
   --link-color: #65adff;
   --button-login-bg: #3090ff;
   --button-login-text: #ffffff;
+  --button-cancel-bg: #ff3030;
   --input-bg: #535353;
   --autofill-bg: #535353;
   --autofill-text: #ffffff;
@@ -50,10 +58,16 @@
   --search-button-bg: #333e57;
   --search-button-text: #ffffff;
   --button-category-bg: #4c4c4c;
+  --selected-button-bg: #7e7e7e;
+  --button-delete-image-bg: #ffa930;
 
   --box-book-color: #1d4208;
   --inner-book-box: #5e5f5e;
   --box-login-color: #2e6d0a;
+  --box-bad-message-color: #6d0a0a;
+  --profile-button-user: #0a546d;
+  --edit-user-modal: #616161;
+  --edit-user-modal-input: #3a3a3a;
 }
 
 html, body {

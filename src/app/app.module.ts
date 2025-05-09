@@ -10,6 +10,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AddEditBookComponent } from './add-edit-book/add-edit-book.component';
+import { FormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth/auth.interceptor';
+import { EditUserModalComponent } from './components/edit-user-modal/edit-user-modal.component';
+import { EditPasswordModalComponent } from './components/edit-password-modal/edit-password-modal.component';
+import { EditAvatarModalComponent } from './components/edit-avatar-modal/edit-avatar-modal.component';
 
 @NgModule({
   declarations: [
@@ -19,15 +25,25 @@ import { AddEditBookComponent } from './add-edit-book/add-edit-book.component';
     NavbarComponent,
     HomeComponent,
     ProfileComponent,
-    AddEditBookComponent
+    AddEditBookComponent,
+    EditUserModalComponent,
+    EditPasswordModalComponent,
+    EditAvatarModalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

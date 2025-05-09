@@ -33,7 +33,20 @@ export class AuthService {
 
         this.cookieService.set('token',this.token);
         this.cookieService.set('refreshToken',this.refreshToken);
-      } )
+        console.log("Login response:", val);
+        const user = val.data.user;
+        localStorage.setItem('userType', user.userType);
+        localStorage.setItem('email', user.email);
+        localStorage.setItem('firstName', user.firstName);
+        localStorage.setItem('lastName', user.lastName);
+        localStorage.setItem('userId', user.id.toString());
+
+        if (user.avatarPath == null) {
+          localStorage.setItem('avatarPath', '/assets/imgs/user.png');
+        } else {
+          localStorage.setItem('avatarPath', user.avatarPath);
+        }
+      })
     )
   }
 
@@ -44,9 +57,34 @@ export class AuthService {
     this.refreshToken = null;
   }
 
-
   register(payload: RegisterPayload) {
     return this.http.post(`${this.baseApiUrl}register`, payload);
+  }
+
+  updateProfile(firstName: string, lastName: string) {
+    const token = this.cookieService.get('token');
+    return this.http.put(
+      'http://localhost:8080/api/v1/user/me',
+      { firstName, lastName },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+
+  changePassword(oldPassword: string, newPassword: string) {
+    const token = this.cookieService.get('token');
+    const body = {
+      oldPassword,
+      newPassword
+    };
+    return this.http.post(`${this.baseApiUrl}changePassword`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
 }
 
