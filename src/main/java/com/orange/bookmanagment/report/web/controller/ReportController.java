@@ -28,7 +28,6 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/api/v1/reports")
 @RequiredArgsConstructor
 public class ReportController {
-
     private final ReportService reportService;
 
     /**
