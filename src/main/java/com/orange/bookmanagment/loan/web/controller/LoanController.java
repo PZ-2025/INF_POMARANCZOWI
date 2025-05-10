@@ -19,7 +19,6 @@ import java.util.Map;
 @RequestMapping("/api/v1/loans")
 @RequiredArgsConstructor
 public class LoanController {
-
     private final LoanService loanService;
     private final UserExternalService userExternalService;
     private final LoanMapper loanMapper;
@@ -53,7 +52,6 @@ public class LoanController {
                         .message("Book borrowed")
                         .data(Map.of("loan", loanMapper.toDto(loan)))
                         .build());
-
     }
 
     /**
@@ -227,6 +225,4 @@ public class LoanController {
                         .data(Map.of("loan", loanMapper.toDto(loan)))
                         .build());
     }
-
-
 }

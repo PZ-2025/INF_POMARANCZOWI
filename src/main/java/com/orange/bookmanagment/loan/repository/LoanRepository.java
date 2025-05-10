@@ -78,7 +78,6 @@ public class LoanRepository {
         return loanJpaRepository.findByUserIdAndStatusIn(userId, statuses);
     }
 
-
     public List<Loan> findAll() {
         return loanJpaRepository.findAll();
     }

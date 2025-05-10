@@ -31,19 +31,21 @@ public class Loan {
     private long userId;
 
     @Enumerated(EnumType.STRING)
+
     private LoanStatus status;
 
     private String notes;
 
-    private long lendingLibrarianId;
+    private Long lendingLibrarianId;
 
     private Instant borrowedAt;
 
-    private long returningLibrarianId;
+    private Long returningLibrarianId;
 
     private Instant returnedAt;
 
     private Instant dueDate;
+
     private Instant updatedAt;
 
     /**

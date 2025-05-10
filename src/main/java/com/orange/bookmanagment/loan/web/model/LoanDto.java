@@ -6,13 +6,12 @@ public record LoanDto(
         long id,
         long bookId,
         long userId,
-        long lendingLibrarianId,
+        Long lendingLibrarianId,
         LoanStatus status,
         String notes,
         String borrowedAt,
         String updatedAt,
         String dueDate,
         String returnedAt,
-        long returningLibrarianId
-) {
-}
+        Long returningLibrarianId
+) { }
