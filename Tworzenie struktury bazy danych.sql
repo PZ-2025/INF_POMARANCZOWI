@@ -6,7 +6,7 @@ create table books (created_at datetime(6), id bigint not null, publisher_id big
 create table books_seq (next_val bigint) engine=InnoDB;
 insert into books_seq values ( 1 );
 create table event_publication (completion_date datetime(6), publication_date datetime(6), id binary(16) not null, event_type varchar(255), listener_id varchar(255), serialized_event varchar(255), primary key (id)) engine=InnoDB;
-create table loans (book_id bigint not null, borrowed_at datetime(6), due_date datetime(6), id bigint not null, lending_librarian_id bigint, returned_at datetime(6), returning_librarian_id bigint, updated_at datetime(6), user_id bigint not null, notes varchar(255), status enum ('ACTIVE','LOST','OVERDUE','RETURNED'), primary key (id)) engine=InnoDB;
+CREATE TABLE loans (id BIGINT NOT NULL, book_id BIGINT NOT NULL, user_id BIGINT NOT NULL, lending_librarian_id BIGINT, returning_librarian_id BIGINT, borrowed_at DATETIME(6), due_date DATETIME(6), returned_at DATETIME(6), updated_at DATETIME(6), extended_count INT DEFAULT 0, notes VARCHAR(255), status ENUM('ACTIVE', 'RETURNED', 'OVERDUE', 'LOST') NOT NULL DEFAULT 'ACTIVE', PRIMARY KEY (id)) ENGINE=InnoDB;
 create table loans_seq (next_val bigint) engine=InnoDB;
 insert into loans_seq values ( 1 );
 create table notifications (created_at datetime(6), id bigint not null, updated_at datetime(6), user_id bigint not null, body varchar(255), title varchar(255), notification_status enum ('CREATED','READ','SENT'), notification_type enum ('ERROR','INFO','REMINDER','WARNING'), primary key (id)) engine=InnoDB;
