@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from '../services/message.service';
 import { BadMessageService } from '../services/bad-message.service';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { User } from '../auth/auth.interface';
 
 @Component({
@@ -19,7 +20,7 @@ export class ProfileComponent {
   message: string | null = null;
   badMessage: string | null = null;
 
-  constructor(private authService: AuthService, private messageService: MessageService, private badMessageService: BadMessageService, private cookieService: CookieService, private http: HttpClient) {}
+  constructor(private authService: AuthService, private messageService: MessageService, private badMessageService: BadMessageService, private cookieService: CookieService, private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   userType: string | null = null;
   email: string | null = null;
@@ -38,7 +39,7 @@ export class ProfileComponent {
     this.lastName = localStorage.getItem('lastName') || '';
     this.userId = parseInt(localStorage.getItem('userId') || '0', 10);
     this.avatarPath = localStorage.getItem('avatarPath');
-    
+
     const rawPath = localStorage.getItem('avatarPath');
     if (!rawPath || rawPath === '/assets/imgs/user.png') {
       this.avatarPath = '/assets/imgs/user.png';
@@ -91,6 +92,16 @@ export class ProfileComponent {
       this.badMessage = currentBadMessage;
       this.autoClearBadMessage();
     }
+
+    const tab = localStorage.getItem('profileTab');
+    this.activeTab = tab || 'profile';
+
+    this.fetchRentals();
+  }
+
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
+    localStorage.setItem('profileTab', tab);
   }
 
   showModal = false;
@@ -282,5 +293,122 @@ export class ProfileComponent {
         this.badMessageService.setMessage('Nie udało się usunąć zdjęcia, spróbuj ponownie później.');
       }
     });
+  }
+
+  activeRentals: any[] = [];
+  returnedRentals: any[] = [];
+
+  onImageBookError(event: Event, bookId: number | undefined): void {
+    if (!bookId) return;
+
+    const key = `book-image-${bookId}`;
+    let fallback = localStorage.getItem(key);
+
+    if (!fallback) {
+      fallback = `https://picsum.photos/seed/book${bookId}/216/216`;
+      localStorage.setItem(key, fallback);
+    }
+
+    const target = event.target as HTMLImageElement;
+    target.src = fallback;
+  }
+
+  formatAuthors(authors: { firstName: string; lastName: string }[]): string {
+    return authors.map(a => `${a.firstName} ${a.lastName}`).join(', ');
+  }
+
+  removeDot(text: string): string {
+    return text.endsWith('.') ? text.slice(0, -1) : text;
+  }
+
+  loadError: boolean = false;
+
+  fetchRentals() {
+    if (this.userType !== 'READER') return;
+
+    const token = this.cookieService.get('token');
+    if (!token) return;
+
+    this.http.get<any>('http://localhost:8080/api/v1/loans/my', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    }).subscribe({
+      next: (response) => {
+        const loans = response.data?.loans || [];
+
+        if (loans.length === 0) {
+          this.activeRentals = [];
+          this.returnedRentals = [];
+          return;
+        }
+
+        const bookRequests = loans.map((loan: any) =>
+          this.http.get<any>(`http://localhost:8080/api/v1/book/${loan.bookId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+          }).pipe(
+            map(bookResponse => {
+              const bookData = bookResponse.data?.book || bookResponse.data || bookResponse;
+
+              return {
+                ...loan,
+                book: {
+                  ...bookData,
+
+                  coverImage: (() => {
+                    const key = `book-image-${bookData.id}`;
+                    let local = localStorage.getItem(key);
+
+                    if (!local) {
+                      local = bookData.coverImage || `https://picsum.photos/seed/book${bookData.id}/216/216`;
+                      localStorage.setItem(key, local as string);
+                    }
+
+                    return local;
+                  })()
+                }
+              };
+            })
+          )
+        );
+
+        if (bookRequests.length > 0) {
+          forkJoin<any[]>(bookRequests).subscribe({
+            next: (loansWithBooks) => {
+              this.activeRentals = loansWithBooks.filter(loan => loan.status === 'ACTIVE');
+              this.returnedRentals = loansWithBooks.filter(loan => loan.status === 'RETURNED');
+              console.log(this.activeRentals);
+              console.log(this.returnedRentals);
+              this.cdr.detectChanges();
+            },
+            error: (err) => {
+              console.error('Błąd przy pobieraniu danych książek:', err);
+            }
+          });
+        } else {
+          this.activeRentals = [];
+          this.returnedRentals = [];
+        }
+      },
+      error: (err) => {
+        console.error('Błąd przy pobieraniu wypożyczeń:', err);
+        this.loadError = true;
+      }
+    });
+  }
+
+  calculateDaysLeft(dueDate: string): number {
+    if (!dueDate) return 0;
+
+    const due = new Date(dueDate);
+    const today = new Date();
+    const diffTime = due.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
   }
 }

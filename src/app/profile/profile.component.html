@@ -16,6 +16,8 @@
   <div class="min-w-[624px] max-w-[1284px] px-16 py-12 mx-auto">
     <h1 *ngIf="activeTab === 'profile'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Mój profil</h1>
     <h1 *ngIf="activeTab === 'history' && userType === 'READER'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Historia</h1>
+    <h1 *ngIf="activeTab === 'rentals' && userType === 'READER'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Wypożyczenia</h1>
+    <h1 *ngIf="activeTab === 'reservations' && userType === 'READER'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Rezerwacje</h1>
     <h1 *ngIf="activeTab === 'users' && userType === 'ADMIN'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Użytkownicy</h1>
     <h1 *ngIf="activeTab === 'orders' && userType === 'ADMIN'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Zamówienia</h1>
     <h1 *ngIf="activeTab === 'library' && (userType === 'LIBRARIAN' || userType === 'ADMIN')" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Księgozbiór</h1>
@@ -25,7 +27,7 @@
     <div class="flex flex-wrap justify-center gap-x-6 gap-y-6 mt-12 mb-12">
       <button
         *ngIf="userType === 'READER'"
-        (click)="activeTab = 'history'"
+        (click)="setActiveTab('history')"
         class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
         [ngStyle]="{
           'background-color': activeTab === 'history' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
@@ -36,8 +38,20 @@
       </button>
 
       <button
+        *ngIf="userType === 'READER'"
+        (click)="setActiveTab('rentals')"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
+        [ngStyle]="{
+          'background-color': activeTab === 'rentals' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
+          'color': 'var(--text-color)'
+        }"
+      >
+        Wypożyczenia
+      </button>
+
+      <button
         *ngIf="userType === 'LIBRARIAN' || userType === 'ADMIN'"
-        (click)="activeTab = 'reports'"
+        (click)="setActiveTab('reports')"
         class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
         [ngStyle]="{
           'background-color': activeTab === 'reports' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
@@ -49,7 +63,7 @@
 
       <button
         *ngIf="userType === 'LIBRARIAN' || userType === 'ADMIN'"
-        (click)="activeTab = 'library'"
+        (click)="setActiveTab('library')"
         class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
         [ngStyle]="{
           'background-color': activeTab === 'library' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
@@ -61,7 +75,7 @@
 
       <button
         *ngIf="userType === 'ADMIN'"
-        (click)="activeTab = 'users'"
+        (click)="setActiveTab('users')"
         class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
         [ngStyle]="{
           'background-color': activeTab === 'users' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
@@ -73,7 +87,7 @@
 
       <button
         *ngIf="userType === 'ADMIN'"
-        (click)="activeTab = 'orders'"
+        (click)="setActiveTab('orders')"
         class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
         [ngStyle]="{
           'background-color': activeTab === 'orders' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
@@ -84,7 +98,18 @@
       </button>
 
       <button
-        (click)="activeTab = 'profile'"
+        (click)="setActiveTab('reservations')"
+        class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
+        [ngStyle]="{
+          'background-color': activeTab === 'reservations' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
+          'color': 'var(--text-color)'
+        }"
+      >
+        Rezerwacje
+      </button>
+
+      <button
+        (click)="setActiveTab('profile')"
         class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
         [ngStyle]="{
           'background-color': activeTab === 'profile' ? 'var(--selected-button-bg)' : 'var(--button-category-bg)',
@@ -95,60 +120,132 @@
       </button>
     </div>
 
+    <!-- Rezerwacje / userType === 'READER' -->
+    <div *ngIf="activeTab === 'reservations' && userType === 'READER'" class="flex flex-col gap-6">
 
+    </div>
 
-
-
-
-    <!-- Historia wypożyczeń -->
+    <!-- Historia / userType === 'READER' -->
     <div *ngIf="activeTab === 'history' && userType === 'READER'" class="flex flex-col gap-6">
-      <!-- Książka 1 -->
-      <div class="flex shadow-md rounded-lg border p-4 w-full" style="background-color: var(--box-color); color: var(--text-color);">
-        <div class="w-[160px] flex justify-center items-center border rounded-md" style="background-color: white;">
-          <img src="/assets/imgs/book.png" alt="Okładka książki" class="w-[128px] h-[128px] object-cover" />
-        </div>
-        <div class="flex-1 px-6">
-          <p class="text-lg font-bold">Harry Potter i Komnata Tajemnic</p>
-          <p class="opacity-80">J.K. Rowling</p>
-          <p class="text-sm">24.02.2025 - ...</p>
-          <p>Przedłużono: 0 razy</p>
-          <p>Pozostało: 11 dni</p>
-        </div>
-        <div class="w-[132px] flex flex-col items-end justify-between">
-          <p class="text-lg mb-2">Wypożyczona</p>
-          <div class="flex flex-col space-y-2">
-            <button class="px-4 py-2 rounded border cursor-pointer" style="background-color: white;">Zwróć</button>
-            <button class="px-4 py-2 rounded border cursor-pointer" style="background-color: white;">Przedłuż</button>
-          </div>
-        </div>
+      <!-- Błąd ładowania -->
+      <p *ngIf="loadError" class="text-center text-2xl mt-2 text-red-600 font-semibold">
+        Nie udało się załadować historii
+      </p>
+
+      <!-- Brak wypożyczeń -->
+      <div *ngIf="!loadError && returnedRentals.length === 0">
+        <p class="text-center text-4xl font-semibold mt-0 opacity-70">
+          Brak historii wypożyczeń
+        </p>
       </div>
 
-      <!-- Książka 2 -->
-      <div class="flex shadow-md rounded-lg border p-4 w-full" style="background-color: var(--box-color); color: var(--text-color);">
-        <div class="w-[160px] flex justify-center items-center border rounded-md" style="background-color: white;">
-          <img src="/assets/imgs/book.png" alt="Okładka książki" class="w-[128px] h-[128px] object-cover" />
+      <div *ngFor="let loan of returnedRentals" class="flex flex-row shadow-md rounded-xl border p-4 w-full" style="background-color: var(--box-color); color: var(--text-color);">
+        <!-- Zdjęcie książki -->
+        <div [routerLink]="['/books', loan.book.id]" class="cursor-pointer w-[192px] h-[192px] flex justify-center items-center border rounded-lg shrink-0" style="background-color: var(--inner-book-box);">
+          <img
+            [src]="loan.book?.coverImage"
+            alt="Okładka książki"
+            class="object-cover w-full h-full rounded-lg"
+            (error)="onImageBookError($event, loan.book?.id)"
+          />
         </div>
-        <div class="flex-1 px-6">
-          <p class="text-lg font-bold">Harry Potter i więzień Azkabanu</p>
-          <p class="opacity-80">J.K. Rowling</p>
-          <p class="text-sm">14.01.2025 - 12.03.2025</p>
-          <p>Przedłużono: 1 raz</p>
-        </div>
-        <div class="w-[132px] flex items-end justify-end">
-          <p class="text-lg">Zwrócona</p>
+
+        <div class="w-full">
+          <!-- Tytuł -->
+          <div class="flex-1 px-6 pr-2 flex flex-col justify-between">
+            <p class="mb-5.5 font-semibold italic leading-[1.1] text-2xl">{{ removeDot(loan.book.title) }}</p>
+          </div>
+
+          <div class="flex flex-row">
+            <!-- Info o książce -->
+            <div class="flex-1 px-6 pr-2 flex flex-col justify-between">
+              <div>
+                <p class="mb-1.5 opacity-80 leading-tight text-lg"><strong>Gatunek:</strong> {{ loan.book.genre }}</p>
+                <p class="mb-1.5 opacity-70 leading-tight"><strong>Autor:</strong> {{ formatAuthors(loan.book.authors) }}</p>
+                <p class="mb-0 opacity-60 leading-tight text-sm"><strong>Wydawca:</strong> {{ loan.book.publisher.name }}</p>
+
+                <div class="text-sm opacity-60 mt-6">
+                  <p><strong>Przedłużono:</strong> {{ loan.extendedCount }} raz{{ loan.extendedCount === 1 ? '' : 'y' }}</p>
+                  <p><strong>Oddano:</strong> {{ loan.returnedAt | date: 'dd.MM.yyyy' }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Guziki
+            <div class="flex justify-start items-start">
+              <div class="flex flex-col gap-4 justify-start items-start">
+                <button class="px-4 py-2 w-[96px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zwróć</button>
+                <button class="px-4 py-2 w-[96px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Przedłuż</button>
+              </div>
+            </div> -->
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Wypożyczenia / userType === 'READER' -->
+    <div *ngIf="activeTab === 'rentals' && userType === 'READER'" class="flex flex-col gap-6">
+      <!-- Błąd ładowania -->
+      <p *ngIf="loadError" class="text-center text-2xl mt-2 text-red-600 font-semibold">
+        Nie udało się załadować wypożyczeń
+      </p>
 
+      <!-- Brak wypożyczeń -->
+      <div *ngIf="!loadError && activeRentals.length === 0">
+        <p class="text-center text-4xl font-semibold mt-0 opacity-70">
+          Brak aktywnych wypożyczeń
+        </p>
+      </div>
 
+      <div *ngFor="let loan of activeRentals" class="flex flex-row shadow-md rounded-xl border p-4 w-full" style="background-color: var(--box-color); color: var(--text-color);">
+        <!-- Zdjęcie książki -->
+        <div [routerLink]="['/books', loan.book.id]" class="cursor-pointer w-[192px] h-[192px] flex justify-center items-center border rounded-lg shrink-0" style="background-color: var(--inner-book-box);">
+          <img
+            [src]="loan.book?.coverImage"
+            alt="Okładka książki"
+            class="object-cover w-full h-full rounded-lg"
+            (error)="onImageBookError($event, loan.book?.id)"
+          />
+        </div>
 
+        <div class="w-full">
+          <!-- Tytuł -->
+          <div class="flex-1 px-6 pr-2 flex flex-col justify-between">
+            <p class="mb-5.5 font-semibold italic leading-[1.1] text-2xl">{{ removeDot(loan.book.title) }}</p>
+          </div>
+
+          <div class="flex flex-row">
+            <!-- Info o książce -->
+            <div class="flex-1 px-6 flex flex-col justify-between">
+              <div>
+                <p class="mb-1.5 opacity-80 leading-tight text-lg"><strong>Gatunek:</strong> {{ loan.book.genre }}</p>
+                <p class="mb-1.5 opacity-70 leading-tight"><strong>Autor:</strong> {{ formatAuthors(loan.book.authors) }}</p>
+                <p class="mb-0 opacity-60 leading-tight text-sm"><strong>Wydawca:</strong> {{ loan.book.publisher.name }}</p>
+
+                <div class="text-sm opacity-60 mt-6">
+                  <p><strong>Przedłużono:</strong> {{ loan.extendedCount }} raz{{ loan.extendedCount === 1 ? '' : 'y' }}</p>
+                  <p><strong>Oddać do:</strong> {{ loan.dueDate | date: 'dd.MM.yyyy' }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Guziki -->
+            <div class="flex justify-start items-start">
+              <div class="flex flex-col gap-4 justify-start items-start">
+                <button class="px-4 py-2 w-[96px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zwróć</button>
+                <button *ngIf="loan.extendedCount < 3" class="px-4 py-2 w-[96px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Przedłuż</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Mój profil / userType === 'READER' || userType === 'LIBRARIAN' || userType === 'ADMIN' -->
     <div *ngIf="activeTab === 'profile'" class="flex flex-col min-[900px]:flex-row gap-6 shadow-md rounded-xl border p-4" style="background-color: var(--box-color); color: var(--text-color);">
       <!-- Zdjęcie użytkownika -->
       <div
-        class="rounded-xl bg-white max-[900px]:w-full max-[900px]:h-[300px] max-[900px]:flex max-[900px]:justify-center max-[900px]:items-center w-[156px] h-[156px]"
+        class="rounded-lg bg-white max-[900px]:w-full max-[900px]:h-[300px] max-[900px]:flex max-[900px]:justify-center max-[900px]:items-center w-[192px] h-[192px]"
         style="background-color: var(--inner-book-box);"
       >
         <img
@@ -168,32 +265,31 @@
       </div>
 
       <!-- Przyciski -->
-      <div class="w-full min-[900px]:w-[164px] flex flex-row gap-8 max-[899px]:mt-1 min-[900px]:flex-col min-[900px]:items-end min-[900px]:justify-between">
-        <div class="flex w-full max-[899px]:justify-between gap-4 min-[900px]:flex-col min-[900px]:w-auto min-[900px]:items-end">
-          <button (click)="toggleAvatarModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień zdjęcie</button>
-          <app-edit-avatar-modal
-            *ngIf="showAvatarModal"
-            (cancel)="toggleAvatarModal()"
-            (save)="uploadAvatar($event)"
-            (delete)="deleteAvatar()">
-          </app-edit-avatar-modal>
-          <button (click)="togglePasswordModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień hasło</button>
-          <app-edit-password-modal
-            *ngIf="showPasswordModal"
-            (cancel)="togglePasswordModal()"
-            (save)="changePassword($event)">
-          </app-edit-password-modal>
-          <button (click)="toggleModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień dane</button>
-          <app-edit-user-modal
-            *ngIf="showModal"
-            [firstName]="tempFirstName"
-            [lastName]="tempLastName"
-            (firstNameChange)="tempFirstName = $event"
-            (lastNameChange)="tempLastName = $event"
-            (save)="saveChanges()"
-            (cancel)="showModal = false">
-          </app-edit-user-modal>
-        </div>
+      <div class="w-full min-[900px]:w-[136px] flex flex-col items-center justify-center gap-4 max-[899px]:flex-row max-[899px]:justify-between max-[899px]:mt-1">  <button (click)="toggleAvatarModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień zdjęcie</button>
+        <app-edit-avatar-modal
+          *ngIf="showAvatarModal"
+          (cancel)="toggleAvatarModal()"
+          (save)="uploadAvatar($event)"
+          (delete)="deleteAvatar()">
+        </app-edit-avatar-modal>
+
+        <button (click)="togglePasswordModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień hasło</button>
+        <app-edit-password-modal
+          *ngIf="showPasswordModal"
+          (cancel)="togglePasswordModal()"
+          (save)="changePassword($event)">
+        </app-edit-password-modal>
+
+        <button (click)="toggleModal()" class="w-full max-[899px]:w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień dane</button>
+        <app-edit-user-modal
+          *ngIf="showModal"
+          [firstName]="tempFirstName"
+          [lastName]="tempLastName"
+          (firstNameChange)="tempFirstName = $event"
+          (lastNameChange)="tempLastName = $event"
+          (save)="saveChanges()"
+          (cancel)="showModal = false">
+        </app-edit-user-modal>
       </div>
     </div>
   </div>
