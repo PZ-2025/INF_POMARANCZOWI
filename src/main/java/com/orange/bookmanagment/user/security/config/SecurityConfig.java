@@ -68,6 +68,7 @@ class SecurityConfig {
                                 .requestMatchers(POST, "/api/v1/loans/borrow").permitAll()
                                 .requestMatchers(POST, "/api/v1/loans/{id}/return").permitAll()
                                 .requestMatchers("/api/v1/loans/my").authenticated()
+                                .requestMatchers(POST, "/api/v1/loans/{id}/extend").permitAll()
                 )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

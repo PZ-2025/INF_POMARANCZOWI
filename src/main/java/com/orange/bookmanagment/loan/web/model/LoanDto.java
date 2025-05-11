@@ -13,5 +13,6 @@ public record LoanDto(
         String updatedAt,
         String dueDate,
         String returnedAt,
-        Long returningLibrarianId
+        Long returningLibrarianId,
+        int extendedCount
 ) { }

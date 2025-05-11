@@ -48,6 +48,8 @@ public class Loan {
 
     private Instant updatedAt;
 
+    private int extendedCount = 0;
+
     /**
      * Constructor to create a new Loan instance.
      *
@@ -82,6 +84,7 @@ public class Loan {
     public void extendLoan() {
         this.dueDate = this.dueDate.plusSeconds(30L * 24 * 60 * 60 ); // month in seconds
         this.updatedAt = Instant.now();
+        this.extendedCount++;
 
         // Update the loan status if needed
         if (this.status == LoanStatus.OVERDUE && dueDate.isAfter(Instant.now())) {
@@ -95,5 +98,4 @@ public class Loan {
         this.notes = notes;
         this.updatedAt = Instant.now();
     }
-
 }

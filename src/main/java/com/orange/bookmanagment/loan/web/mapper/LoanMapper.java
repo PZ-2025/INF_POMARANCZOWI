@@ -19,7 +19,8 @@ public class LoanMapper {
                 TimeUtil.getTimeInStandardFormat(loan.getUpdatedAt()),
                 TimeUtil.getTimeInStandardFormat(loan.getDueDate()),
                 TimeUtil.getTimeInStandardFormat(loan.getReturnedAt()),
-                loan.getReturningLibrarianId()
+                loan.getReturningLibrarianId(),
+                loan.getExtendedCount()
         );
     }
 }
