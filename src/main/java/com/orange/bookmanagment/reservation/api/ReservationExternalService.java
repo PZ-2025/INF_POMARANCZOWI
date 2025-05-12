@@ -1,8 +1,6 @@
 package com.orange.bookmanagment.reservation.api;
 
-
 import com.orange.bookmanagment.reservation.api.dto.ReservationExternalDto;
-
 import java.util.List;
 
 public interface ReservationExternalService {

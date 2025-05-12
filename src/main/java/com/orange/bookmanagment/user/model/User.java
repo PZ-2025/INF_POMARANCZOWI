@@ -3,7 +3,6 @@ package com.orange.bookmanagment.user.model;
 import com.orange.bookmanagment.user.model.enums.UserType;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.Instant;
 
 /**

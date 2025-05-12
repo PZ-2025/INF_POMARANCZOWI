@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.Instant;
 
 /**
@@ -23,8 +22,8 @@ import java.time.Instant;
 @Setter
 public class Reservation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "book_id", nullable = false)
@@ -37,7 +36,9 @@ public class Reservation {
     private long userId;
 
     private Instant reservedAt;
+
     private Instant expiresAt;
+
     private Instant updatedAt;
 
     @Enumerated(EnumType.STRING)
@@ -82,5 +83,4 @@ public class Reservation {
         this.queuePosition = queuePosition;
         this.updatedAt = Instant.now();
     }
-
 }

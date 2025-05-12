@@ -32,8 +32,12 @@ public class UserRepository {
         return userJpaRepository.findUsersByFirstName(firstName);
     }
 
-    //existsById
+    // existsById
     public boolean existsById(Long id) {
         return userJpaRepository.existsById(id);
+    }
+
+    public Optional<User> findRandomLibrarian() {
+        return userJpaRepository.findRandomLibrarian();
     }
 }

@@ -24,4 +24,9 @@ public interface ReservationService {
 
      List<Reservation> getActiveUserReservations(long userId);
 
+     Reservation expireReservation(long reservationId);
+
+     Reservation completeReservation(long reservationId);
+
+     Reservation extendReservation(long reservationId);
 }

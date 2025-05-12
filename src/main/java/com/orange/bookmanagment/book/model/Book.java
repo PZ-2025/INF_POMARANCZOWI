@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.Instant;
 import java.util.List;
 
@@ -25,9 +24,11 @@ import java.util.List;
 @Setter
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String title;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_authors",
@@ -35,15 +36,22 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private List<Author> authors;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
+
     private String description;
+
     private String genre;
+
     @Enumerated(EnumType.STRING)
     private BookStatus status;
+
     private String coverImage;
+
     private Instant createdAt;
+
     private Instant updatedAt;
 
     /**

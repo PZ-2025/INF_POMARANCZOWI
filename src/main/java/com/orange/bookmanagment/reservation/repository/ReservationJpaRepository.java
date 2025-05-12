@@ -96,4 +96,6 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation,Long
     List<Reservation> findByUserIdAndStatusInOrderByQueuePosition(Long userId, List<ReservationStatus> statusList);
 
     boolean existsByBookIdAndUserIdNotAndStatusIn(Long bookId, Long userId, List<ReservationStatus> statusList);
+
+    Optional<Reservation> findFirstByBookIdAndStatusOrderByQueuePosition(long bookId, ReservationStatus status);
 }

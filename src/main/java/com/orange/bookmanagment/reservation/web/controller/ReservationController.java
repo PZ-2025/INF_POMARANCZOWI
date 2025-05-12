@@ -181,4 +181,40 @@ public class ReservationController {
                         .toList()))
                 .build());
     }
+
+    @PostMapping("/{reservationId}/expire")
+    public ResponseEntity<HttpResponse> expireReservation(@PathVariable long reservationId) {
+        Reservation reservation = reservationService.expireReservation(reservationId);
+        return ResponseEntity.ok(HttpResponse.builder()
+                .statusCode(200)
+                .httpStatus(OK)
+                .reason("Reservation expired")
+                .message("Reservation marked as expired")
+                .data(Map.of("reservation", reservationDtoMapper.toDto(reservation)))
+                .build());
+    }
+
+    @PostMapping("/{reservationId}/complete")
+    public ResponseEntity<HttpResponse> completeReservation(@PathVariable long reservationId, Authentication authentication) {
+        Reservation reservation = reservationService.completeReservation(reservationId);
+        return ResponseEntity.ok(HttpResponse.builder()
+                .statusCode(200)
+                .httpStatus(OK)
+                .reason("Reservation completed")
+                .message("Reservation marked as completed")
+                .data(Map.of("reservation", reservationDtoMapper.toDto(reservation)))
+                .build());
+    }
+
+    @PostMapping("/{reservationId}/extend")
+    public ResponseEntity<HttpResponse> extendReservation(@PathVariable long reservationId) {
+        Reservation reservation = reservationService.extendReservation(reservationId);
+        return ResponseEntity.ok(HttpResponse.builder()
+                .statusCode(200)
+                .httpStatus(OK)
+                .reason("Reservation extended")
+                .message("Reservation expiration extended")
+                .data(Map.of("reservation", reservationDtoMapper.toDto(reservation)))
+                .build());
+    }
 }

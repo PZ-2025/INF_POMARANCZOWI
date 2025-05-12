@@ -13,4 +13,4 @@ public record ReservationExternalDto(
         Instant reservedAt,
         Instant expiresAt,
         Instant updatedAt
-) {}
+) { }
