@@ -97,6 +97,7 @@ export class ProfileComponent {
     this.activeTab = tab || 'profile';
 
     this.fetchRentals();
+    this.fetchReservations();
   }
 
   setActiveTab(tab: string) {
@@ -235,6 +236,10 @@ export class ProfileComponent {
     formData.append('file', file);
 
     const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
 
     this.http.post('http://localhost:8080/api/v1/user/upload-avatar', formData, {
       headers: {
@@ -277,6 +282,10 @@ export class ProfileComponent {
     }
 
     const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
 
     this.http.delete('http://localhost:8080/api/v1/user/delete-avatar', {
       headers: {
@@ -299,18 +308,35 @@ export class ProfileComponent {
   returnedRentals: any[] = [];
 
   onImageBookError(event: Event, bookId: number | undefined): void {
-    if (!bookId) return;
+    const img = event.target as HTMLImageElement;
 
-    const key = `book-image-${bookId}`;
-    let fallback = localStorage.getItem(key);
-
-    if (!fallback) {
-      fallback = `https://picsum.photos/seed/book${bookId}/216/216`;
-      localStorage.setItem(key, fallback);
+    if (!bookId) {
+      img.src = '/assets/imgs/book.png';
+      return;
     }
 
-    const target = event.target as HTMLImageElement;
-    target.src = fallback;
+    const key = `book-image-${bookId}`;
+    const fallbackUsed = img.dataset['fallbackUsed'] === 'true';
+    const fallbackFailed = img.dataset['fallbackFailed'] === 'true';
+
+    if (fallbackUsed && fallbackFailed) {
+      img.src = '/assets/imgs/book.png';
+      return;
+    }
+
+    if (!fallbackUsed) {
+      const fallback = `https://picsum.photos/seed/book${bookId}/216/216`;
+      img.src = fallback;
+      img.dataset['fallbackUsed'] = 'true';
+      localStorage.setItem(key, fallback);
+      return;
+    }
+
+    if (fallbackUsed && !fallbackFailed) {
+      img.src = '/assets/imgs/book.png';
+      img.dataset['fallbackFailed'] = 'true';
+      return;
+    }
   }
 
   formatAuthors(authors: { firstName: string; lastName: string }[]): string {
@@ -327,7 +353,10 @@ export class ProfileComponent {
     if (this.userType !== 'READER') return;
 
     const token = this.cookieService.get('token');
-    if (!token) return;
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
 
     this.http.get<any>('http://localhost:8080/api/v1/loans/my', {
       headers: {
@@ -361,14 +390,16 @@ export class ProfileComponent {
 
                   coverImage: (() => {
                     const key = `book-image-${bookData.id}`;
-                    let local = localStorage.getItem(key);
+                    const existing = localStorage.getItem(key);
 
-                    if (!local) {
-                      local = bookData.coverImage || `https://picsum.photos/seed/book${bookData.id}/216/216`;
-                      localStorage.setItem(key, local as string);
-                    }
+                    if (existing) return existing;
 
-                    return local;
+                    const source = bookData.coverImage && bookData.coverImage.trim() !== ''
+                      ? bookData.coverImage
+                      : `https://picsum.photos/seed/book${bookData.id}/216/216`;
+
+                    localStorage.setItem(key, source);
+                    return source;
                   })()
                 }
               };
@@ -381,8 +412,8 @@ export class ProfileComponent {
             next: (loansWithBooks) => {
               this.activeRentals = loansWithBooks.filter(loan => loan.status === 'ACTIVE');
               this.returnedRentals = loansWithBooks.filter(loan => loan.status === 'RETURNED');
-              console.log(this.activeRentals);
-              console.log(this.returnedRentals);
+              console.log('Wypożyczone książki:', this.activeRentals);
+              console.log('Zwrócone książki:', this.returnedRentals);
               this.cdr.detectChanges();
             },
             error: (err) => {
@@ -432,6 +463,11 @@ export class ProfileComponent {
     }
 
     const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
+
     this.http.post(`http://localhost:8080/api/v1/loans/${loanId}/extend`, {}, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -450,6 +486,10 @@ export class ProfileComponent {
 
   returnBook(loanId: number) {
     const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
 
     this.http.post(`http://localhost:8080/api/v1/loans/${loanId}/return`, {}, {
       headers: {
@@ -465,5 +505,226 @@ export class ProfileComponent {
         this.badMessageService.setMessage('Nie udało się zwrócić książki.');
       }
     });
+  }
+
+  userReservations: any[] = [];
+  loadReservationError: boolean = false;
+
+  fetchReservations() {
+    if (this.userType !== 'READER') return;
+
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
+
+    this.http.get<any>('http://localhost:8080/api/v1/reservations/my', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    }).subscribe({
+      next: (response) => {
+        const reservations = response.data?.reservations || [];
+
+        if (reservations.length === 0) {
+          this.userReservations = [];
+          this.loadReservationError = false;
+          return;
+        }
+
+        const now = new Date();
+        const validReservations = reservations.map((reservation: any) => {
+          const expires = new Date(reservation.expiresAt);
+          if (reservation.status === 'READY' && expires < now) {
+            if (reservation.id) this.expireReservation(reservation.id);
+            return null;
+          }
+          return reservation;
+        }).filter(Boolean);
+
+        const bookRequests = validReservations.map((reservation: any) =>
+          this.http.get<any>(`http://localhost:8080/api/v1/book/${reservation.bookId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+          }).pipe(
+            map(bookResponse => {
+              const bookData = bookResponse.data?.book || bookResponse.data || bookResponse;
+
+              return {
+                ...reservation,
+                book: {
+                  ...bookData,
+
+                  coverImage: (() => {
+                    const key = `book-image-${bookData.id}`;
+                    const existing = localStorage.getItem(key);
+
+                    if (existing) return existing;
+
+                    const source = bookData.coverImage && bookData.coverImage.trim() !== ''
+                      ? bookData.coverImage
+                      : `https://picsum.photos/seed/book${bookData.id}/216/216`;
+
+                    localStorage.setItem(key, source);
+                    return source;
+                  })()
+                }
+              };
+            })
+          )
+        );
+
+        if (bookRequests.length > 0) {
+          forkJoin<any[]>(bookRequests).subscribe({
+            next: (reservationsWithBooks) => {
+              // this.userReservations = reservationsWithBooks;
+              this.userReservations = reservationsWithBooks.filter(r => r.status !== 'EXPIRED' && r.status !== 'CANCELLED' && r.status !== 'COMPLETED');
+              this.loadReservationError = false;
+              console.log('Rezerwacje z książkami:', this.userReservations);
+              this.cdr.detectChanges();
+            },
+            error: (err) => {
+              console.error('Błąd przy pobieraniu danych książek do rezerwacji:', err);
+              this.loadReservationError = true;
+            }
+          });
+        } else {
+          this.userReservations = [];
+        }
+      },
+      error: (err) => {
+        console.error('Błąd przy pobieraniu rezerwacji:', err);
+        this.loadReservationError = true;
+      }
+    });
+  }
+
+  translateReservationStatus(status: string): string {
+    switch (status) {
+      case 'CANCELLED': return 'Anulowana';
+      case 'COMPLETED': return 'Zrealizowana';
+      case 'EXPIRED': return 'Wygasła';
+      case 'PENDING': return 'Oczekująca';
+      case 'READY': return 'Gotowa do odbioru';
+      default: return status;
+    }
+  }
+
+  expireReservation(reservationId: number) {
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
+
+    this.http.post(`http://localhost:8080/api/v1/reservations/${reservationId}/expire`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    }).subscribe({
+      next: () => {
+        // console.log(`Rezerwacja ${reservationId} została oznaczona jako EXPIRED`);
+        this.fetchReservations();
+      },
+      error: (err) => {
+        console.error(`Błąd przy oznaczaniu rezerwacji ${reservationId} jako EXPIRED:`, err);
+      }
+    });
+  }
+
+  cancelReservation(reservationId: number) {
+    const reservation = this.userReservations.find(r => r.id === reservationId);
+    if (reservation?.status === 'CANCELLED') {
+      this.badMessageService.setMessage('Rezerwacja została już anulowana.');
+      return;
+    }
+
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
+
+    this.http.post(`http://localhost:8080/api/v1/reservations/${reservationId}/cancel`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    }).subscribe({
+      next: () => {
+        this.messageService.setMessage('Rezerwacja została anulowana.');
+        this.fetchReservations();
+      },
+      error: err => {
+        console.error('Błąd przy anulowaniu rezerwacji:', err);
+        this.badMessageService.setMessage('Nie udało się anulować rezerwacji.');
+      }
+    });
+  }
+
+  completeReservation(reservationId: number) {
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
+
+    this.http.post(`http://localhost:8080/api/v1/reservations/${reservationId}/complete`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    }).subscribe({
+      next: () => {
+        this.messageService.setMessage('Rezerwacja została zrealizowana.');
+        this.fetchReservations();
+        this.fetchRentals();
+      },
+      error: err => {
+        console.error('Błąd przy realizowaniu rezerwacji:', err);
+        this.badMessageService.setMessage('Nie udało się zrealizować rezerwacji.');
+      }
+    });
+  }
+
+  extendReservation(reservationId: number, expiresAt: string) {
+    if (!this.canExtendReservation(expiresAt)) {
+      this.badMessageService.setMessage('Rezerwację można przedłużyć dopiero na 3 dni przed wygaśnięciem.');
+      return;
+    }
+
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
+
+    this.http.post(`http://localhost:8080/api/v1/reservations/${reservationId}/extend`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    }).subscribe({
+      next: () => {
+        this.messageService.setMessage('Rezerwacja została przedłużona.');
+        this.fetchReservations();
+      },
+      error: err => {
+        console.error('Błąd przy przedłużaniu rezerwacji:', err);
+        this.badMessageService.setMessage('Nie udało się przedłużyć rezerwacji.');
+      }
+    });
+  }
+
+  canExtendReservation(expiresAt: string): boolean {
+    const now = new Date();
+    const expires = new Date(expiresAt);
+    const diff = (expires.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+    return diff <= 3;
   }
 }

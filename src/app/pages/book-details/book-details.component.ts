@@ -77,7 +77,6 @@ export class BookDetailsComponent implements OnInit {
     if (!fallback) {
       fallback = `https://picsum.photos/seed/book${id}/216/216`;
       localStorage.setItem(key, fallback);
-      console.log('[ERROR] New fallback saved:', fallback);
     }
 
     this.bookImageUrl = fallback;
