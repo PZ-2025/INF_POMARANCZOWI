@@ -58,4 +58,7 @@ public class ReservationRepository {
         return reservationJpaRepository.findByUserIdAndStatusInOrderByQueuePosition(userId, statusList);
     }
 
+    public boolean existsByBookIdAndUserIdNotAndStatusIn(long bookId, long userId, List<ReservationStatus> statuses) {
+        return reservationJpaRepository.existsByBookIdAndUserIdNotAndStatusIn(bookId, userId, statuses);
+    }
 }

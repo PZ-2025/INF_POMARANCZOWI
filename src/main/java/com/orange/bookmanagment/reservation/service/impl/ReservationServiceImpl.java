@@ -26,11 +26,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 class ReservationServiceImpl implements ReservationService, ReservationExternalService {
-
     private final ReservationRepository reservationRepository;
     private final BookExternalService bookExternalService;
     private final ReservationInternalMapper reservationInternalMapper;
-
 
     @Override
     @Transactional
@@ -70,7 +68,6 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
     @Override
     @Transactional
     public Reservation cancelReservation(Reservation reservation) {
-
         if (reservation.getStatus() == ReservationStatus.CANCELLED) {
             return reservation;
         }
@@ -83,7 +80,6 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         final long bookId = reservation.getBookId();
 
         if (reservation.getStatus() == ReservationStatus.READY) {
-
             Optional<Reservation> nextReservation = reservationRepository.findFirstByBookIdAndStatusOrderByQueuePosition(
                     bookId, ReservationStatus.PENDING);
 
@@ -99,12 +95,10 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
 
         reservation.setStatus(ReservationStatus.CANCELLED);
 
-
         // Aktualizuj pozycje w kolejce pozostałych rezerwacji
         updateQueuePositions(bookId);
 
         return reservationRepository.saveReservation(reservation);
-
     }
 
     @Override
@@ -219,6 +213,48 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         }
     }
 
+    @Override
+    public List<ReservationExternalDto> getPendingReservations(long bookId) {
+        return reservationRepository
+                .findByBookIdAndStatusOrderByQueuePosition(bookId, ReservationStatus.PENDING)
+                .stream()
+                .map(reservationInternalMapper::toDto)
+                .toList();
+    }
 
+    @Override
+    public void markAsReady(long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
 
+        reservation.setStatus(ReservationStatus.READY);
+        reservationRepository.saveReservation(reservation);
+    }
+
+    @Override
+    @Transactional
+    public void decrementQueuePosition(long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
+
+        reservation.setQueuePosition(reservation.getQueuePosition() - 1);
+        reservation.setUpdatedAt(java.time.Instant.now());
+
+        reservationRepository.saveReservation(reservation);
+    }
+
+    @Override
+    public boolean isReservedByAnotherUser(long bookId, long userId) {
+        return reservationRepository
+                .findByBookIdAndStatusOrderByQueuePosition(bookId, ReservationStatus.PENDING)
+                .stream()
+                .anyMatch(r -> r.getUserId() != userId);
+    }
+
+    @Override
+    public boolean isBookReservedForAnotherUser(Long bookId, Long currentUserId) {
+        return reservationRepository.existsByBookIdAndUserIdNotAndStatusIn(
+                bookId, currentUserId, List.of(ReservationStatus.PENDING, ReservationStatus.READY)
+        );
+    }
 }

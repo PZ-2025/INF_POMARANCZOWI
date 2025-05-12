@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface LoanJpaRepository extends JpaRepository<Loan, Long> {
-
     boolean existsByBookIdAndUserIdAndStatusIn(Long bookId, Long userId, List<LoanStatus> statuses);
 
     List<Loan> findByStatusIn(List<LoanStatus> statuses);

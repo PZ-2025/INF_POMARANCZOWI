@@ -225,4 +225,15 @@ public class LoanController {
                         .data(Map.of("loan", loanMapper.toDto(loan)))
                         .build());
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<HttpResponse> handleIllegalStateException(IllegalStateException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(HttpResponse.builder()
+                        .statusCode(HttpStatus.BAD_REQUEST.value())
+                        .httpStatus(HttpStatus.BAD_REQUEST)
+                        .reason("Invalid loan operation")
+                        .message(ex.getMessage())
+                        .build());
+    }
 }

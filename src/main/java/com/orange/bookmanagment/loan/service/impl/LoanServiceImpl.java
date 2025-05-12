@@ -8,6 +8,7 @@ import com.orange.bookmanagment.loan.exception.BookNotAvailableException;
 import com.orange.bookmanagment.loan.exception.LoanNotFoundException;
 import com.orange.bookmanagment.loan.service.mapper.LoanInternalMapper;
 import com.orange.bookmanagment.reservation.api.ReservationExternalService;
+import com.orange.bookmanagment.reservation.api.dto.ReservationExternalDto;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.loan.model.Loan;
 import com.orange.bookmanagment.shared.enums.LoanStatus;
@@ -53,28 +54,44 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
     @Override
     @Transactional
     public Loan returnBook(long loanId, Long librarianId) {
-
         final Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan not found with ID: " + loanId));
 
-        // Sprawdź czy książka jest już zwrócona
         if (loan.getStatus() == LoanStatus.RETURNED) {
             return loan;
         }
 
-        // Oznacz wypożyczenie jako zwrócone
         loan.markAsReturned(librarianId);
         loanRepository.saveLoan(loan);
 
-        // Pobierz ID książki
         final Long bookId = loan.getBookId();
 
-        // Sprawdź czy są oczekujące rezerwacje przez serwis
-        boolean hasActiveReservation = reservationExternalService.processReturnedBook(bookId);
+        // Pobranie wszystkich oczekujących rezerwacji
+        List<ReservationExternalDto> reservations = reservationExternalService.getPendingReservations(bookId);
 
-        if (!hasActiveReservation) {
-            // Brak rezerwacji, oznacz książkę jako dostępną
+        if (reservations.isEmpty()) {
+            // Brak rezerwacji – książka dostępna
             bookExternalService.updateBookStatus(bookId, BookStatus.AVAILABLE);
+            return loan;
+        }
+
+        if (reservations.size() == 1) {
+            // Tylko jedna rezerwacja – nowe wypożyczenie
+            var r = reservations.get(0);
+            reservationExternalService.markAsReady(r.id());
+            bookExternalService.updateBookStatus(bookId, BookStatus.BORROWED);
+
+            // Tworzenie nowego wypożyczenia
+            Loan newLoan = new Loan(bookId, r.userId(), LoanStatus.ACTIVE, librarianId, "Loan from reservation");
+            return loanRepository.saveLoan(newLoan);
+        }
+
+        // Więcej niż jedna rezerwacja
+        var first = reservations.get(0);
+        reservationExternalService.markAsReady(first.id());
+        bookExternalService.updateBookStatus(bookId, BookStatus.RESERVED);
+        for (int i = 1; i < reservations.size(); i++) {
+            reservationExternalService.decrementQueuePosition(reservations.get(i).id());
         }
 
         return loan;
@@ -86,6 +103,10 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
         // Używamy userService
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan not found with ID: " + loanId));
+
+        if (reservationExternalService.isReservedByAnotherUser(loan.getBookId(), loan.getUserId())) {
+            throw new IllegalStateException("Cannot extend, the book is reserved by another user.");
+        }
 
         // Sprawdź czy wypożyczenie jest aktywne
         if (loan.getStatus() != LoanStatus.ACTIVE && loan.getStatus() != LoanStatus.OVERDUE) {
@@ -101,7 +122,6 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
     @Override
     @Transactional
     public Loan markBookAsLost(long loanId, String notes, Long librarianId) {
-
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan not found with ID: " + loanId));
 
@@ -168,6 +188,4 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
                 .map(loanInternalMapper::toDto)
                 .toList();
     }
-
-
 }

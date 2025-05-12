@@ -14,5 +14,6 @@ public record LoanDto(
         String dueDate,
         String returnedAt,
         Long returningLibrarianId,
-        int extendedCount
+        int extendedCount,
+        boolean isReserved
 ) { }
