@@ -70,6 +70,7 @@ class SecurityConfig {
                                 .requestMatchers("/api/v1/loans/my").authenticated()
                                 .requestMatchers(POST, "/api/v1/loans/{id}/extend").permitAll()
                                 .requestMatchers(POST, "/api/v1/loans/**/return").permitAll()
+                                .requestMatchers("/api/v1/reservations/my").authenticated()
                 )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
