@@ -35,8 +35,8 @@
   --edit-user-modal-input: #a4a3a3;
 
   --status-available: #15803d; /* Książka dosepna: zielony */
-  --status-reserved: #ca8a04;  /* Książka zarezerwowana: żółty */
-  --status-borrowed: #e21111;  /* Książka niedosepna: czerwony */
+  --status-reserved: #e21111;  /* Książka zarezerwowana: czerwony */
+  --status-borrowed: #ca8a04;  /* Książka wypożyczona/niezarezerwowana: żółty */
   --status-lost: #1154e6;      /* Książka zgubiona: niebieski */
 }
 
@@ -75,8 +75,8 @@
   --edit-user-modal-input: #3a3a3a;
 
   --status-available: #81fe90; /* Książka dosepna: jasny zielony */
-  --status-reserved: #eeba2c;  /* Książka zarezerwowana: jasny żółty */
-  --status-borrowed: #fe8181;  /* Książka niedosepna: jasny czerwony */
+  --status-reserved: #fe8181;  /* Książka zarezerwowana: jasny czerwony */
+  --status-borrowed: #eeba2c;  /* Książka wypożyczona/niezarezerwowana: jasny żółty */
   --status-lost: #81bbfe;      /* Książka zgubiona: jasny niebieski */
 }
 

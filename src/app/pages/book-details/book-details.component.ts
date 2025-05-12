@@ -24,7 +24,7 @@ export class BookDetailsComponent implements OnInit {
       return;
     }
 
-    const key = `book-image-${id}`;
+    const key = `book-details-image-${id}`;
     const stored = localStorage.getItem(key);
 
     if (stored) {
@@ -42,8 +42,14 @@ export class BookDetailsComponent implements OnInit {
 
         this.book = book;
 
-        if (book.coverImage && !this.fallbackUsed) {
+        const key = `book-details-image-${book.id}`;
+        const fallbackImage = localStorage.getItem(key);
+
+        if (book.coverImage && !fallbackImage) {
           this.bookImageUrl = book.coverImage;
+        } else if (fallbackImage) {
+          this.bookImageUrl = fallbackImage;
+          this.fallbackUsed = true;
         }
       },
       error: (error) => {
@@ -65,13 +71,12 @@ export class BookDetailsComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) return;
 
-    const key = `book-image-${id}`;
+    const key = `book-details-image-${id}`;
     let fallback = localStorage.getItem(key);
 
     if (!fallback) {
       fallback = `https://picsum.photos/seed/book${id}/216/216`;
       localStorage.setItem(key, fallback);
-      console.log('[ERROR] New fallback saved:', fallback);
     }
 
     this.bookImageUrl = fallback;

@@ -40,6 +40,7 @@ export class AuthService {
         localStorage.setItem('firstName', user.firstName);
         localStorage.setItem('lastName', user.lastName);
         localStorage.setItem('userId', user.id.toString());
+        localStorage.removeItem('profileTab');
 
         if (user.avatarPath == null) {
           localStorage.setItem('avatarPath', '/assets/imgs/user.png');
