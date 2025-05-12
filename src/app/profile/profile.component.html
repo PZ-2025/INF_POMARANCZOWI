@@ -229,12 +229,11 @@
               </div>
             </div>
 
-            
             <!-- Guziki -->
             <div class="flex justify-start items-start">
               <div class="flex flex-col gap-4 justify-start items-start">
-                <button class="px-4 py-2 w-[96px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zwróć</button>
-                <button *ngIf="loan.extendedCount < 3" class="px-4 py-2 w-[96px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Przedłuż</button>
+                <button (click)="returnBook(loan.id)" class="px-4 py-2 w-[96px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zwróć</button>
+                <button (click)="extendLoan(loan.id, loan.extendedCount, loan.dueDate, loan.isReserved)" *ngIf="canExtendLoan(loan.extendedCount, loan.dueDate) && !loan.isReserved" class="px-4 py-2 w-[96px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Przedłuż</button>
               </div>
             </div>
           </div>

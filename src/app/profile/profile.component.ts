@@ -401,14 +401,69 @@ export class ProfileComponent {
     });
   }
 
-  calculateDaysLeft(dueDate: string): number {
-    if (!dueDate) return 0;
-
-    const due = new Date(dueDate);
+  canExtendLoan(extendedCount: number, dueDateStr: string): boolean {
+    const dueDate = new Date(dueDateStr);
     const today = new Date();
-    const diffTime = due.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffInMs = dueDate.getTime() - today.getTime();
+    const daysLeft = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
 
-    return diffDays;
+    return extendedCount < 3 && daysLeft <= 14;
+  }
+
+  extendLoan(loanId: number, extendedCount: number, dueDateStr: string, isReserved: boolean) {
+    if (isReserved) {
+      this.badMessageService.setMessage('Nie można przedłużyć wypożyczenia. Książka jest zarezerwowana przez innego użytkownika.');
+      return;
+    }
+
+    if (extendedCount >= 3) {
+      this.badMessageService.setMessage('Nie można przedłużyć wypożyczenia. Maksymalna liczba przedłużeń została osiągnięta.');
+      return;
+    }
+
+    const dueDate = new Date(dueDateStr);
+    const today = new Date();
+    const diffInMs = dueDate.getTime() - today.getTime();
+    const daysLeft = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+    if (daysLeft > 14) {
+      this.badMessageService.setMessage('Nie można przedłużyć wypożyczenia. Do terminu zwrotu pozostało więcej niż 14 dni.');
+      return;
+    }
+
+    const token = this.cookieService.get('token');
+    this.http.post(`http://localhost:8080/api/v1/loans/${loanId}/extend`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
+      next: () => {
+        this.messageService.setMessage('Wypożyczenie zostało przedłużone.');
+        this.fetchRentals();
+      },
+      error: (err) => {
+        console.error('Błąd przy przedłużaniu wypożyczenia:', err);
+        this.badMessageService.setMessage('Nie udało się przedłużyć wypożyczenia.');
+      }
+    });
+  }
+
+  returnBook(loanId: number) {
+    const token = this.cookieService.get('token');
+
+    this.http.post(`http://localhost:8080/api/v1/loans/${loanId}/return`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
+      next: () => {
+        this.messageService.setMessage('Książka została zwrócona.');
+        this.fetchRentals();
+      },
+      error: (err) => {
+        console.error('Błąd przy zwracaniu książki:', err);
+        this.badMessageService.setMessage('Nie udało się zwrócić książki.');
+      }
+    });
   }
 }
