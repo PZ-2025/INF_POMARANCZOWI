@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
  * Żądanie logowania użytkownika.
  *
  * @param email adres e-mail użytkownika
- * @param password hasło użytkownika (min. 6 znaków)
+ * @param password hasło użytkownika
  */
 public record UserLoginRequest(
         @Email
