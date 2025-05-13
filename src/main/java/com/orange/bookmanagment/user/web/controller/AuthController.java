@@ -24,18 +24,27 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
+/**
+ * Kontroler odpowiedzialny za obsługę uwierzytelniania i rejestracji użytkowników.
+ * <p>
+ * Udostępnia punkty końcowe dla logowania, rejestracji, zmiany hasła i pobierania danych o zalogowanym użytkowniku.
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 class AuthController {
+
     private final UserService userService;
     private final AccountAuthenticationProvider accountAuthenticationProvider;
     private final UserDtoMapper userDtoMapper;
     private final TokenService tokenService;
 
     /**
-     * @param userLoginRequest - login request with params
-     * @return As response.Message we will receive token, as data we will have {@link com.orange.bookmanagment.user.web.model.UserDto} model
+     * Endpoint do logowania użytkownika.
+     *
+     * @param userLoginRequest żądanie logowania zawierające email i hasło
+     * @return mapa zawierająca access token, refresh token (opcjonalnie) oraz dane użytkownika
+     * @throws IllegalAccountAccessException w przypadku błędnych danych logowania
      */
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody UserLoginRequest userLoginRequest) {
@@ -63,9 +72,10 @@ class AuthController {
     }
 
     /**
-     * @param userRegisterRequest - User register request with params
+     * Endpoint do rejestracji nowego użytkownika.
      *
-     * @return As data endpoint returns registered user data as {@link com.orange.bookmanagment.user.web.model.UserDto}
+     * @param userRegisterRequest dane rejestracyjne użytkownika
+     * @return odpowiedź HTTP z danymi nowo zarejestrowanego użytkownika
      */
     @PostMapping("/register")
     public ResponseEntity<HttpResponse> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
@@ -82,6 +92,12 @@ class AuthController {
                         .build());
     }
 
+    /**
+     * Endpoint zwracający dane aktualnie zalogowanego użytkownika.
+     *
+     * @param authentication obiekt uwierzytelnienia dostarczony przez Spring Security
+     * @return dane użytkownika w odpowiedzi HTTP
+     */
     @GetMapping("/me")
     public ResponseEntity<HttpResponse> me(Authentication authentication) {
         final User user = userService.getUserByEmail(authentication.getName());
@@ -98,16 +114,18 @@ class AuthController {
     }
 
     /**
+     * Endpoint do zmiany hasła użytkownika.
      *
-     * @param changePasswordRequest - Change password request includes old and new password
-     * @param authHeader - Authorization header with JWT token
-     * @return Status of password change
+     * @param changePasswordRequest żądanie zmiany hasła zawierające stare i nowe hasło
+     * @param authHeader nagłówek Authorization zawierający JWT token
+     * @return odpowiedź z potwierdzeniem zmiany hasła
      */
     @PostMapping("/changePassword")
-    public ResponseEntity<HttpResponse> changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest,
-                                                       @RequestHeader("Authorization") String authHeader) {
-        final String token = authHeader.replace("Bearer ", "");
+    public ResponseEntity<HttpResponse> changePassword(
+            @RequestBody @Valid ChangePasswordRequest changePasswordRequest,
+            @RequestHeader("Authorization") String authHeader) {
 
+        final String token = authHeader.replace("Bearer ", "");
         userService.changeUserPassword(tokenService.getUserIdFromJwtToken(token), changePasswordRequest);
 
         return ResponseEntity.status(OK).body(HttpResponse.builder()

@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/**
+ * Własny provider uwierzytelnienia JWT używany do weryfikacji danych logowania (email + hasło).
+ */
 @Component
 @RequiredArgsConstructor
 class JwtAuthenticationProvider implements AuthenticationProvider {
@@ -18,7 +21,13 @@ class JwtAuthenticationProvider implements AuthenticationProvider {
     private final CustomUserDetailsService detailsService;
     private final PasswordEncoder passwordEncoder;
 
-
+    /**
+     * Przeprowadza proces uwierzytelnienia użytkownika.
+     *
+     * @param authentication dane uwierzytelniające
+     * @return uwierzytelniony token z uprawnieniami
+     * @throws AuthenticationException jeśli uwierzytelnienie się nie powiedzie
+     */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final String email = authentication.getName();
@@ -32,6 +41,12 @@ class JwtAuthenticationProvider implements AuthenticationProvider {
         return new UsernamePasswordAuthenticationToken(email, password, userDetails.getAuthorities());
     }
 
+    /**
+     * Sprawdza, czy provider obsługuje dany typ uwierzytelnienia.
+     *
+     * @param authentication typ klasy uwierzytelnienia
+     * @return true, jeśli wspierany; false w przeciwnym razie
+     */
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);

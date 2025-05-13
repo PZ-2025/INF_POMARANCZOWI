@@ -9,8 +9,17 @@ import com.orange.bookmanagment.user.web.requests.UserRegisterRequest;
 
 import java.util.List;
 
+/**
+ * Interfejs zewnętrznego serwisu użytkowników, udostępniający operacje dostępne dla innych modułów.
+ */
 public interface UserExternalService {
 
+    /**
+     * Zwraca identyfikator użytkownika na podstawie jego adresu e-mail.
+     *
+     * @param email adres e-mail użytkownika
+     * @return identyfikator użytkownika
+     * @throws UserNotFoundException jeśli użytkownik o podanym adresie e-mail nie istnieje
+     */
     long getUserIdByEmail(String email) throws UserNotFoundException;
-
 }

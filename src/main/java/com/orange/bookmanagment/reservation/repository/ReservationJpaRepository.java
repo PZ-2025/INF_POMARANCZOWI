@@ -20,8 +20,8 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation,Long
     /**
      * Sprawdza, czy istnieje rezerwacja użytkownika dla danej książki o określonych statusach.
      *
-     * @param bookId     identyfikator książki
-     * @param userId     identyfikator użytkownika
+     * @param bookId identyfikator książki
+     * @param userId identyfikator użytkownika
      * @param statusList lista statusów rezerwacji
      * @return true, jeśli istnieje pasująca rezerwacja
      */
@@ -30,7 +30,7 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation,Long
     /**
      * Zlicza rezerwacje dla danej książki o określonych statusach.
      *
-     * @param bookId     identyfikator książki
+     * @param bookId identyfikator książki
      * @param statusList lista statusów rezerwacji
      * @return liczba znalezionych rezerwacji
      */
@@ -83,7 +83,7 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation,Long
     /**
      * Zwraca wszystkie rezerwacje książki o określonych statusach, posortowane według pozycji w kolejce.
      *
-     * @param bookId     identyfikator książki
+     * @param bookId identyfikator książki
      * @param statusList lista statusów rezerwacji
      * @return lista rezerwacji
      */
@@ -92,7 +92,7 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation,Long
     /**
      * Zwraca wszystkie rezerwacje użytkownika o określonych statusach, posortowane według pozycji w kolejce.
      *
-     * @param userId     identyfikator użytkownika
+     * @param userId identyfikator użytkownika
      * @param statusList lista statusów rezerwacji
      * @return lista rezerwacji
      */
@@ -101,8 +101,8 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation,Long
     /**
      * Sprawdza, czy książka jest zarezerwowana przez innego użytkownika niż wskazany, o podanych statusach.
      *
-     * @param bookId     identyfikator książki
-     * @param userId     identyfikator użytkownika do wykluczenia
+     * @param bookId identyfikator książki
+     * @param userId identyfikator użytkownika do wykluczenia
      * @param statusList lista statusów rezerwacji
      * @return true, jeśli istnieje rezerwacja innego użytkownika
      */

@@ -22,14 +22,25 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
 
+/**
+ * Kontroler użytkownika odpowiadający za operacje związane z profilem użytkownika.
+ * <p>
+ * Obsługuje pobieranie danych użytkownika, aktualizację danych, zarządzanie zdjęciem profilowym.
+ */
 @RestController
 @RequestMapping("/api/v1/user")
-
 @RequiredArgsConstructor
 class UserController {
+
     private final UserService userService;
     private final UserDtoMapper userDtoMapper;
 
+    /**
+     * Pobiera dane użytkownika na podstawie jego ID.
+     *
+     * @param id identyfikator użytkownika
+     * @return odpowiedź HTTP zawierająca dane użytkownika
+     */
     @GetMapping("/{id}")
     public ResponseEntity<HttpResponse> getUserById(@PathVariable("id") long id) {
         return ResponseEntity.status(OK)
@@ -43,11 +54,17 @@ class UserController {
                         .build());
     }
 
+    /**
+     * Aktualizuje dane zalogowanego użytkownika.
+     *
+     * @param request obiekt zawierający nowe dane użytkownika
+     * @return potwierdzenie wykonania aktualizacji
+     */
     @PutMapping("/me")
     public ResponseEntity<HttpResponse> updateUser(@RequestBody UpdateUserRequest request) {
+
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = jwt.getClaim("user_id");
-
         userService.updateUserData(userId, request);
 
         return ResponseEntity.status(OK)
@@ -61,11 +78,19 @@ class UserController {
                         .build());
     }
 
+    /**
+     * Przesyła i zapisuje zdjęcie profilowe użytkownika.
+     *
+     * @param file plik graficzny (awatar)
+     * @param authHeader nagłówek autoryzacyjny zawierający token JWT
+     * @return odpowiedź potwierdzająca zapisanie pliku
+     * @throws IOException w przypadku błędu zapisu pliku
+     */
     @PostMapping("/upload-avatar")
     public ResponseEntity<HttpResponse> uploadAvatar(
             @RequestParam("file") MultipartFile file,
-            @RequestHeader("Authorization") String authHeader
-    ) throws IOException {
+            @RequestHeader("Authorization") String authHeader) throws IOException {
+
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = jwt.getClaim("user_id");
 
@@ -73,7 +98,6 @@ class UserController {
         Path uploadPath = Paths.get("uploads/avatars/" + fileName);
         Files.createDirectories(uploadPath.getParent());
         Files.write(uploadPath, file.getBytes());
-
         userService.updateAvatarPath(userId, "/uploads/avatars/" + fileName);
 
         return ResponseEntity.ok(HttpResponse.builder()
@@ -82,6 +106,13 @@ class UserController {
                 .build());
     }
 
+    /**
+     * Usuwa zdjęcie profilowe zalogowanego użytkownika.
+     *
+     * @param jwt token JWT zawierający identyfikator użytkownika
+     * @return odpowiedź HTTP potwierdzająca usunięcie zdjęcia
+     * @throws IOException w przypadku błędu usunięcia pliku
+     */
     @DeleteMapping("/delete-avatar")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> deleteAvatar(@AuthenticationPrincipal Jwt jwt) throws IOException {

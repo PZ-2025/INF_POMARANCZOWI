@@ -50,9 +50,9 @@ public class Reservation {
     /**
      * Tworzy nową rezerwację książki.
      *
-     * @param bookId        ID książki
-     * @param userId        ID użytkownika
-     * @param status        status rezerwacji
+     * @param bookId ID książki
+     * @param userId ID użytkownika
+     * @param status status rezerwacji
      * @param queuePosition pozycja w kolejce
      */
     public Reservation(long bookId, long userId, ReservationStatus status, int queuePosition) {

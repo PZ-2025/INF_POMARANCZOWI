@@ -27,16 +27,28 @@ import java.util.List;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Główna konfiguracja bezpieczeństwa aplikacji (Spring Security).
+ * Odpowiada za konfigurację JWT, CORS, endpointów i filtrowania żądań.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
 class SecurityConfig {
+
     private final CustomUserDetailsService detailsService;
     private final AccountAuthenticationProvider authenticationProvider;
     private final JwtDecoder jwtDecoder;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    /**
+     * Konfiguracja łańcucha filtrów zabezpieczeń HTTP.
+     *
+     * @param security konfigurator HttpSecurity
+     * @return SecurityFilterChain
+     * @throws Exception w przypadku błędów konfiguracji
+     */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = security.getSharedObject(AuthenticationManagerBuilder.class);
@@ -90,6 +102,11 @@ class SecurityConfig {
         return security.build();
     }
 
+    /**
+     * Konwerter JWT do uwzględniania uprawnień z tokena.
+     *
+     * @return JwtAuthenticationConverter
+     */
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         final org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -98,9 +115,15 @@ class SecurityConfig {
 
         final JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+
         return jwtAuthenticationConverter;
     }
 
+    /**
+     * Konfiguracja CORS dla aplikacji.
+     *
+     * @return CorsConfigurationSource
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
