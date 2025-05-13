@@ -222,6 +222,8 @@ public class ReportService {
         };
     }
 
+
+
     /**
      * Generuje raport popularności książek na podstawie historii wypożyczeń
      *
@@ -264,105 +266,59 @@ public class ReportService {
         }
 
         // Pobierz informacje o książkach
-        Map<Long, BookExternalDto> booksMap = new HashMap<>();
-        for (Long bookId : bookLoanCounts.keySet()) {
-            try {
-                BookExternalDto book = bookExternalService.getBookForExternal(bookId);
-                if (book != null) {
-                    booksMap.put(bookId, book);
-                }
-            } catch (Exception e) {
-                // Książka mogła zostać usunięta, pomijamy ją
-                System.err.println("Nie znaleziono książki o ID: " + bookId);
-            }
-        }
+        List<BookExternalDto> allBooks = bookExternalService.getAllBooks();
 
         // Filtruj książki według gatunku i statusu (jeśli podano)
-        List<Map.Entry<Long, Integer>> filteredEntries = bookLoanCounts.entrySet().stream()
-                .filter(entry -> {
-                    BookExternalDto book = booksMap.get(entry.getKey());
-                    if (book == null) return false;
+        List<BookExternalDto> filteredBooks = allBooks.stream()
+                .filter(book -> genre == null || genre.isEmpty() ||
+                        (book.genre() != null && book.genre().equalsIgnoreCase(genre)))
+                .filter(book -> status == null || book.status() == status)
+                .collect(Collectors.toList());
 
-                    boolean genreMatch = genre == null || genre.isEmpty() ||
-                            (book.genre() != null && book.genre().equalsIgnoreCase(genre));
+        // Konwertuj na mapę id książki -> książka
+        Map<Long, BookExternalDto> booksMap = filteredBooks.stream()
+                .collect(Collectors.toMap(BookExternalDto::id, book -> book));
 
-                    boolean statusMatch = status == null || book.status() == status;
-
-                    return genreMatch && statusMatch;
-                })
+        // Przygotuj listę książek z liczbą wypożyczeń
+        List<Map.Entry<Long, Integer>> bookLoanList = bookLoanCounts.entrySet().stream()
+                .filter(entry -> booksMap.containsKey(entry.getKey()))
                 .sorted(Map.Entry.<Long, Integer>comparingByValue().reversed())
                 .collect(Collectors.toList());
 
         // Ogranicz liczbę książek (jeśli podano limit)
-        if (limit != null && limit > 0 && limit < filteredEntries.size()) {
-            filteredEntries = filteredEntries.subList(0, limit);
+        if (limit != null && limit > 0 && bookLoanList.size() > limit) {
+            bookLoanList = bookLoanList.subList(0, limit);
         }
 
-        // Przygotuj dane do raportu
+        // Konwertuj na LibraryPdfTableItem
         List<LibraryPdfTableItem> pdfItems = new ArrayList<>();
-        for (Map.Entry<Long, Integer> entry : filteredEntries) {
-            BookExternalDto book = booksMap.get(entry.getKey());
+        // Przygotuj mapę z liczbami wypożyczeń do przekazania do generatora raportów
+        Map<String, Integer> loanCountMap = new HashMap<>();
+
+        for (Map.Entry<Long, Integer> entry : bookLoanList) {
+            Long bookId = entry.getKey();
+            Integer loanCount = entry.getValue();
+            BookExternalDto book = booksMap.get(bookId);
+
             if (book != null) {
                 String authorsString = book.authors().stream()
                         .map(author -> author.firstName() + " " + author.lastName())
                         .collect(Collectors.joining(", "));
 
-                // Liczba wypożyczeń dodana jako gatunek (zostanie pokazana w tej kolumnie)
-                String loanCountDisplay = String.valueOf(entry.getValue());
-
-                pdfItems.add(new LibraryPdfTableItem(
+                LibraryPdfTableItem pdfItem = new LibraryPdfTableItem(
                         String.valueOf(book.id()),
                         book.title(),
                         authorsString,
                         book.publisher() != null ? book.publisher().name() : "",
                         translateStatus(book.status()),
-                        book.genre() + " (" + loanCountDisplay + " wypożyczeń)",  // Dodajemy liczbę wypożyczeń do gatunku
-                        ""  // Pusty opis, możemy tu dodać więcej informacji w przyszłości
-                ));
+                        book.genre()
+                );
+
+                pdfItems.add(pdfItem);
+
+                // Dodaj liczbę wypożyczeń do mapy
+                loanCountMap.put(String.valueOf(book.id()), loanCount);
             }
-        }
-
-        // Zlicz gatunki z książek które mają wypożyczenia
-        Map<String, Integer> genreLoanCounts = new HashMap<>();
-        for (Map.Entry<Long, Integer> entry : bookLoanCounts.entrySet()) {
-            BookExternalDto book = booksMap.get(entry.getKey());
-            if (book != null && book.genre() != null && !book.genre().isEmpty()) {
-                genreLoanCounts.merge(book.genre(), entry.getValue(), Integer::sum);
-            }
-        }
-
-        // Sortuj gatunki według liczby wypożyczeń
-        List<Map.Entry<String, Integer>> sortedGenres = genreLoanCounts.entrySet().stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .collect(Collectors.toList());
-
-        // Przygotuj mapy dla raportu
-        Map<String, Integer> statusCounts = new HashMap<>();
-        Map<String, Integer> genreCounts = new HashMap<>();
-
-        // Dla każdego gatunku, podaj liczbę wypożyczeń (nie książek)
-        for (Map.Entry<String, Integer> entry : sortedGenres) {
-            genreCounts.put(entry.getKey() + " (" + entry.getValue() + " wypożyczeń)", 1);
-        }
-
-        // Dla statusów, możemy użyć liczby książek
-        for (LibraryPdfTableItem item : pdfItems) {
-            statusCounts.merge(item.getStatus(), 1, Integer::sum);
-        }
-
-        // Tworzy tytuł raportu
-        StringBuilder reportTitle = new StringBuilder("System Zarządzania Księgozbiorem - Raport popularności książek");
-        if (genre != null && !genre.isEmpty()) {
-            reportTitle.append(" - Gatunek: ").append(genre);
-        }
-        if (status != null) {
-            reportTitle.append(" - Status: ").append(translateStatus(status));
-        }
-        if (startDate != null) {
-            reportTitle.append(" - Od: ").append(startDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
-        }
-        if (endDate != null) {
-            reportTitle.append(" - Do: ").append(endDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
         }
 
         // Utwórz nazwę pliku z datą i czasem
@@ -371,17 +327,17 @@ public class ReportService {
                 ".pdf";
         String outputPath = Paths.get(reportConfig.getReportDirectory(), fileName).toString();
 
-        // Wygeneruj raport
+        // Wydobądź wydawcę z filtra (jeśli istnieje)
+        String publisherFilter = null;
+
+        // Wygeneruj raport używając odpowiedniej metody z LibraryPdfService
         pdfService.generatePopularityReport(
-                "Biblioteka Miejska",
-                reportTitle.toString(),
-                "ul. Akademicka 16",
-                "44-100 Gliwice",
-                "POP-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "-001",
-                startDate, endDate,
                 pdfItems,
-                genreCounts,  // Przekazujemy gatunki z liczbą wypożyczeń
-                statusCounts, // Przekazujemy statusy
+                loanCountMap,  // Przekazujemy mapę z liczbami wypożyczeń
+                genre,
+                publisherFilter,
+                startDate,
+                endDate,
                 outputPath,
                 generatedBy
         );
