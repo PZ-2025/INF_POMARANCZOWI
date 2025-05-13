@@ -11,9 +11,19 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Mapper odpowiedzialny za konwersję encji {@link Book} do DTO {@link BookExternalDto},
+ * oraz mapowanie powiązanych encji autorów i wydawcy.
+ */
 @Component
 public class BookInternalMapper {
 
+    /**
+     * Mapuje encję książki na DTO do użytku zewnętrznego.
+     *
+     * @param book książka do zmapowania
+     * @return DTO książki lub null, jeśli przekazano null
+     */
     public BookExternalDto toDto(Book book) {
         if (book == null) {
             return null;
@@ -33,6 +43,12 @@ public class BookInternalMapper {
         );
     }
 
+    /**
+     * Mapuje listę encji autorów na listę DTO autorów.
+     *
+     * @param authors lista encji autorów
+     * @return lista DTO autorów
+     */
     private List<AuthorExternalDto> mapAuthorsToDto(List<Author> authors) {
         return authors.stream()
                 .map(author -> new AuthorExternalDto(
@@ -42,6 +58,12 @@ public class BookInternalMapper {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Mapuje encję wydawcy na DTO wydawcy.
+     *
+     * @param publisher encja wydawcy
+     * @return DTO wydawcy
+     */
     private PublisherExternalDto mapPublisherToDto(Publisher publisher) {
         return new PublisherExternalDto(
                 publisher.getId(),

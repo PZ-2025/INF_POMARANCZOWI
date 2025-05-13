@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * <p>Entity representing a book author.</p>
- *
- * <p>This class contains information about the author, such as first name, last name, and biography.</p>
+ * Encja reprezentująca autora książki.
+ * <p>
+ * Zawiera podstawowe dane autora: imię, nazwisko oraz biografię.
  */
 @Entity
 @Table(name = "authors")
@@ -31,11 +31,11 @@ public class Author {
     private String biography;
 
     /**
-     * <p>Constructor for Author entity</p>
+     * Konstruktor tworzący autora
      *
-     * @param firstName firstname of author
-     * @param lastName  lastname of author
-     * @param biography biography of author
+     * @param firstName imię autora
+     * @param lastName nazwisko autora
+     * @param biography biografia autora
      */
     public Author(String firstName, String lastName, String biography) {
         this.firstName = firstName;

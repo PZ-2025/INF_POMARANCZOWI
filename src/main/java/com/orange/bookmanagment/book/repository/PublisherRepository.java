@@ -5,33 +5,33 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 /**
- * <p>Repository class for managing {@link Publisher} entities.</p>
- *
- * <p>This class provides methods to save and find publishers using the underlying JPA repository.</p>
+ * Repozytorium do zarządzania encjami {@link Publisher}.
+ * <p>
+ * Umożliwia zapisywanie i pobieranie wydawców z bazy danych.
  */
 @Repository
 @RequiredArgsConstructor
 public class PublisherRepository {
+
     private final PublisherJpaRepository publisherJpaRepository;
 
     /**
-     * Saves a given publisher entity.
+     * Zapisuje wydawcę w bazie danych.
      *
-     * @param publisher the publisher entity to save
-     * @return the saved publisher entity
+     * @param publisher encja wydawcy do zapisania
+     * @return zapisana encja wydawcy
      */
     public Publisher savePublisher(Publisher publisher) {
         return publisherJpaRepository.save(publisher);
     }
 
     /**
-     * Finds a publisher entity by its ID.
+     * Wyszukuje wydawcę po jego ID.
      *
-     * @param id the ID of the publisher entity to find
-     * @return the found publisher entity, or null if not found
+     * @param id identyfikator wydawcy
+     * @return encja wydawcy lub null, jeśli nie znaleziono
      */
     public Publisher findPublisherById(Long id) {
         return publisherJpaRepository.findById(id).orElse(null);
     }
-
 }

@@ -4,4 +4,4 @@ public record AuthorExternalDto(
         Long id,
         String firstName,
         String lastName
-) {}
+) { }

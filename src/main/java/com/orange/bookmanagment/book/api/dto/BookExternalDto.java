@@ -16,4 +16,4 @@ public record BookExternalDto(
         String coverImage,
         Instant createdAt,
         Instant updatedAt
-) {}
+) { }

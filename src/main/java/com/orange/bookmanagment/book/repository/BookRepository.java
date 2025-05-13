@@ -6,93 +6,128 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>Repository class for managing {@link Book} entities.</p>
- * It uses Spring Data JPA to perform CRUD operations and custom queries.
- * The class is annotated with @Repository to indicate that it is a Spring Data repository.
- * The class is also annotated with @RequiredArgsConstructor to generate a constructor with required arguments.
+ * Repozytorium do zarządzania encjami {@link Book}.
+ * <p>
+ * Umożliwia operacje CRUD oraz rozszerzone zapytania przy użyciu Spring Data JPA.
  */
 @Repository
 @RequiredArgsConstructor
 public class BookRepository {
+
     private final BookJpaRepository bookJpaRepository;
 
     /**
-     * Saves a book entity to the database.
+     * Zapisuje książkę w bazie danych.
      *
-     * @param book the book entity to save
-     * @return the saved book entity
+     * @param book książka do zapisania
+     * @return zapisana encja książki
      */
     public Book saveBook(Book book) {
         return bookJpaRepository.save(book);
     }
 
     /**
-     * Finds a book entity by its ID.
+     * Wyszukuje książkę po ID.
      *
-     * @param id the ID of the book entity to find
-     * @return an {@link Optional} containing the found book entity, or empty if not found
+     * @param id identyfikator książki
+     * @return opcjonalna książka
      */
     public Optional<Book> findBookById(long id){
         return bookJpaRepository.findById(id);
     }
 
     /**
-     * Retrieves all book entities with pagination support.
+     * Pobiera wszystkie książki z paginacją.
      *
-     * @param pageable the pagination information
-     * @return a {@link Page} containing the book entities
+     * @param pageable dane o stronie i rozmiarze
+     * @return strona książek
      */
     public Page<Book> findAllBooks(Pageable pageable){
         return bookJpaRepository.findAll(pageable);
     }
 
     /**
-     * Finds book entities by their title.
+     * Wyszukuje książki po tytule.
      *
-     * @param title the title of the books to find
-     * @return a list of book entities with the given title
+     * @param title tytuł książki
+     * @return lista książek o podanym tytule
      */
     public List<Book> findBookByTitle(String title){
         return bookJpaRepository.findBookByTitle(title);
     }
 
-    // existsById
     /**
-     * Checks if a book entity exists by its ID.
+     * Sprawdza, czy książka istnieje na podstawie ID.
      *
-     * @param id the ID of the book entity to check
-     * @return true if the book entity exists, false otherwise
+     * @param id identyfikator książki
+     * @return true, jeśli istnieje; false w przeciwnym razie
      */
     public boolean existsById(long id) {
         return bookJpaRepository.existsById(id);
     }
 
+    /**
+     * Zwraca wszystkie książki (bez paginacji).
+     *
+     * @return lista wszystkich książek
+     */
     public List<Book> findAll() {
         return bookJpaRepository.findAll();
     }
 
+    /**
+     * Zwraca książki o podanym statusie.
+     *
+     * @param status status książki
+     * @return lista książek o wskazanym statusie
+     */
     public List<Book> findByStatus(BookStatus status) {
         return bookJpaRepository.findByStatus(status);
     }
 
+    /**
+     * Zwraca losowe książki.
+     *
+     * @param limit maksymalna liczba książek do zwrócenia
+     * @return lista losowych książek
+     */
     public List<Book> findRandomBooks(int limit) {
         return bookJpaRepository.findRandomBooks(limit);
     }
 
+    /**
+     * Zwraca losowe książki dla podanego gatunku.
+     *
+     * @param genre gatunek książek
+     * @param limit maksymalna liczba książek do zwrócenia
+     * @return lista losowych książek z danego gatunku
+     */
     public List<Book> findRandomBooksByGenre(String genre, int limit) {
         return bookJpaRepository.findRandomBooksByGenre(genre, limit);
     }
 
+    /**
+     * Zwraca 5 najpopularniejszych gatunków książek.
+     *
+     * @return lista nazw najpopularniejszych gatunków
+     */
     public List<String> findTop5Genres() {
         return bookJpaRepository.findTop5Genres().stream()
                 .map(row -> (String) row[0])
                 .toList();
     }
 
+    /**
+     * Wyszukuje książki na podstawie zapytania tekstowego.
+     *
+     * @param query ciąg tekstowy do wyszukania (tytuł, autor, gatunek itp.)
+     * @return lista książek pasujących do zapytania
+     */
     public List<Book> searchBooks(String query) {
         return bookJpaRepository.searchBooks(query);
     }

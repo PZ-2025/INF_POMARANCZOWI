@@ -1,7 +1,5 @@
 package com.orange.bookmanagment.book.web.requests;
 
-import com.orange.bookmanagment.book.model.Publisher;
-
 import java.util.List;
 
 public record BookCreateRequest(
@@ -11,5 +9,4 @@ public record BookCreateRequest(
         String description,
         String genre,
         String coverImage
-) {
-}
+) { }

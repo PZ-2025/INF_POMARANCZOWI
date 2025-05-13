@@ -6,16 +6,17 @@ import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
 import org.springframework.stereotype.Component;
 
 /**
- * AuthorMapper is a component that provides methods to convert between Author entities and their corresponding DTOs.
- * It is used to map data between the database model and the API representation.
+ * Komponent odpowiedzialny za mapowanie między encją {@link Author} a jej reprezentacją DTO.
+ * Umożliwia konwersję do i z modelu API.
  */
 @Component
 public class AuthorMapper {
+
     /**
-     * Converts an AuthorCreateRequest object to an Author entity.
+     * Konwertuje żądanie utworzenia autora na encję.
      *
-     * @param authorCreateRequest the AuthorCreateRequest object to convert
-     * @return the converted Author entity
+     * @param authorCreateRequest dane autora z żądania
+     * @return utworzona encja autora
      */
     public Author toEntity(AuthorCreateRequest authorCreateRequest) {
         return new Author(
@@ -26,10 +27,10 @@ public class AuthorMapper {
     }
 
     /**
-     * Converts an Author entity to an AuthorDto object.
+     * Konwertuje encję autora na obiekt DTO.
      *
-     * @param author the Author entity to convert
-     * @return the converted AuthorDto object
+     * @param author encja autora
+     * @return DTO autora
      */
     public AuthorDto toDto(Author author) {
         return new AuthorDto(

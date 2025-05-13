@@ -4,16 +4,17 @@ import com.orange.bookmanagment.book.model.Publisher;
 import com.orange.bookmanagment.book.web.requests.PublisherCreateRequest;
 
 /**
- * PublisherService interface for managing publishers.
- * This interface defines the contract for publishers management operations.
+ * Serwis do zarządzania wydawcami książek.
+ * <p>
+ * Definiuje operacje związane z tworzeniem wydawców.
  */
 public interface PublisherService {
 
     /**
-     * Creates a new publisher based on the provided request.
+     * Tworzy nowego wydawcę na podstawie danych z żądania.
      *
-     * @param publisherCreateRequest the request containing publisher details
-     * @return the created Publisher object
+     * @param publisherCreateRequest dane nowego wydawcy
+     * @return utworzony wydawca
      */
     Publisher createPublisher(PublisherCreateRequest publisherCreateRequest);
 }
