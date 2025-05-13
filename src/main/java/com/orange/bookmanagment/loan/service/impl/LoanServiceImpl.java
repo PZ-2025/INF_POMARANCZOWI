@@ -20,14 +20,30 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Implementacja interfejsu {@link LoanService} oraz {@link LoanExternalService}.
+ * <p>
+ * Odpowiada za logikę wypożyczeń, w tym: tworzenie, zwroty, przedłużenia i obsługę rezerwacji.
+ */
 @Service
 @RequiredArgsConstructor
 class LoanServiceImpl implements LoanService, LoanExternalService {
+
     private final LoanRepository loanRepository;
     private final BookExternalService bookExternalService;
     private final ReservationExternalService reservationExternalService;
     private final LoanInternalMapper loanInternalMapper;
 
+    /**
+     * Wypożycza książkę użytkownikowi.
+     * Jeśli książka jest zarezerwowana – sprawdza zgodność z użytkownikiem i kończy rezerwację.
+     *
+     * @param bookId      ID książki
+     * @param userId      ID użytkownika
+     * @param librarianId ID bibliotekarza
+     * @param notes       notatki do wypożyczenia
+     * @return utworzone wypożyczenie
+     */
     @Override
     @Transactional
     public Loan borrowBook(Long bookId, Long userId, Long librarianId, String notes) {
@@ -51,6 +67,13 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
         return loanRepository.saveLoan(loan);
     }
 
+    /**
+     * Zwraca książkę i obsługuje zmianę statusu oraz ewentualne przypisanie kolejnej rezerwacji.
+     *
+     * @param loanId      ID wypożyczenia
+     * @param librarianId ID bibliotekarza
+     * @return zaktualizowane wypożyczenie
+     */
     @Override
     @Transactional
     public Loan returnBook(long loanId, Long librarianId) {
@@ -97,6 +120,13 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
         return loan;
     }
 
+    /**
+     * Przedłuża wypożyczenie o 30 dni, jeśli książka nie została zarezerwowana przez innego użytkownika.
+     *
+     * @param loanId      ID wypożyczenia
+     * @param librarianId ID bibliotekarza zatwierdzającego przedłużenie
+     * @return zaktualizowane wypożyczenie
+     */
     @Override
     @Transactional
     public Loan extendLoan(long loanId, long librarianId) {
@@ -108,7 +138,7 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
             throw new IllegalStateException("Cannot extend, the book is reserved by another user.");
         }
 
-        // Sprawdź czy wypożyczenie jest aktywne
+        // Sprawdź, czy wypożyczenie jest aktywne
         if (loan.getStatus() != LoanStatus.ACTIVE && loan.getStatus() != LoanStatus.OVERDUE) {
             throw new IllegalStateException("Cannot extend a loan that is not active or overdue");
         }
@@ -119,13 +149,21 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
         return loanRepository.saveLoan(loan);
     }
 
+    /**
+     * Oznacza wypożyczenie jako zgubione i aktualizuje status książki na LOST.
+     *
+     * @param loanId      ID wypożyczenia
+     * @param notes       notatki dotyczące zgubienia
+     * @param librarianId ID bibliotekarza zgłaszającego
+     * @return zaktualizowane wypożyczenie
+     */
     @Override
     @Transactional
     public Loan markBookAsLost(long loanId, String notes, Long librarianId) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan not found with ID: " + loanId));
 
-        // Sprawdź czy to aktywne wypożyczenie
+        // Sprawdź, czy to aktywne wypożyczenie
         if (loan.getStatus() != LoanStatus.ACTIVE && loan.getStatus() != LoanStatus.OVERDUE) {
             throw new IllegalStateException("Only active loans can be marked as lost");
         }
@@ -140,24 +178,47 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
         return loanRepository.saveLoan(loan);
     }
 
+    /**
+     * Zwraca wszystkie aktywne wypożyczenia (ACTIVE i OVERDUE).
+     *
+     * @return lista wypożyczeń
+     */
     @Override
     @Transactional
     public List<Loan> getAllActiveLoans() {
         return loanRepository.findByStatusIn(List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE));
     }
 
+    /**
+     * Zwraca wszystkie wypożyczenia danego użytkownika.
+     *
+     * @param userId ID użytkownika
+     * @return lista wypożyczeń
+     */
     @Override
     @Transactional
     public List<Loan> getUserLoans(long userId) {
         return loanRepository.findByUserId(userId);
     }
 
+    /**
+     * Zwraca aktywne wypożyczenia użytkownika (ACTIVE lub OVERDUE).
+     *
+     * @param userId ID użytkownika
+     * @return lista wypożyczeń
+     */
     @Override
     @Transactional
     public List<Loan> getActiveUserLoans(long userId) {
         return loanRepository.findByUserAndStatusIn(userId, List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE));
     }
 
+    /**
+     * Zwraca wypożyczenie na podstawie ID.
+     *
+     * @param loanId ID wypożyczenia
+     * @return wypożyczenie
+     */
     @Override
     public Loan getLoanById(long loanId) throws LoanNotFoundException {
         return loanRepository.findById(loanId)
@@ -179,7 +240,11 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
 ////        return overdueLoans.size();
 ////    }
 
-    //getAllLoans
+    /**
+     * Zwraca wszystkie wypożyczenia w systemie w formacie DTO.
+     *
+     * @return lista wypożyczeń DTO
+     */
     @Override
     @Transactional
     public List<LoanExternalDto> getAllLoans() {

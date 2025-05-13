@@ -4,5 +4,4 @@ public record CreateLoanRequest(
         Long bookId,
         Long userId,
         String notes
-    ) {
-}
+) { }

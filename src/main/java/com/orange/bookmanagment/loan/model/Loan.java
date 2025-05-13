@@ -6,13 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.Instant;
 
 /**
- * Represents a loan of a book to a user.
- * <p>
- * This entity contains information about the book being loaned, the user who borrowed it,
- * the status of the loan, and the librarians involved in the lending and returning process.
+ * Encja reprezentująca wypożyczenie książki przez użytkownika.
+ * Zawiera informacje o książce, użytkowniku, terminach,
+ * statusie oraz bibliotekarzach obsługujących wypożyczenie i zwrot.
  */
 @Entity
 @Table(name = "loans")
@@ -50,13 +50,13 @@ public class Loan {
     private int extendedCount = 0;
 
     /**
-     * Constructor to create a new Loan instance.
+     * Konstruktor tworzący nowe wypożyczenie.
      *
-     * @param book          The book being loaned.
-     * @param user          The user borrowing the book.
-     * @param loanStatus    The status of the loan.
-     * @param librarian     The librarian processing the loan.
-     * @param notes         Additional notes about the loan.
+     * @param book          ID książki
+     * @param user          ID użytkownika
+     * @param loanStatus    status wypożyczenia
+     * @param librarian     ID bibliotekarza rejestrującego
+     * @param notes         notatki wypożyczenia
      */
     public Loan(long book, long user, LoanStatus loanStatus, long librarian, String notes) {
         this.bookId = book;
@@ -69,9 +69,9 @@ public class Loan {
     }
 
     /**
-     * Marks the loan as returned.
+     * Oznacza wypożyczenie jako zwrócone.
      *
-     * @param librarian The librarian processing the return.
+     * @param librarian ID bibliotekarza przyjmującego zwrot
      */
     public void markAsReturned(long librarian) {
         this.status = LoanStatus.RETURNED;
@@ -80,6 +80,10 @@ public class Loan {
         this.returnedAt = Instant.now();
     }
 
+    /**
+     * Przedłuża wypożyczenie o 30 dni.
+     * Jeśli wypożyczenie było przeterminowane, zmienia jego status na ACTIVE.
+     */
     public void extendLoan() {
         this.dueDate = this.dueDate.plusSeconds(30L * 24 * 60 * 60 ); // month in seconds
         this.updatedAt = Instant.now();
@@ -91,6 +95,12 @@ public class Loan {
         }
     }
 
+    /**
+     * Oznacza książkę jako zagubioną.
+     *
+     * @param librarian ID bibliotekarza zgłaszającego zgubienie
+     * @param notes dodatkowe informacje o sytuacji
+     */
     public void markAsLost(long librarian, String notes) {
         this.status = LoanStatus.LOST;
         this.returningLibrarianId = librarian;

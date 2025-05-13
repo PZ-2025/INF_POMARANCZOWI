@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repozytorium pośredniczące w dostępie do wypożyczeń.
+ * Używa {@link LoanJpaRepository} do wykonywania operacji na bazie danych.
+ */
 @Repository
 @AllArgsConstructor
 public class LoanRepository {
@@ -15,69 +19,73 @@ public class LoanRepository {
     private final LoanJpaRepository loanJpaRepository;
 
     /**
-     * Checks if a loan exists for a specific book and user with the given statuses.
+     * Sprawdza, czy istnieje wypożyczenie dla danego użytkownika i książki w określonych statusach.
      *
-     * @param bookId   the ID of the book
-     * @param userId   the ID of the user
-     * @param statuses  the list of loan statuses to check
-     * @return true if a loan exists, false otherwise
+     * @param bookId   ID książki
+     * @param userId   ID użytkownika
+     * @param statuses lista statusów wypożyczenia
+     * @return true, jeśli istnieje takie wypożyczenie; false w przeciwnym razie
      */
     public boolean existsByBookIdAndUserIdAndStatusIn(long bookId, long userId, List<LoanStatus> statuses) {
         return loanJpaRepository.existsByBookIdAndUserIdAndStatusIn(bookId, userId, statuses);
     }
 
     /**
-     * Saves a loan entity to the database.
+     * Zapisuje wypożyczenie do bazy danych.
      *
-     * @param loan the loan entity to save
-     * @return the saved loan entity
+     * @param loan encja wypożyczenia
+     * @return zapisana encja
      */
     public Loan saveLoan(Loan loan) {
         return loanJpaRepository.save(loan);
     }
 
     /**
-     * Finds a loan entity by its ID.
+     * Wyszukuje wypożyczenie po ID.
      *
-     * @param id the ID of the loan entity to find
-     * @return an {@link Optional} containing the found loan entity, or empty if not found
+     * @param id identyfikator wypożyczenia
+     * @return opcjonalna encja wypożyczenia
      */
     public Optional<Loan> findById(long id) {
         return loanJpaRepository.findById(id);
     }
 
-    //findByStatusIn
     /**
-     * Finds all loan entities with the specified statuses.
+     * Zwraca wszystkie wypożyczenia o określonych statusach.
      *
-     * @param statuses the list of loan statuses to filter by
-     * @return a list of loan entities with the specified statuses
+     * @param statuses lista statusów
+     * @return lista wypożyczeń
      */
     public List<Loan> findByStatusIn(List<LoanStatus> statuses) {
         return loanJpaRepository.findByStatusIn(statuses);
     }
 
     /**
-     * Finds all loan entities associated with a specific user.
+     * Zwraca wszystkie wypożyczenia danego użytkownika.
      *
-     * @param userId the user entity to filter by
-     * @return a list of loan entities associated with the specified user
+     * @param userId identyfikator użytkownika
+     * @return lista wypożyczeń użytkownika
      */
     public List<Loan> findByUserId(long userId) {
         return loanJpaRepository.findByUserId(userId);
     }
 
     /**
-     * Finds all loan entities associated with a specific user and having the specified statuses.
+     * Zwraca wszystkie wypożyczenia użytkownika z określonymi statusami.
      *
-     * @param userId   the ID of the user
-     * @param statuses  the list of loan statuses to filter by
-     * @return a list of loan entities associated with the specified user and having the specified statuses
+     * @param userId identyfikator użytkownika
+     * @param statuses lista statusów
+     * @return lista wypożyczeń użytkownika z podanymi statusami
      */
     public List<Loan> findByUserAndStatusIn(long userId, List<LoanStatus> statuses) {
         return loanJpaRepository.findByUserIdAndStatusIn(userId, statuses);
     }
 
+    /**
+     * Zwraca wszystkie wypożyczenia w systemie.
+     *
+     * @return lista wszystkich wypożyczeń
+     */
     public List<Loan> findAll() {
         return loanJpaRepository.findAll();
     }

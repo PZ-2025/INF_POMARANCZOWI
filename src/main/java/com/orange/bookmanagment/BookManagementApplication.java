@@ -1,7 +1,6 @@
 package com.orange.bookmanagment;
 
 import com.orange.bookmanagment.shared.properties.RsaKeyProperties;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

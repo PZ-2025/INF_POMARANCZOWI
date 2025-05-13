@@ -16,4 +16,4 @@ public record LoanExternalDto(
         Instant returnedAt,
         Instant dueDate,
         Instant updatedAt
-) {}
+) { }
