@@ -21,8 +21,8 @@ public class LoanRepository {
     /**
      * Sprawdza, czy istnieje wypożyczenie dla danego użytkownika i książki w określonych statusach.
      *
-     * @param bookId   ID książki
-     * @param userId   ID użytkownika
+     * @param bookId ID książki
+     * @param userId ID użytkownika
      * @param statuses lista statusów wypożyczenia
      * @return true, jeśli istnieje takie wypożyczenie; false w przeciwnym razie
      */

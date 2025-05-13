@@ -9,93 +9,111 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ReservationJpaRepository is a Spring Data JPA repository interface for managing Reservation entities.
- * It extends JpaRepository to provide CRUD operations and custom query methods.
+ * Interfejs JPA dla zarządzania encjami {@link Reservation}.
+ * <p>
+ * Umożliwia wykonywanie operacji CRUD oraz definiowanie zapytań niestandardowych
+ * na bazie konwencji nazw metod Spring Data JPA.
  */
 @Repository
 public interface ReservationJpaRepository extends JpaRepository<Reservation,Long> {
 
     /**
-     * Checks if a reservation exists for a specific book and user with the given statuses.
+     * Sprawdza, czy istnieje rezerwacja użytkownika dla danej książki o określonych statusach.
      *
-     * @param bookId     the ID of the book
-     * @param userId     the ID of the user
-     * @param statusList the list of reservation statuses to check
-     * @return true if a reservation exists, false otherwise
+     * @param bookId     identyfikator książki
+     * @param userId     identyfikator użytkownika
+     * @param statusList lista statusów rezerwacji
+     * @return true, jeśli istnieje pasująca rezerwacja
      */
     boolean existsByBookIdAndUserIdAndStatusIn(Long bookId, Long userId, List<ReservationStatus> statusList);
 
     /**
-     * Counts the number of reservations for a specific book with the given statuses.
+     * Zlicza rezerwacje dla danej książki o określonych statusach.
      *
-     * @param bookId     the ID of the book
-     * @param statusList the list of reservation statuses to count
-     * @return the number of reservations matching the criteria
+     * @param bookId     identyfikator książki
+     * @param statusList lista statusów rezerwacji
+     * @return liczba znalezionych rezerwacji
      */
     int countByBookIdAndStatusIn(Long bookId, List<ReservationStatus> statusList);
 
     /**
-     * Finds a reservation by its ID.
+     * Zwraca pierwszą rezerwację dla książki o podanym statusie, posortowaną według pozycji w kolejce.
      *
-     * @param id the ID of the reservation
-     * @return an Optional containing the found reservation, or empty if not found
+     * @param bookId identyfikator książki
+     * @param status status rezerwacji
+     * @return opcjonalna rezerwacja
      */
     Optional<Reservation> findFirstByBookIdAndStatusOrderByQueuePosition(Long bookId, ReservationStatus status);
 
     /**
-     * Finds all reservations for a given book with a specified status, ordered by queue position.
+     * Zwraca wszystkie rezerwacje danej książki o wskazanym statusie, uporządkowane według pozycji w kolejce.
      *
-     * @param bookId the ID of the book
-     * @param status the status of the reservations
-     * @return a list of reservations matching the criteria
+     * @param bookId identyfikator książki
+     * @param status status rezerwacji
+     * @return lista rezerwacji
      */
     List<Reservation> findByBookIdAndStatusOrderByQueuePosition(Long bookId, ReservationStatus status);
 
     /**
-     * Finds a reservation by book, user, and status.
+     * Zwraca rezerwację użytkownika dla określonej książki i statusu.
      *
-     * @param bookId   the ID of the book
-     * @param userId   the ID of the user
-     * @param status   the status of the reservation
-     * @return an Optional containing the found reservation, or empty if not found
+     * @param bookId identyfikator książki
+     * @param userId identyfikator użytkownika
+     * @param status status rezerwacji
+     * @return opcjonalna rezerwacja
      */
     Optional<Reservation> findByBookIdAndUserIdAndStatus(Long bookId, Long userId, ReservationStatus status);
 
     /**
-     * Finds all reservations for a given user.
+     * Zwraca wszystkie rezerwacje użytkownika.
      *
-     * @param user the user associated with the reservations
-     * @return a list of reservations for the user
+     * @param userId identyfikator użytkownika
+     * @return lista rezerwacji
      */
     List<Reservation> findByUserId(Long userId);
 
     /**
-     * Finds all reservations for a given book.
+     * Zwraca wszystkie rezerwacje dla danej książki.
      *
-        * @param bookId the ID of the book associated with the reservations
-     * @return a list of reservations for the book
+     * @param bookId identyfikator książki
+     * @return lista rezerwacji
      */
     List<Reservation> findByBookId(Long bookId);
 
     /**
-     * Finds all reservations for a given book with specified statuses, ordered by queue position.
+     * Zwraca wszystkie rezerwacje książki o określonych statusach, posortowane według pozycji w kolejce.
      *
-        * @param bookId    the ID of the book associated with the reservations
-     * @param statusList the list of reservation statuses to filter by
-     * @return a list of reservations matching the criteria
+     * @param bookId     identyfikator książki
+     * @param statusList lista statusów rezerwacji
+     * @return lista rezerwacji
      */
     List<Reservation> findByBookIdAndStatusInOrderByQueuePosition(Long bookId, List<ReservationStatus> statusList);
 
     /**
-     * Finds all reservations for a given user with specified statuses, ordered by queue position.
+     * Zwraca wszystkie rezerwacje użytkownika o określonych statusach, posortowane według pozycji w kolejce.
      *
-        * @param userId     the ID of the user associated with the reservations
-     * @param statusList the list of reservation statuses to filter by
-     * @return a list of reservations matching the criteria
+     * @param userId     identyfikator użytkownika
+     * @param statusList lista statusów rezerwacji
+     * @return lista rezerwacji
      */
     List<Reservation> findByUserIdAndStatusInOrderByQueuePosition(Long userId, List<ReservationStatus> statusList);
 
+    /**
+     * Sprawdza, czy książka jest zarezerwowana przez innego użytkownika niż wskazany, o podanych statusach.
+     *
+     * @param bookId     identyfikator książki
+     * @param userId     identyfikator użytkownika do wykluczenia
+     * @param statusList lista statusów rezerwacji
+     * @return true, jeśli istnieje rezerwacja innego użytkownika
+     */
     boolean existsByBookIdAndUserIdNotAndStatusIn(Long bookId, Long userId, List<ReservationStatus> statusList);
 
+    /**
+     * Alias metody {@link #findFirstByBookIdAndStatusOrderByQueuePosition(Long, ReservationStatus)} ze zmienioną sygnaturą.
+     *
+     * @param bookId identyfikator książki
+     * @param status status rezerwacji
+     * @return opcjonalna rezerwacja
+     */
     Optional<Reservation> findFirstByBookIdAndStatusOrderByQueuePosition(long bookId, ReservationStatus status);
 }

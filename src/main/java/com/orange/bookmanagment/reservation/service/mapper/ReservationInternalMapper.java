@@ -7,9 +7,19 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Mapper odpowiedzialny za konwersję encji {@link Reservation}
+ * na obiekty DTO wykorzystywane w komunikacji między modułami.
+ */
 @Component
 public class ReservationInternalMapper {
 
+    /**
+     * Konwertuje pojedynczą rezerwację do DTO na potrzeby warstwy zewnętrznej.
+     *
+     * @param reservation encja rezerwacji
+     * @return DTO reprezentujący rezerwację
+     */
     public ReservationExternalDto toDto(Reservation reservation) {
         if (reservation == null) {
             return null;
@@ -27,6 +37,12 @@ public class ReservationInternalMapper {
         );
     }
 
+    /**
+     * Konwertuje listę rezerwacji na listę DTO.
+     *
+     * @param reservations lista encji rezerwacji
+     * @return lista DTO rezerwacji
+     */
     public List<ReservationExternalDto> toDtoList(List<Reservation> reservations) {
         if (reservations == null) {
             return List.of();

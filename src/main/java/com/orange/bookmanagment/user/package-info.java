@@ -1,4 +1,3 @@
-
 @ApplicationModule(
         allowedDependencies = {"shared"},
         type = ApplicationModule.Type.CLOSED,

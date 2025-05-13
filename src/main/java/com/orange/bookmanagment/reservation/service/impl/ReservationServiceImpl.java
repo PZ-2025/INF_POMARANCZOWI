@@ -18,28 +18,38 @@ import com.orange.bookmanagment.reservation.service.ReservationService;
 import com.orange.bookmanagment.user.model.User;
 import com.orange.bookmanagment.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * ReservationServiceImpl is an implementation of the ReservationService interface.
- * It provides methods to create reservations and check the status of reservations.
+ * Implementacja serwisu {@link ReservationService} oraz {@link ReservationExternalService}.
+ * <p>
+ * Obsługuje logikę tworzenia, anulowania, aktualizacji i finalizacji rezerwacji książek w systemie.
  */
 @Service
 @RequiredArgsConstructor
 class ReservationServiceImpl implements ReservationService, ReservationExternalService {
+
     private final ReservationRepository reservationRepository;
     private final BookExternalService bookExternalService;
     private final ReservationInternalMapper reservationInternalMapper;
     private final LoanRepository loanRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Tworzy nową rezerwację książki przez użytkownika.
+     *
+     * @param bookId ID książki
+     * @param userId ID użytkownika
+     * @return utworzona rezerwacja
+     * @throws BookNotAvailableException        jeśli książka jest niedostępna
+     * @throws BookAlreadyReservedException     jeśli użytkownik ma już aktywną rezerwację tej książki
+     */
     @Override
     @Transactional
     public Reservation createReservation(long bookId, long userId) {
@@ -51,7 +61,7 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
             throw new BookNotAvailableException("This book is currently reported as lost and cannot be reserved");
         }
 
-        // Sprawdź czy użytkownik nie ma już aktywnej rezerwacji na tę książkę
+        // Sprawdź, czy użytkownik nie ma już aktywnej rezerwacji na tę książkę
         if (isBookReservedForUser(bookId, userId)) {
             throw new BookAlreadyReservedException("You already have an active reservation for this book");
         }
@@ -75,6 +85,12 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         return reservationRepository.saveReservation(reservation);
     }
 
+    /**
+     * Anuluje aktywną rezerwację użytkownika.
+     *
+     * @param reservation rezerwacja do anulowania
+     * @return zaktualizowana rezerwacja
+     */
     @Override
     @Transactional
     public Reservation cancelReservation(Reservation reservation) {
@@ -111,6 +127,12 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         return reservationRepository.saveReservation(reservation);
     }
 
+    /**
+     * Przetwarza zwróconą książkę i przypisuje ją do następnej osoby w kolejce (jeśli istnieje).
+     *
+     * @param bookId ID zwróconej książki
+     * @return true, jeśli zaktualizowano status rezerwacji; false w przeciwnym razie
+     */
     @Override
     @Transactional
     public boolean processReturnedBook(long bookId) {
@@ -136,6 +158,13 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         return false;
     }
 
+    /**
+     * Zwraca rezerwację po ID.
+     *
+     * @param reservationId ID rezerwacji
+     * @return rezerwacja
+     * @throws ReservationNotFoundException jeśli nie znaleziono rezerwacji
+     */
     @Override
     @Transactional
     public Reservation getReservationById(Long reservationId) {
@@ -143,6 +172,12 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
                 .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
     }
 
+    /**
+     * Pobiera wszystkie rezerwacje użytkownika, aktualizując status wygasłych.
+     *
+     * @param userId ID użytkownika
+     * @return lista rezerwacji
+     */
     @Override
     @Transactional
     public List<Reservation> getUserReservations(long userId) {
@@ -175,17 +210,35 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         return reservations;
     }
 
+    /**
+     * Zwraca wszystkie aktywne rezerwacje użytkownika.
+     *
+     * @param userId ID użytkownika
+     * @return lista aktywnych rezerwacji użytkownika
+     */
     @Override
     public List<Reservation> getActiveUserReservations(long userId) {
         return reservationRepository.findByUserIdAndStatusInOrderByQueuePosition(
                 userId, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
     }
 
+    /**
+     * Zwraca wszystkie rezerwacje dla danej książki (niezależnie od statusu).
+     *
+     * @param bookId ID książki
+     * @return lista rezerwacji dla książki
+     */
     @Override
     public List<Reservation> getBookReservations(long bookId) {
         return reservationRepository.findByBookId(bookId);
     }
 
+    /**
+     * Zwraca aktywne rezerwacje danej książki (statusy PENDING i READY), posortowane po kolejce.
+     *
+     * @param bookId ID książki
+     * @return lista aktywnych rezerwacji dla książki
+     */
     @Override
     public List<Reservation> getActiveBookReservations(long bookId) {
         return reservationRepository.findByBookIdAndStatusInOrderByQueuePosition(
@@ -193,17 +246,24 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
     }
 
     /**
-     * Checks if a book is reserved for a specific user.
+     * Sprawdza, czy dana książka jest zarezerwowana przez użytkownika.
      *
-     * @param bookId the book to check
-     * @param userId the user to check
-     * @return true if the book is reserved for the user, false otherwise
+     * @param bookId ID książki
+     * @param userId ID użytkownika
+     * @return true, jeśli rezerwacja istnieje
      */
     public boolean isBookReservedForUser(Long bookId, Long userId) {
         return reservationRepository.existsByBookIdAndUserIdAndStatusIn(
                 bookId, userId, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
     }
 
+    /**
+     * Finalizuje rezerwację użytkownika dla danej książki.
+     *
+     * @param bookId ID książki
+     * @param userId ID użytkownika
+     * @return DTO rezerwacji
+     */
     @Override
     @Transactional
     public ReservationExternalDto completeReservation(long bookId, long userId) {
@@ -222,10 +282,10 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
     }
 
     /**
-     * Counts the number of active reservations for a given book.
+     * Zlicza aktywne rezerwacje na daną książkę.
      *
-     * @param bookId the book to check for active reservations
-     * @return the number of active reservations for the book
+     * @param bookId ID książki
+     * @return liczba rezerwacji
      */
     public int countActiveReservations(long bookId) {
         return reservationRepository.countByBookIdAndStatusIn(
@@ -233,9 +293,9 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
     }
 
     /**
-     * <p>Update queue positions for pending reservations</p>
+     * Aktualizuje pozycje w kolejce dla oczekujących rezerwacji.
      *
-     * @param bookId book to update queue positions for
+     * @param bookId ID książki
      */
     private void updateQueuePositions(long bookId) {
         List<Reservation> pendingReservations = reservationRepository.findByBookIdAndStatusOrderByQueuePosition(
@@ -248,6 +308,12 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         }
     }
 
+    /**
+     * Zwraca listę oczekujących rezerwacji na daną książkę, posortowanych według pozycji w kolejce.
+     *
+     * @param bookId ID książki
+     * @return lista rezerwacji w statusie PENDING
+     */
     @Override
     public List<ReservationExternalDto> getPendingReservations(long bookId) {
         return reservationRepository
@@ -257,6 +323,12 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
                 .toList();
     }
 
+    /**
+     * Ustawia rezerwację jako gotową do odbioru.
+     *
+     * @param reservationId ID rezerwacji
+     * @throws ReservationNotFoundException jeśli rezerwacja nie istnieje
+     */
     @Override
     public void markAsReady(long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
@@ -266,6 +338,12 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         reservationRepository.saveReservation(reservation);
     }
 
+    /**
+     * Dekrementuje pozycję w kolejce rezerwacji (zmniejsza o 1).
+     *
+     * @param reservationId ID rezerwacji
+     * @throws ReservationNotFoundException jeśli rezerwacja nie istnieje
+     */
     @Override
     @Transactional
     public void decrementQueuePosition(long reservationId) {
@@ -278,6 +356,13 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         reservationRepository.saveReservation(reservation);
     }
 
+    /**
+     * Sprawdza, czy książka jest zarezerwowana przez innego użytkownika niż wskazany.
+     *
+     * @param bookId ID książki
+     * @param userId ID użytkownika
+     * @return true, jeśli inny użytkownik posiada aktywną rezerwację; false w przeciwnym razie
+     */
     @Override
     public boolean isReservedByAnotherUser(long bookId, long userId) {
         return reservationRepository
@@ -286,6 +371,13 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
                 .anyMatch(r -> r.getUserId() != userId);
     }
 
+    /**
+     * Sprawdza, czy książka jest zarezerwowana przez kogoś innego niż obecny użytkownik.
+     *
+     * @param bookId ID książki
+     * @param currentUserId ID obecnie zalogowanego użytkownika
+     * @return true, jeśli ktoś inny ma aktywną rezerwację; false w przeciwnym razie
+     */
     @Override
     public boolean isBookReservedForAnotherUser(Long bookId, Long currentUserId) {
         return reservationRepository.existsByBookIdAndUserIdNotAndStatusIn(
@@ -293,6 +385,12 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         );
     }
 
+    /**
+     * Wygasza aktywną rezerwację. Jeśli była READY — przekazuje do kolejnego.
+     *
+     * @param reservationId ID rezerwacji
+     * @return zaktualizowana rezerwacja
+     */
     @Override
     @Transactional
     public Reservation expireReservation(long reservationId) {
@@ -321,6 +419,12 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         return reservation;
     }
 
+    /**
+     * Finalizuje rezerwację oraz tworzy nowe wypożyczenie.
+     *
+     * @param reservationId ID rezerwacji
+     * @return zaktualizowana rezerwacja
+     */
     @Override
     @Transactional
     public Reservation completeReservation(long reservationId) {
@@ -350,6 +454,12 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         return reservation;
     }
 
+    /**
+     * Przedłuża rezerwację o 5 dni.
+     *
+     * @param reservationId ID rezerwacji
+     * @return zaktualizowana rezerwacja
+     */
     @Override
     @Transactional
     public Reservation extendReservation(long reservationId) {

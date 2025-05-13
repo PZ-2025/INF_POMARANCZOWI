@@ -1,14 +1,14 @@
 package com.orange.bookmanagment.shared.enums;
 
 /**
- * Enum representing the status of a loan.
- * <p>
- * The possible statuses are:
+ * Enum reprezentujący status wypożyczenia książki.
+ *
+ * <p>Dostępne statusy:</p>
  * <ul>
- *     <li>ACTIVE: The loan is currently active.</li>
- *     <li>OVERDUE: The loan is overdue.</li>
- *     <li>RETURNED: The loan has been returned.</li>
- *     <li>LOST: The loaned item is lost.</li>
+ *   <li>{@code ACTIVE} – Wypożyczenie aktywne.</li>
+ *   <li>{@code OVERDUE} – Wypożyczenie przeterminowane.</li>
+ *   <li>{@code RETURNED} – Książka została zwrócona.</li>
+ *   <li>{@code LOST} – Książka została zgubiona.</li>
  * </ul>
  */
 public enum LoanStatus {

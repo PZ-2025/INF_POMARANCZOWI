@@ -6,13 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.Instant;
 
 /**
- * Represents a reservation of a book by a user.
+ * Reprezentuje rezerwację książki przez użytkownika.
  * <p>
- * This entity contains information about the book being reserved, the user who reserved it,
- * the status of the reservation, and the queue position of the reservation.
+ * Zawiera informacje o książce, użytkowniku, statusie rezerwacji, pozycji w kolejce
+ * oraz terminie ważności rezerwacji.
  */
 @Entity
 @Table(name = "reservations")
@@ -47,12 +48,12 @@ public class Reservation {
     private int queuePosition;
 
     /**
-     * Constructs a new Reservation object with the specified parameters.
+     * Tworzy nową rezerwację książki.
      *
-     * @param bookId       The ID of the book being reserved.
-     * @param userId       The ID of the user who reserved the book.
-     * @param status       The status of the reservation.
-     * @param queuePosition The queue position of the reservation.
+     * @param bookId        ID książki
+     * @param userId        ID użytkownika
+     * @param status        status rezerwacji
+     * @param queuePosition pozycja w kolejce
      */
     public Reservation(long bookId, long userId, ReservationStatus status, int queuePosition) {
         this.bookId = bookId;
@@ -65,9 +66,9 @@ public class Reservation {
     }
 
     /**
-     * Updates the status of the reservation.
+     * Aktualizuje status rezerwacji i ustawia datę aktualizacji.
      *
-     * @param status The new status of the reservation.
+     * @param status nowy status rezerwacji
      */
     public void setStatus(ReservationStatus status) {
         this.status = status;
@@ -75,9 +76,9 @@ public class Reservation {
     }
 
     /**
-     * Updates the queue position of the reservation.
+     * Ustawia nową pozycję w kolejce i aktualizuje datę modyfikacji.
      *
-     * @param queuePosition The new queue position of the reservation.
+     * @param queuePosition nowa pozycja w kolejce
      */
     public void setQueuePosition(int queuePosition) {
         this.queuePosition = queuePosition;

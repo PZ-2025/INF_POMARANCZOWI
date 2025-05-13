@@ -52,11 +52,11 @@ public class Loan {
     /**
      * Konstruktor tworzący nowe wypożyczenie.
      *
-     * @param book          ID książki
-     * @param user          ID użytkownika
-     * @param loanStatus    status wypożyczenia
-     * @param librarian     ID bibliotekarza rejestrującego
-     * @param notes         notatki wypożyczenia
+     * @param book ID książki
+     * @param user ID użytkownika
+     * @param loanStatus status wypożyczenia
+     * @param librarian ID bibliotekarza rejestrującego
+     * @param notes notatki wypożyczenia
      */
     public Loan(long book, long user, LoanStatus loanStatus, long librarian, String notes) {
         this.bookId = book;

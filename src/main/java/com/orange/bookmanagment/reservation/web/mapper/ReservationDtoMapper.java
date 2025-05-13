@@ -6,15 +6,17 @@ import com.orange.bookmanagment.shared.util.TimeUtil;
 import org.springframework.stereotype.Component;
 
 /**
- * ReservationDtoMapper is responsible for mapping Reservation entities to ReservationDto objects.
+ * Odpowiada za mapowanie encji {@link Reservation}
+ * na obiekt DTO {@link ReservationDto}, który jest używany w odpowiedziach API.
  */
 @Component
 public class ReservationDtoMapper {
+
     /**
-     * Maps a Reservation entity to a ReservationDto object.
+     * Mapuje obiekt {@link Reservation} na {@link ReservationDto}.
      *
-     * @param reservation the Reservation entity to map
-     * @return the mapped ReservationDto object
+     * @param reservation obiekt rezerwacji do zmapowania
+     * @return DTO z danymi rezerwacji
      */
     public ReservationDto toDto(Reservation reservation) {
         return new ReservationDto(
