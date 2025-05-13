@@ -9,9 +9,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
+/**
+ * Handler wyjątków związanych z bezpieczeństwem i autoryzacją użytkownika.
+ * <p>
+ * Obsługuje błędy logowania i nieprawidłowe dane uwierzytelniające.
+ */
 @ControllerAdvice
+
 class SecurityExceptionHandler {
 
+    /**
+     * Obsługuje wyjątek {@link InvalidCredentialsException} rzucany w przypadku nieprawidłowych danych logowania.
+     *
+     * @param e wyjątek zawierający szczegóły błędu autoryzacji
+     * @return odpowiedź HTTP 401 (UNAUTHORIZED) z opisem błędu
+     */
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<HttpResponse> handleInvalidCredentialsException(InvalidCredentialsException e) {
         return ResponseEntity.status(UNAUTHORIZED).body(

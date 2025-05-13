@@ -5,9 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /**
- * Login request with 2 parameters
- * @param email - User email
- * @param password - User password
+ * Żądanie logowania użytkownika.
+ *
+ * @param email adres e-mail użytkownika
+ * @param password hasło użytkownika (min. 6 znaków)
  */
 public record UserLoginRequest(
         @Email

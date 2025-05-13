@@ -4,6 +4,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Żądanie rejestracji nowego użytkownika.
+ *
+ * @param email adres e-mail
+ * @param password hasło
+ * @param firstName imię
+ * @param lastName nazwisko
+ */
 public record UserRegisterRequest(
         @Email
         @NotBlank
