@@ -1,5 +1,6 @@
 package com.orange.bookmanagment.reservation.service;
 
+import com.orange.bookmanagment.reservation.api.dto.ReservationExternalDto;
 import com.orange.bookmanagment.reservation.model.Reservation;
 
 import java.util.List;
@@ -90,4 +91,19 @@ public interface ReservationService {
       * @return zaktualizowana rezerwacja
       */
      Reservation extendReservation(long reservationId);
+
+     /**
+      * Zwraca aktywne rezerwacje (PENDING lub READY) książki na potrzeby oznaczenia jako zgubiona.
+      *
+      * @param bookId ID książki
+      * @return lista aktywnych rezerwacji
+      */
+     List<ReservationExternalDto> getActiveBookReservationsForMark(long bookId);
+
+     /**
+      * Anuluje rezerwację na potrzeby oznaczenia książki jako zgubionej.
+      *
+      * @param reservationId ID rezerwacji
+      */
+     void cancelReservationForMark(Long reservationId);
 }

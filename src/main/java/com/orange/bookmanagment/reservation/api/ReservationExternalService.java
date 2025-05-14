@@ -77,4 +77,8 @@ public interface ReservationExternalService {
      * @return true, jeśli zarezerwowana przez innego użytkownika
      */
     boolean isBookReservedForAnotherUser(Long bookId, Long currentUserId);
+
+    List<ReservationExternalDto> getActiveBookReservationsForMark(long bookId);
+
+    void cancelReservationForMark(Long reservationId);
 }

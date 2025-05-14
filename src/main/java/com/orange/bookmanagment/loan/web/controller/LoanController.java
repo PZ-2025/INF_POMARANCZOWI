@@ -9,6 +9,7 @@ import com.orange.bookmanagment.user.api.UserExternalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +54,37 @@ public class LoanController {
                         .statusCode(HttpStatus.CREATED.value())
                         .httpStatus(HttpStatus.CREATED)
                         .reason("Book borrowed successfully")
+                        .message("Book borrowed")
+                        .data(Map.of("loan", loanMapper.toDto(loan)))
+                        .build());
+    }
+
+    /**
+     * Czytelnik wypożycza książkę samodzielnie (bez udziału bibliotekarza).
+     *
+     * @param request dane wypożyczenia (bookId + opcjonalne notatki)
+     * @param authentication dane użytkownika
+     * @return nowo utworzone wypożyczenie
+     */
+    @PostMapping("/borrow/self")
+    @PreAuthorize("hasAuthority('READER')")
+    public ResponseEntity<HttpResponse> borrowBookSelf(
+            @RequestBody CreateLoanRequest request,
+            Authentication authentication) {
+
+        final Long bookId = request.bookId();
+        final Long userId = userExternalService.getUserIdByEmail(authentication.getName());
+
+        Long librarianId = userExternalService.getRandomLibrarianId()
+                .orElseThrow(() -> new RuntimeException("Brak dostępnego bibliotekarza"));
+
+        Loan loan = loanService.borrowBook(bookId, userId, librarianId, request.notes());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(HttpResponse.builder()
+                        .statusCode(HttpStatus.CREATED.value())
+                        .httpStatus(HttpStatus.CREATED)
+                        .reason("Book borrowed successfully by user")
                         .message("Book borrowed")
                         .data(Map.of("loan", loanMapper.toDto(loan)))
                         .build());

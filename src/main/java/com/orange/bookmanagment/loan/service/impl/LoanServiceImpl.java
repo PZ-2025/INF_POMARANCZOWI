@@ -38,10 +38,10 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
      * Wypożycza książkę użytkownikowi.
      * Jeśli książka jest zarezerwowana – sprawdza zgodność z użytkownikiem i kończy rezerwację.
      *
-     * @param bookId      ID książki
-     * @param userId      ID użytkownika
+     * @param bookId ID książki
+     * @param userId ID użytkownika
      * @param librarianId ID bibliotekarza
-     * @param notes       notatki do wypożyczenia
+     * @param notes notatki do wypożyczenia
      * @return utworzone wypożyczenie
      */
     @Override
@@ -70,7 +70,7 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
     /**
      * Zwraca książkę i obsługuje zmianę statusu oraz ewentualne przypisanie kolejnej rezerwacji.
      *
-     * @param loanId      ID wypożyczenia
+     * @param loanId ID wypożyczenia
      * @param librarianId ID bibliotekarza
      * @return zaktualizowane wypożyczenie
      */
@@ -131,7 +131,7 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
     /**
      * Przedłuża wypożyczenie o 30 dni, jeśli książka nie została zarezerwowana przez innego użytkownika.
      *
-     * @param loanId      ID wypożyczenia
+     * @param loanId ID wypożyczenia
      * @param librarianId ID bibliotekarza zatwierdzającego przedłużenie
      * @return zaktualizowane wypożyczenie
      */
@@ -160,8 +160,8 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
     /**
      * Oznacza wypożyczenie jako zgubione i aktualizuje status książki na LOST.
      *
-     * @param loanId      ID wypożyczenia
-     * @param notes       notatki dotyczące zgubienia
+     * @param loanId ID wypożyczenia
+     * @param notes notatki dotyczące zgubienia
      * @param librarianId ID bibliotekarza zgłaszającego
      * @return zaktualizowane wypożyczenie
      */
@@ -176,11 +176,17 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
             throw new IllegalStateException("Only active loans can be marked as lost");
         }
 
-        // Oznacz wypożyczenie jako zgubione
+        // Oznaczenie wypożyczenia jako zgubione
         loan.markAsLost(librarianId, notes);
-
-        // Aktualizuj status książki
         long bookId = loan.getBookId();
+
+        // Anulowanie wszystkich aktywnych rezerwacji (PENDING i READY)
+        List<ReservationExternalDto> reservations = reservationExternalService.getActiveBookReservationsForMark(bookId);
+        for (ReservationExternalDto reservation : reservations) {
+            reservationExternalService.cancelReservationForMark(reservation.id());
+        }
+
+        // Aktualizacja statusu książki
         bookExternalService.updateBookStatus(bookId, BookStatus.LOST);
 
         return loanRepository.saveLoan(loan);

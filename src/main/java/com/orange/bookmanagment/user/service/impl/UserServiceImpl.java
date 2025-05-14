@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementacja serwisu {@link UserService} oraz interfejsu zewnętrznego {@link UserExternalService}.
@@ -194,5 +195,10 @@ class UserServiceImpl implements UserService, UserExternalService {
             user.setAvatarPath(null);
             userRepository.updateUser(user);
         }
+    }
+
+    @Override
+    public Optional<Long> getRandomLibrarianId() {
+        return userRepository.findRandomLibrarian().map(User::getId);
     }
 }

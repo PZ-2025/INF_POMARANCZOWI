@@ -47,40 +47,38 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
      * @param bookId ID książki
      * @param userId ID użytkownika
      * @return utworzona rezerwacja
-     * @throws BookNotAvailableException        jeśli książka jest niedostępna
-     * @throws BookAlreadyReservedException     jeśli użytkownik ma już aktywną rezerwację tej książki
+     * @throws BookNotAvailableException jeśli książka jest niedostępna
+     * @throws BookAlreadyReservedException jeśli użytkownik ma już aktywną rezerwację tej książki
      */
     @Override
     @Transactional
     public Reservation createReservation(long bookId, long userId) {
         BookStatus bookStatus = bookExternalService.getBookStatusForExternal(bookId);
 
-        if (bookStatus == BookStatus.BORROWED) {
-             throw new BookNotAvailableException("This book is currently borrowed and cannot be reserved");
-        } else if (bookStatus == BookStatus.LOST) {
+        if (bookStatus == BookStatus.LOST) {
             throw new BookNotAvailableException("This book is currently reported as lost and cannot be reserved");
         }
 
-        // Sprawdź, czy użytkownik nie ma już aktywnej rezerwacji na tę książkę
         if (isBookReservedForUser(bookId, userId)) {
             throw new BookAlreadyReservedException("You already have an active reservation for this book");
         }
 
-        final int queuePosition = countActiveReservations(bookId) + 1;
+        int queuePosition = countActiveReservations(bookId) + 1;
+        ReservationStatus status = ReservationStatus.PENDING;
+
+        if (bookStatus == BookStatus.AVAILABLE && queuePosition == 1) {
+            status = ReservationStatus.READY;
+            bookExternalService.updateBookStatus(bookId, BookStatus.BORROWED);
+        } else if (bookStatus == BookStatus.BORROWED && queuePosition == 1) {
+            bookExternalService.updateBookStatus(bookId, BookStatus.RESERVED);
+        }
 
         Reservation reservation = new Reservation(
                 bookId,
                 userId,
-                ReservationStatus.PENDING,
+                status,
                 queuePosition
         );
-
-        if (bookStatus == BookStatus.AVAILABLE) {
-            reservation.setStatus(ReservationStatus.READY);
-
-            // Aktualizuj status książki przez API zewnętrzne
-            bookExternalService.updateBookStatus(bookId, BookStatus.RESERVED);
-        }
 
         return reservationRepository.saveReservation(reservation);
     }
@@ -499,6 +497,18 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         return reservationRepository.saveReservation(reservation);
     }
 
+    /**
+     * Aktualizuje status książki w systemie zewnętrznym na podstawie jej bieżących rezerwacji i wypożyczeń.
+     * <p>
+     * Logika aktualizacji:
+     * <ul>
+     *   <li>Jeśli istnieją aktywne rezerwacje (status {@code PENDING} lub {@code READY}) – ustaw status na {@code RESERVED}.</li>
+     *   <li>W przeciwnym razie, jeśli istnieją aktywne wypożyczenia (status {@code ACTIVE} lub {@code OVERDUE}) – ustaw status na {@code BORROWED}.</li>
+     *   <li>Jeśli brak zarówno aktywnych rezerwacji, jak i wypożyczeń – ustaw status na {@code AVAILABLE}.</li>
+     * </ul>
+     *
+     * @param bookId ID książki, dla której należy zaktualizować status
+     */
     private void updateBookStatusBasedOnReservationsAndLoans(long bookId) {
         boolean hasActiveReservations = reservationRepository.existsByBookIdAndStatusIn(
                 bookId, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
@@ -512,5 +522,37 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         } else {
             bookExternalService.updateBookStatus(bookId, BookStatus.AVAILABLE);
         }
+    }
+
+    /**
+     * Zwraca aktywne rezerwacje (PENDING lub READY) książki na potrzeby oznaczenia jako zgubiona.
+     *
+     * @param bookId ID książki
+     * @return lista aktywnych rezerwacji
+     */
+    @Override
+    public List<ReservationExternalDto> getActiveBookReservationsForMark(long bookId) {
+        return reservationRepository
+                .findByBookIdAndStatusInOrderByQueuePosition(bookId, List.of(ReservationStatus.PENDING, ReservationStatus.READY))
+                .stream()
+                .map(reservationInternalMapper::toDto)
+                .toList();
+    }
+
+    /**
+     * Anuluje rezerwację na potrzeby oznaczenia książki jako zgubionej.
+     *
+     * @param reservationId ID rezerwacji
+     */
+    @Override
+    @Transactional
+    public void cancelReservationForMark(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
+
+        reservation.setStatus(ReservationStatus.CANCELLED);
+        reservationRepository.saveReservation(reservation);
+
+        updateQueuePositions(reservation.getBookId());
     }
 }
