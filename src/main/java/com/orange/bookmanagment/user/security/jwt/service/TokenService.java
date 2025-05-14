@@ -7,20 +7,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Serwis odpowiedzialny za generowanie i analizowanie tokenów JWT.
+ */
 @Service
 @RequiredArgsConstructor
 public class TokenService {
+
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
 
     /**
+     * Generuje token JWT na podstawie danych uwierzytelniających użytkownika.
      *
-     * @param authentication - user authentication with email and password
-     * @param user - User which one creates token
-     * @return Token as string value
+     * @param authentication obiekt Authentication zawierający dane logowania
+     * @param user obiekt użytkownika
+     * @return token JWT jako String
      */
     public String generateJwtToken(Authentication authentication, User user){
 
@@ -39,10 +45,16 @@ public class TokenService {
         return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
 
+    /**
+     * Pobiera ID użytkownika z tokena JWT.
+     *
+     * @param token wartość tokena JWT
+     * @return ID użytkownika
+     * @throws IllegalAccountAccessException jeśli token jest niepoprawny
+     */
     public Long getUserIdFromJwtToken(String token) {
         try {
             Jwt jwt = jwtDecoder.decode(token);
-
             return jwt.getClaim("user_id");
         } catch (JwtException e) {
             throw new IllegalAccountAccessException("Wrong authentication");

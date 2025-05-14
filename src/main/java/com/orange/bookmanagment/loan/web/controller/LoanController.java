@@ -9,28 +9,35 @@ import com.orange.bookmanagment.user.api.UserExternalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Kontroler REST odpowiedzialny za operacje związane z wypożyczeniami książek.
+ * <p>
+ * Obsługuje proces wypożyczania, zwrotu, przedłużenia, oznaczania jako zagubione
+ * oraz pobierania danych o wypożyczeniach (dla bibliotekarzy i użytkowników).
+ */
 @RestController
 @RequestMapping("/api/v1/loans")
 @RequiredArgsConstructor
 public class LoanController {
+
     private final LoanService loanService;
     private final UserExternalService userExternalService;
     private final LoanMapper loanMapper;
 
     /**
-     * <p>Borrow a book (librarian only)</p>
-     * This endpoint is used by librarians to create a new loan for a user.
-     * It can also be used to convert a reservation to a loan.
+     * Tworzy nowe wypożyczenie książki.
+     * Może również przekształcić rezerwację w wypożyczenie.
      *
-     * @param request loan request (bookId, userId, notes)
-     * @param authentication authenticated librarian
-     * @return the created loan
+     * @param request obiekt żądania wypożyczenia
+     * @param authentication uwierzytelniony bibliotekarz
+     * @return nowo utworzone wypożyczenie
      */
     @PostMapping("/borrow")
     public ResponseEntity<HttpResponse> borrowBook(
@@ -39,9 +46,7 @@ public class LoanController {
 
         final Long bookId = request.bookId();
         final Long userId = request.userId();
-
         final Long librarianId = userExternalService.getUserIdByEmail(authentication.getName());
-
         Loan loan = loanService.borrowBook(bookId, userId, librarianId, request.notes());
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -55,11 +60,42 @@ public class LoanController {
     }
 
     /**
-     * <p>Return a book (librarian only)</p>
+     * Czytelnik wypożycza książkę samodzielnie (bez udziału bibliotekarza).
      *
-     * @param loanId ID of the loan to return
-     * @param authentication authenticated librarian
-     * @return the updated loan
+     * @param request dane wypożyczenia (bookId + opcjonalne notatki)
+     * @param authentication dane użytkownika
+     * @return nowo utworzone wypożyczenie
+     */
+    @PostMapping("/borrow/self")
+    @PreAuthorize("hasAuthority('READER')")
+    public ResponseEntity<HttpResponse> borrowBookSelf(
+            @RequestBody CreateLoanRequest request,
+            Authentication authentication) {
+
+        final Long bookId = request.bookId();
+        final Long userId = userExternalService.getUserIdByEmail(authentication.getName());
+
+        Long librarianId = userExternalService.getRandomLibrarianId()
+                .orElseThrow(() -> new RuntimeException("Brak dostępnego bibliotekarza"));
+
+        Loan loan = loanService.borrowBook(bookId, userId, librarianId, request.notes());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(HttpResponse.builder()
+                        .statusCode(HttpStatus.CREATED.value())
+                        .httpStatus(HttpStatus.CREATED)
+                        .reason("Book borrowed successfully by user")
+                        .message("Book borrowed")
+                        .data(Map.of("loan", loanMapper.toDto(loan)))
+                        .build());
+    }
+
+    /**
+     * Zwraca książkę.
+     *
+     * @param loanId identyfikator wypożyczenia
+     * @param authentication uwierzytelniony bibliotekarz
+     * @return zaktualizowane wypożyczenie
      */
     @PostMapping("{loanId}/return")
     public ResponseEntity<HttpResponse> returnBook(
@@ -68,6 +104,7 @@ public class LoanController {
 
         final long librarianId = userExternalService.getUserIdByEmail(authentication.getName());
         final Loan loan = loanService.returnBook(loanId, librarianId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())
@@ -79,11 +116,11 @@ public class LoanController {
     }
 
     /**
-     * <p>Extend loan period (librarian only)</p>
+     * Przedłuża okres wypożyczenia.
      *
-     * @param loanId ID of the loan to extend
-     * @param authentication authenticated librarian
-     * @return the updated loan
+     * @param loanId identyfikator wypożyczenia
+     * @param authentication uwierzytelniony bibliotekarz
+     * @return zaktualizowane wypożyczenie
      */
     @PostMapping("{loanId}/extend")
     public ResponseEntity<HttpResponse> extendLoan(
@@ -92,6 +129,7 @@ public class LoanController {
 
         final long librarianId = userExternalService.getUserIdByEmail(authentication.getName());
         final Loan loan = loanService.extendLoan(loanId, librarianId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())
@@ -103,12 +141,12 @@ public class LoanController {
     }
 
     /**
-     * <p>Mark a book as lost (librarian only)</p>
+     * Oznacza wypożyczenie jako zagubione.
      *
-     * @param loanId ID of the loan to mark as lost
-     * @param notes notes about the lost book
-     * @param authentication authenticated librarian
-     * @return the updated loan
+     * @param loanId identyfikator wypożyczenia
+     * @param notes notatki dotyczące zagubienia
+     * @param authentication uwierzytelniony bibliotekarz
+     * @return zaktualizowane wypożyczenie
      */
     @PostMapping("{loanId}/lost")
     public ResponseEntity<HttpResponse> markBookAsLost(
@@ -118,6 +156,7 @@ public class LoanController {
 
         final long librarianId = userExternalService.getUserIdByEmail(authentication.getName());
         final Loan loan = loanService.markBookAsLost(loanId, notes, librarianId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())
@@ -129,14 +168,15 @@ public class LoanController {
     }
 
     /**
-     * <p>Get all active loans (librarian only)</p>
+     * Zwraca listę wszystkich aktywnych wypożyczeń (tylko dla bibliotekarzy).
      *
-     * @return list of all active loans
+     * @return lista aktywnych wypożyczeń
      */
     @GetMapping
     public ResponseEntity<HttpResponse> getAllActiveLoans() {
 
         List<Loan> loans = loanService.getAllActiveLoans();
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())
@@ -148,16 +188,17 @@ public class LoanController {
     }
 
     /**
-     * <p>Get user's loans (librarian or self)</p>
+     * Zwraca wszystkie wypożyczenia danego użytkownika (dla siebie lub przez bibliotekarza).
      *
-     * @param userId ID of the user to get loans for
-     * @return list of loans for the user
+     * @param userId identyfikator użytkownika
+     * @return lista wypożyczeń użytkownika
      */
     @GetMapping("/user/{userId}")
     public ResponseEntity<HttpResponse> getUserLoans(
             @PathVariable long userId) {
 
         final List<Loan> loans = loanService.getUserLoans(userId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())
@@ -168,11 +209,18 @@ public class LoanController {
                         .build());
     }
 
+    /**
+     * Zwraca wszystkie aktywne wypożyczenia danego użytkownika.
+     *
+     * @param userId identyfikator użytkownika
+     * @return lista aktywnych wypożyczeń użytkownika
+     */
     @GetMapping("/user/{userId}/active")
     public ResponseEntity<HttpResponse> getActiveUserLoans(
             @PathVariable long userId) {
 
         final List<Loan> loans = loanService.getActiveUserLoans(userId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())
@@ -184,10 +232,10 @@ public class LoanController {
     }
 
     /**
-     * <p>Get my loans (any user)</p>
+     * Zwraca wypożyczenia aktualnie zalogowanego użytkownika.
      *
-     * @param authentication authenticated user
-     * @return list of loans for the authenticated user
+     * @param authentication uwierzytelniony użytkownik
+     * @return lista wypożyczeń zalogowanego użytkownika
      */
     @GetMapping("/my")
     public ResponseEntity<HttpResponse> getMyLoans(
@@ -195,6 +243,7 @@ public class LoanController {
 
         final long userId = userExternalService.getUserIdByEmail(authentication.getName());
         final List<Loan> loans = loanService.getUserLoans(userId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())
@@ -206,16 +255,17 @@ public class LoanController {
     }
 
     /**
-     * <p>Get loan by ID (librarian or self)</p>
+     * Zwraca wypożyczenie na podstawie jego ID.
      *
-     * @param loanId ID of the loan to get
-     * @return the loan
+     * @param loanId identyfikator wypożyczenia
+     * @return szczegóły wypożyczenia
      */
     @GetMapping("/{loanId}")
     public ResponseEntity<HttpResponse> getLoanById(
             @PathVariable long loanId) {
 
         final Loan loan = loanService.getLoanById(loanId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.OK.value())
@@ -226,8 +276,15 @@ public class LoanController {
                         .build());
     }
 
+    /**
+     * Obsługuje wyjątek nieprawidłowego stanu operacji związanej z wypożyczeniami.
+     *
+     * @param ex wyjątek
+     * @return odpowiedź z błędem
+     */
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<HttpResponse> handleIllegalStateException(IllegalStateException ex) {
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(HttpResponse.builder()
                         .statusCode(HttpStatus.BAD_REQUEST.value())

@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * <p>Entity representing a book publisher.</p>
- *
- * <p>This class contains information about the publisher, such as name and description.</p>
+ * Encja reprezentująca wydawcę książki.
+ * <p>
+ * Zawiera nazwę wydawcy oraz jego opis.
  */
 @Entity
 @Table(name = "publishers")
@@ -19,16 +19,18 @@ import lombok.Setter;
 @Setter
 public class Publisher {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
+
     private String description;
 
     /**
-     * <p>Constructor for Publisher entity</p>
+     * Konstruktor tworzący wydawcę.
      *
-     * @param name        name of publisher
-     * @param description description of publisher
+     * @param name nazwa wydawcy
+     * @param description opis wydawcy
      */
     public Publisher(String name, String description) {
         this.name = name;

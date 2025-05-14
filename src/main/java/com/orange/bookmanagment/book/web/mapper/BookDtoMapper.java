@@ -10,20 +10,21 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * BookDtoMapper is a component that provides methods to convert between Book entities and their corresponding DTOs.
- * It is used to map data between the database model and the API representation.
+ * Komponent odpowiedzialny za mapowanie encji {@link Book} do obiektu DTO {@link BookDto}.
+ * Używany do reprezentacji danych książki w odpowiedziach API.
  */
 @Component
 @RequiredArgsConstructor
 public class BookDtoMapper {
+
     private final AuthorMapper authorMapper;
     private final PublisherMapper publisherMapper;
 
     /**
-     * Converts a Book entity to a BookDto object.
+     * Konwertuje encję książki na obiekt DTO.
      *
-     * @param book the Book entity to convert
-     * @return the converted BookDto object
+     * @param book encja książki
+     * @return DTO książki
      */
     public BookDto toDto(Book book){
         List<AuthorDto> authorDtos = book.getAuthors().stream()

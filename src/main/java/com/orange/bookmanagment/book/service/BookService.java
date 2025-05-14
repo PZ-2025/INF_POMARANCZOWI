@@ -11,64 +11,99 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
- * Service interface for managing books.
+ * Serwis do zarządzania książkami.
+ * <p>
+ * Definiuje operacje związane z tworzeniem, pobieraniem, aktualizacją i wyszukiwaniem książek.
  */
 public interface BookService {
 
     /**
-     * Creates a new book.
+     * Tworzy nową książkę.
      *
-     * @param bookCreateRequest the request containing book details
-     * @return the created book
+     * @param bookCreateRequest dane nowej książki
+     * @return utworzona encja książki
      */
     Book createBook(BookCreateRequest bookCreateRequest);
 
     /**
-     * Retrieves a book by its ID.
+     * Zwraca książkę o podanym ID.
      *
-     * @param id the ID of the book
-     * @return the book with the specified ID
-     * @throws BookNotFoundException if the book is not found
+     * @param id identyfikator książki
+     * @return znaleziona książka
+     * @throws BookNotFoundException jeśli książka nie istnieje
      */
     Book getBookById(long id) throws BookNotFoundException;
 
     /**
-     * Retrieves all books with pagination.
+     * Zwraca wszystkie książki (stronicowane).
      *
-     * @param pageable the pagination information
-     * @return a page of books
+     * @param pageable dane dotyczące paginacji
+     * @return strona książek
      */
     Page<Book> getAllBooks(Pageable pageable);
 
     /**
-     * Retrieves books by their title.
+     * Zwraca książki o podanym tytule.
      *
-     * @param title the title of the book
-     * @return a list of books with the specified title
+     * @param title tytuł książki
+     * @return lista pasujących książek
      */
     List<Book> getBookByTitle(String title);
 
     /**
-     * Updates an existing book.
+     * Aktualizuje dane książki.
      *
-     * @param book the book to update
-     * @return the updated book
-     * @throws BookNotFoundException if the book is not found
+     * @param book książka do aktualizacji
+     * @return zaktualizowana książka
+     * @throws BookNotFoundException jeśli książka nie istnieje
      */
     Book updateBook(Book book) throws BookNotFoundException;
 
+    /**
+     * Sprawdza istnienie książki po ID.
+     *
+     * @param id identyfikator książki
+     * @return true, jeśli istnieje; false w przeciwnym razie
+     */
     boolean existsById(long id);
 
-    //getBookStatusById
+    /**
+     * Zwraca status książki po jej ID.
+     *
+     * @param id identyfikator książki
+     * @return status książki
+     */
     BookStatus getBookStatusById(long id);
 
-//    void updateBookStatus(long id, BookStatus status);
-
+    /**
+     * Zwraca losowe książki w formie DTO.
+     *
+     * @param limit liczba książek do pobrania
+     * @return lista książek DTO
+     */
     List<BookDto> getRandomBooks(int limit);
 
+    /**
+     * Zwraca losowe książki dla wybranego gatunku.
+     *
+     * @param genre gatunek książki
+     * @param limit liczba książek do pobrania
+     * @return lista książek DTO
+     */
     List<BookDto> getRandomBooksByGenre(String genre, int limit);
 
+    /**
+     * Zwraca 5 najczęściej występujących gatunków książek.
+     *
+     * @return lista nazw gatunków
+     */
     List<String> getTop5Genres();
 
+    /**
+     * Wyszukuje książki po zapytaniu tekstowym.
+     *
+     * @param query fraza wyszukiwania
+     * @return lista dopasowanych książek
+     */
     List<Book> searchBooks(String query);
 }

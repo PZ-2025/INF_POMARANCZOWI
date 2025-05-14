@@ -15,5 +15,4 @@ public record BookDto(
         String coverImage,
         String created_at,
         String updated_at
-) {
-}
+) { }

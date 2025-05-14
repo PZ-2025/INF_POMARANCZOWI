@@ -1,26 +1,33 @@
 package com.orange.bookmanagment.shared.enums;
 
 /**
- * <p>Enum representing the status of a book in the system.</p>
+ * Enum reprezentujący status książki w systemie.
  *
- * <p>Possible statuses are:</p>
+ * <p>Dostępne statusy:</p>
  * <ul>
- *   <li>AVAILABLE - The book is available for borrowing.</li>
- *   <li>BORROWED - The book is currently borrowed.</li>
- *   <li>RESERVED - The book is reserved by a user.</li>
- *   <li>LOST - The book is lost.</li>
+ *   <li>{@code AVAILABLE} – Książka dostępna do wypożyczenia.</li>
+ *   <li>{@code BORROWED} – Książka aktualnie wypożyczona.</li>
+ *   <li>{@code RESERVED} – Książka zarezerwowana przez użytkownika.</li>
+ *   <li>{@code LOST} – Książka została zgubiona.</li>
  * </ul>
  */
 public enum BookStatus {
-    AVAILABLE, BORROWED, RESERVED, LOST;
+    AVAILABLE,
+    BORROWED,
+    RESERVED,
+    LOST;
 
+    BookStatus() { }
 
-    BookStatus() {
-    }
-
-    public static boolean existsByName(String name){
-        for(BookStatus bookStatus : BookStatus.values()){
-            if(bookStatus.name().equals(name)){
+    /**
+     * Sprawdza, czy podana nazwa odpowiada któremukolwiek ze statusów książki.
+     *
+     * @param name nazwa statusu do sprawdzenia
+     * @return {@code true}, jeśli status istnieje; w przeciwnym razie {@code false}
+     */
+    public static boolean existsByName(String name) {
+        for (BookStatus bookStatus : BookStatus.values()) {
+            if (bookStatus.name().equals(name)) {
                 return true;
             }
         }

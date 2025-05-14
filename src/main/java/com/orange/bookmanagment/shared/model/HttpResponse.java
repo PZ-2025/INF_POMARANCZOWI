@@ -6,6 +6,11 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
+/**
+ * Reprezentuje ustandaryzowaną strukturę odpowiedzi HTTP w aplikacji.
+ * <p>
+ * Zawiera metadane takie jak czas odpowiedzi, status, kod oraz dane zwrotne.
+ */
 @Data
 @Builder
 public class HttpResponse {

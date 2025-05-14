@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * <p>Repository class for managing {@link Author} entities.</p>
- *
- * <p>This class provides methods to save multiple authors using the underlying JPA repository.</p>
+ * Repozytorium do zarządzania encjami {@link Author}.
+ * <p>
+ * Umożliwia zapisywanie wielu autorów jednocześnie.
  */
 @Repository
 @RequiredArgsConstructor
@@ -18,10 +18,10 @@ public class AuthorRepository {
     private final AuthorJpaRepository authorJpaRepository;
 
     /**
-     * Saves a list of author entities.
+     * Zapisuje listę autorów w bazie danych.
      *
-     * @param authors the list of author entities to save
-     * @return the saved list of author entities
+     * @param authors lista autorów do zapisania
+     * @return zapisane encje autorów
      */
     public List<Author> saveAllAuthors(List<Author> authors) {
         return authorJpaRepository.saveAll(authors);

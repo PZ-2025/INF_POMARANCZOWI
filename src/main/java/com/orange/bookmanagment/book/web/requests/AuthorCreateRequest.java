@@ -4,5 +4,4 @@ public record AuthorCreateRequest(
         String firstName,
         String lastName,
         String biography
-) {
-}
+) { }

@@ -6,16 +6,17 @@ import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
 import java.util.List;
 
 /**
- * <p>Service interface for managing authors.</p>
- *
+ * Serwis do zarządzania autorami książek.
+ * <p>
+ * Definiuje operacje związane z tworzeniem autorów.
  */
 public interface AuthorService {
 
     /**
-     * <p>Creates a list of authors based on the provided requests.</p>
+     * Tworzy listę autorów na podstawie przesłanych danych wejściowych.
      *
-     * @param authorCreateRequests list of requests to create authors
-     * @return list of created authors
+     * @param authorCreateRequests lista danych do utworzenia autorów
+     * @return lista utworzonych encji autorów
      */
     List<Author> createAuthors(List<AuthorCreateRequest> authorCreateRequests);
 }

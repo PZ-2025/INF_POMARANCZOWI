@@ -24,21 +24,22 @@ import java.util.Map;
 import static org.springframework.http.HttpStatus.OK;
 
 /**
- * BookController is a REST controller that handles requests related to books.
- * It provides endpoints for retrieving book information, creating new books, and managing book data.
+ * Kontroler REST obsługujący operacje na książkach.
+ * Umożliwia pobieranie książek, tworzenie nowych, wyszukiwanie oraz inne operacje pomocnicze.
  */
 @RestController
 @RequestMapping("/api/v1/book")
 @RequiredArgsConstructor
 class BookController {
+
     private final BookService bookService;
     private final BookDtoMapper bookDtoMapper;
 
     /**
-     * Retrieves a book by its ID.
+     * Zwraca książkę o podanym ID.
      *
-     * @param id the ID of the book to retrieve
-     * @return a ResponseEntity containing the book data
+     * @param id identyfikator książki
+     * @return odpowiedź z danymi książki
      */
     @GetMapping("/{id}")
     public ResponseEntity<HttpResponse> getBookById(@PathVariable("id") long id) {
@@ -54,13 +55,13 @@ class BookController {
     }
 
     /**
-     * Retrieves all books with pagination and sorting options.
+     * Zwraca wszystkie książki w formie stronicowanej i posortowanej.
      *
-     * @param page          the page number to retrieve (default is 0)
-     * @param size          the number of items per page (default is 10)
-     * @param sortBy        the field to sort by (default is "id")
-     * @param sortDirection the direction of sorting (default is "asc")
-     * @return a ResponseEntity containing the paginated list of books
+     * @param page numer strony (domyślnie 0)
+     * @param size rozmiar strony (domyślnie 10)
+     * @param sortBy pole do sortowania (domyślnie "id")
+     * @param sortDirection kierunek sortowania: asc lub desc (domyślnie asc)
+     * @return odpowiedź z listą książek i informacją o stronie
      */
     @GetMapping("/all")
     public ResponseEntity<HttpResponse> getAllBooks(
@@ -94,10 +95,10 @@ class BookController {
     }
 
     /**
-     * Creates a new book.
+     * Tworzy nową książkę.
      *
-     * @param bookCreateRequest the request object containing book creation data
-     * @return a ResponseEntity containing the created book data
+     * @param bookCreateRequest dane nowej książki
+     * @return odpowiedź z utworzoną książką
      */
     @PostMapping("/create")
     public ResponseEntity<HttpResponse> createBook(@RequestBody BookCreateRequest bookCreateRequest) {
@@ -113,6 +114,11 @@ class BookController {
                         .build());
     }
 
+    /**
+     * Zwraca losowe książki.
+     *
+     * @return lista 12 losowych książek
+     */
     @GetMapping("/random")
     public ResponseEntity<HttpResponse> getRandomBooks() {
         List<BookDto> books = bookService.getRandomBooks(12);
@@ -128,6 +134,12 @@ class BookController {
         );
     }
 
+    /**
+     * Zwraca losowe książki dla danego gatunku.
+     *
+     * @param genre gatunek książki
+     * @return lista 6 losowych książek z danego gatunku
+     */
     @GetMapping("/random/category/{genre}")
     public ResponseEntity<HttpResponse> getRandomBooksByGenre(@PathVariable("genre") String genre) {
         List<BookDto> books = bookService.getRandomBooksByGenre(genre, 6);
@@ -143,6 +155,11 @@ class BookController {
         );
     }
 
+    /**
+     * Zwraca 5 najpopularniejszych gatunków książek.
+     *
+     * @return lista nazw gatunków
+     */
     @GetMapping("/top-genres")
     public ResponseEntity<HttpResponse> getTop5Genres() {
         List<String> genres = bookService.getTop5Genres();
@@ -158,6 +175,12 @@ class BookController {
         );
     }
 
+    /**
+     * Wyszukuje książki na podstawie zapytania tekstowego.
+     *
+     * @param query fraza wyszukiwania
+     * @return lista dopasowanych książek
+     */
     @GetMapping("/search")
     public ResponseEntity<HttpResponse> searchBooks(@RequestParam("query") String query) {
         List<Book> books = bookService.searchBooks(query);
@@ -172,6 +195,12 @@ class BookController {
                         .build());
     }
 
+    /**
+     * Endpoint testowy do autoryzacji.
+     *
+     * @param authentication obiekt uwierzytelniający
+     * @return wiadomość testowa
+     */
     @GetMapping("/test")
     public ResponseEntity<String> test(Authentication authentication) {
         final Jwt jwt = (Jwt) authentication.getPrincipal();

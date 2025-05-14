@@ -27,13 +27,29 @@ import java.util.stream.Collectors;
 import static java.time.Instant.now;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
+/**
+ * Filtr odpowiedzialny za przetwarzanie nagłówka "Authorization" i ustawienie kontekstu bezpieczeństwa.
+ * Jeśli token JWT jest poprawny, ustawia użytkownika jako uwierzytelnionego.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     private final JwtDecoder jwtDecoder;
 
+    /**
+     * Przechwytuje żądania HTTP i przetwarza nagłówek autoryzacji JWT.
+     *
+     * @param request  żądanie HTTP
+     * @param response odpowiedź HTTP
+     * @param filterChain łańcuch filtrów
+     */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
+
         if (request.getRequestURI().startsWith("/uploads/")) {
             filterChain.doFilter(request, response);
             return;
@@ -63,15 +79,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         }
-        filterChain.doFilter(request, response);
 
+        filterChain.doFilter(request, response);
     }
 
+    /**
+     * Parsuje role użytkownika z tokena JWT.
+     *
+     * @param jwt obiekt tokena JWT
+     * @return lista uprawnień
+     */
     Collection<GrantedAuthority> parseAuthoritiesFromToken(Jwt jwt){
         List<String> roles = jwt.getClaim("authorities");
         return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
+    /**
+     * Obsługuje wyjątki JWT i zwraca odpowiedź z błędem.
+     *
+     * @param response obiekt odpowiedzi HTTP
+     * @param e wyjątek do obsłużenia
+     */
     void handleJwtException(HttpServletResponse response, Exception e) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");

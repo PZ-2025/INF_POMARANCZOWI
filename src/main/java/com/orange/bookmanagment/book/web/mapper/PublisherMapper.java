@@ -5,17 +5,16 @@ import com.orange.bookmanagment.book.web.model.PublisherDto;
 import org.springframework.stereotype.Component;
 
 /**
- * PublisherMapper is a component that maps Publisher entities to PublisherDto objects.
- * It is used to convert Publisher data for API responses.
+ * Komponent odpowiedzialny za mapowanie encji {@link Publisher} do obiektu DTO {@link PublisherDto}.
  */
 @Component
 public class PublisherMapper {
 
     /**
-     * Converts a Publisher entity to a PublisherDto object.
+     * Konwertuje encję wydawcy na obiekt DTO.
      *
-     * @param publisher the Publisher entity to convert
-     * @return the converted PublisherDto object
+     * @param publisher encja wydawcy
+     * @return DTO wydawcy
      */
     public PublisherDto toDto(Publisher publisher) {
         return new PublisherDto(

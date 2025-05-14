@@ -27,16 +27,28 @@ import java.util.List;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Główna konfiguracja bezpieczeństwa aplikacji (Spring Security).
+ * Odpowiada za konfigurację JWT, CORS, endpointów i filtrowania żądań.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
 class SecurityConfig {
+
     private final CustomUserDetailsService detailsService;
     private final AccountAuthenticationProvider authenticationProvider;
     private final JwtDecoder jwtDecoder;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    /**
+     * Konfiguracja łańcucha filtrów zabezpieczeń HTTP.
+     *
+     * @param security konfigurator HttpSecurity
+     * @return SecurityFilterChain
+     * @throws Exception w przypadku błędów konfiguracji
+     */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = security.getSharedObject(AuthenticationManagerBuilder.class);
@@ -55,22 +67,28 @@ class SecurityConfig {
                                 .requestMatchers(POST, "/api/v1/book/create").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/all").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/{id}").permitAll()
-                                .requestMatchers(POST, "/api/v1/reservations/book/{bookId}").authenticated()
-                                .requestMatchers(PUT, "/api/v1/user/me").authenticated()
-                                .requestMatchers(POST, "/api/v1/user/upload-avatar").authenticated()
-                                .requestMatchers("/uploads/**").permitAll()
-                                .requestMatchers(DELETE, "/api/v1/user/delete-avatar").authenticated()
-                                .requestMatchers(GET, "/api/v1/reports/inventory").permitAll()
-                                .requestMatchers(GET, "/api/v1/reports/filtered").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/random/category/**").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/search").permitAll()
+                                .requestMatchers(POST, "/api/v1/reservations/book/{bookId}").authenticated()
+                                .requestMatchers(POST, "/api/v1/reservations/{reservationId}/cancel").authenticated()
+                                .requestMatchers(POST, "/api/v1/reservations/{reservationId}/complete").authenticated()
+                                .requestMatchers(POST, "/api/v1/reservations/{reservationId}/extend").authenticated()
+                                .requestMatchers(POST, "/api/v1/reservations/{reservationId}/expire").authenticated()
+                                .requestMatchers("/api/v1/reservations/my").authenticated()
+                                .requestMatchers(PUT, "/api/v1/user/me").authenticated()
+                                .requestMatchers(POST, "/api/v1/user/upload-avatar").authenticated()
+                                .requestMatchers(DELETE, "/api/v1/user/delete-avatar").authenticated()
+                                .requestMatchers("/uploads/**").permitAll()
+                                .requestMatchers(GET, "/api/v1/reports/inventory").permitAll()
+                                .requestMatchers(GET, "/api/v1/reports/filtered").permitAll()
                                 .requestMatchers(GET, "/api/v1/reports/popularity").permitAll()
                                 .requestMatchers(POST, "/api/v1/loans/borrow").permitAll()
+                                .requestMatchers(POST, "/api/v1/loans/borrow/self").authenticated()
                                 .requestMatchers(POST, "/api/v1/loans/{id}/return").permitAll()
-                                .requestMatchers("/api/v1/loans/my").authenticated()
                                 .requestMatchers(POST, "/api/v1/loans/{id}/extend").permitAll()
-                                .requestMatchers(POST, "/api/v1/loans/**/return").permitAll()
-                                .requestMatchers("/api/v1/reservations/my").authenticated()
+                                .requestMatchers(POST, "/api/v1/loans/{loanId}/lost").authenticated()
+                                .requestMatchers(POST, "/api/v1/loans/*/return").permitAll()
+                                .requestMatchers("/api/v1/loans/my").authenticated()
                 )
                 .authenticationManager(authenticationManagerBuilder.build())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -86,6 +104,11 @@ class SecurityConfig {
         return security.build();
     }
 
+    /**
+     * Konwerter JWT do uwzględniania uprawnień z tokena.
+     *
+     * @return JwtAuthenticationConverter
+     */
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         final org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -94,9 +117,15 @@ class SecurityConfig {
 
         final JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+
         return jwtAuthenticationConverter;
     }
 
+    /**
+     * Konfiguracja CORS dla aplikacji.
+     *
+     * @return CorsConfigurationSource
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

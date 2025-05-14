@@ -11,12 +11,12 @@ import java.time.Instant;
 import java.util.List;
 
 /**
- * <p>Book entity represent book information in system</p>
- *
- * <p>Book entity has many to many relationship with Author entity</p>
- * <p>BookStatus is represent as status of book in system</p>
+ * Encja reprezentująca książkę w systemie.
+ * <p>
+ * Zawiera dane takie jak tytuł, autorzy, wydawca, opis, gatunek, status czy okładka.
+ * <p>
+ * Książka posiada relację wiele-do-wielu z autorami oraz wiele-do-jednego z wydawcą.
  */
-
 @Entity
 @Table(name = "books")
 @Getter
@@ -25,9 +25,11 @@ import java.util.List;
 @Setter
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String title;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_authors",
@@ -35,27 +37,35 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private List<Author> authors;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
+
     private String description;
+
     private String genre;
+
     @Enumerated(EnumType.STRING)
     private BookStatus status;
+
     private String coverImage;
+
     private Instant createdAt;
+
     private Instant updatedAt;
 
     /**
-     * <p>Constructor for Book entity</p>
+     * Konstruktor tworzący książkę.
+     * Daty są ustawiane automatycznie.
      *
-     * @param title      title of book
-     * @param authors    list of authors of book
-     * @param publisher  publisher of book
-     * @param description description of book
-     * @param genre      genre of book
-     * @param status     status of book
-     * @param coverImage cover image of book
+     * @param title tytuł książki
+     * @param authors lista autorów
+     * @param publisher wydawca książki
+     * @param description opis książki
+     * @param genre gatunek książki
+     * @param status status książki
+     * @param coverImage adres URL do okładki
      */
     public Book(String title, List<Author> authors, Publisher publisher, String description, String genre, BookStatus status, String coverImage) {
         this.title = title;
@@ -70,9 +80,9 @@ public class Book {
     }
 
     /**
-     * <p>Sets the status of the book.</p>
+     * Ustawia nowy status książki i aktualizuje datę modyfikacji.
      *
-     * @param status new status of the book
+     * @param status nowy status książki
      */
     public void setStatus(BookStatus status) {
         this.status = status;

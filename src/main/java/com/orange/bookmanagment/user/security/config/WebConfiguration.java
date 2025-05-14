@@ -17,32 +17,50 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Konfiguracja komponentów bezpieczeństwa aplikacji związanych z JWT i hasłami.
+ */
 @Configuration
 @RequiredArgsConstructor
 class WebConfiguration {
+
     private final RsaKeyProperties rsaKeyProperties;
 
 //    @Bean
-//    PasswordEncoder passwordEncoder(){
+//    PasswordEncoder passwordEncoder() {
 //        return new BCryptPasswordEncoder();
 //    }
 
+    /**
+     * Zwraca instancję kodera haseł.
+     *
+     * @return obiekt PasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return NoOpPasswordEncoder.getInstance(); // Do testów
     }
 
+    /**
+     * Tworzy dekoder JWT oparty na kluczu publicznym RSA.
+     *
+     * @return JwtDecoder
+     */
     @Bean
-    JwtDecoder jwtDecoder(){
+    JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeyProperties.rsaPublicKey()).build();
     }
 
+    /**
+     * Tworzy enkoder JWT wykorzystujący klucz RSA.
+     *
+     * @return JwtEncoder
+     */
     @Bean
-    JwtEncoder jwtEncoder(){
+    JwtEncoder jwtEncoder() {
         final JWK jwk = new RSAKey.Builder(rsaKeyProperties.rsaPublicKey()).privateKey(rsaKeyProperties.rsaPrivateKey()).build();
         final JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
 

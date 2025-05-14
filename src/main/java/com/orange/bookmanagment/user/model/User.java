@@ -3,15 +3,13 @@ package com.orange.bookmanagment.user.model;
 import com.orange.bookmanagment.user.model.enums.UserType;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.Instant;
 
 /**
- * <p>Main actor of book management system, representing standard user information</p>
- *
- * <p>UserType is represent as type of user in system</p>
+ * Główna encja reprezentująca użytkownika systemu zarządzania książkami.
+ * <p>
+ * Zawiera podstawowe dane użytkownika, statusy bezpieczeństwa oraz typ użytkownika (rola).
  */
-
 @Entity
 @Table(name = "users")
 @Getter
@@ -60,12 +58,13 @@ public class User {
     private Settings userSettings;
 
     /**
-     * <p>Default constructor to create a new user with default values for Instant type variables</p>
-     * @param password - User password
-     * @param email - User email
-     * @param lastName - User first name
-     * @param firstName - User last name
-     * @param userType - Type of user
+     * Konstruktor tworzący nowego użytkownika z domyślnymi ustawieniami i czasami.
+     *
+     * @param password hasło użytkownika
+     * @param email adres e-mail użytkownika
+     * @param lastName nazwisko użytkownika
+     * @param firstName imię użytkownika
+     * @param userType typ użytkownika (rola)
      */
     public User(String password, String email, String lastName, String firstName, UserType userType) {
         this.password = password;
@@ -95,11 +94,26 @@ public class User {
         );
     }
 
+    /**
+     * Konstruktor tworzący użytkownika z dodatkową ścieżką do avatara.
+     *
+     * @param password hasło
+     * @param email adres e-mail
+     * @param lastName nazwisko
+     * @param firstName imię
+     * @param userType typ użytkownika
+     * @param avatarPath ścieżka do avatara
+     */
     public User(String password, String email, String lastName, String firstName, UserType userType, String avatarPath) {
         this(password, email, lastName, firstName, userType);
         this.avatarPath = avatarPath;
     }
 
+    /**
+     * Zmienia hasło użytkownika i aktualizuje daty zmian.
+     *
+     * @param password nowe hasło
+     */
     public void changePassword(String password) {
         this.password = password;
         this.changedPasswordAt = Instant.now();

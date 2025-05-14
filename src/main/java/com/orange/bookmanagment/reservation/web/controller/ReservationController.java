@@ -16,7 +16,7 @@ import java.util.Map;
 import static org.springframework.http.HttpStatus.*;
 
 /**
- * ReservationController handles the reservation-related endpoints.
+ * Kontroler REST obsługujący operacje związane z rezerwacjami książek.
  */
 @RestController
 @RequestMapping("/api/v1/reservations")
@@ -28,11 +28,11 @@ public class ReservationController {
     private final ReservationDtoMapper reservationDtoMapper;
 
     /**
-     * Creates a reservation for a book.
+     * Tworzy rezerwację dla książki przez zalogowanego użytkownika.
      *
-     * @param bookId        the ID of the book to reserve
-     * @param authentication the authentication object containing user details
-     * @return a ResponseEntity containing the reservation details or an error message
+     * @param bookId ID książki do zarezerwowania
+     * @param authentication dane użytkownika
+     * @return utworzona rezerwacja
      */
     @PostMapping("/book/{bookId}")
     public ResponseEntity<HttpResponse> createReservation(
@@ -40,7 +40,6 @@ public class ReservationController {
             Authentication authentication) {
 
         long userId = userExternalService.getUserIdByEmail(authentication.getName());
-
         Reservation reservation = reservationService.createReservation(bookId, userId);
 
         return ResponseEntity.ok(HttpResponse.builder()
@@ -53,11 +52,11 @@ public class ReservationController {
     }
 
     /**
-     * Cancels a reservation.
+     * Anuluje rezerwację.
      *
-     * @param reservationId  the ID of the reservation to cancel
-     * @param authentication the authentication object containing user details
-     * @return a ResponseEntity indicating the result of the cancellation
+     * @param reservationId ID rezerwacji do anulowania
+     * @param authentication dane użytkownika
+     * @return anulowana rezerwacja
      */
     @PostMapping("/{reservationId}/cancel")
     public ResponseEntity<HttpResponse> cancelReservation(
@@ -65,7 +64,6 @@ public class ReservationController {
             Authentication authentication) {
 
         final Reservation reservation = reservationService.getReservationById(reservationId);
-
         final Reservation cancelReservation = reservationService.cancelReservation(reservation);
 
         return ResponseEntity.ok(HttpResponse.builder()
@@ -78,10 +76,10 @@ public class ReservationController {
     }
 
     /**
-     * <p>Get all reservations for a book (librarian only)</p>
+     * Zwraca wszystkie rezerwacje dla danej książki.
      *
-     * @param bookId ID of the book
-     * @return list of reservations for the book
+     * @param bookId ID książki
+     * @return lista rezerwacji
      */
     @GetMapping("/book/{bookId}")
     public ResponseEntity<HttpResponse> getBookReservations(
@@ -101,10 +99,10 @@ public class ReservationController {
     }
 
     /**
-     * <p>Get active reservations for a book (librarian only)</p>
+     * Zwraca aktywne rezerwacje dla danej książki.
      *
-     * @param bookId ID of the book
-     * @return list of active reservations for the book
+     * @param bookId ID książki
+     * @return lista aktywnych rezerwacji
      */
     @GetMapping("/book/{bookId}/active")
     public ResponseEntity<HttpResponse> getActiveBookReservations(
@@ -124,10 +122,10 @@ public class ReservationController {
     }
 
     /**
-     * <p>Get all reservations for a user (librarian or self)</p>
+     * Zwraca wszystkie rezerwacje danego użytkownika.
      *
-     * @param userId ID of the user
-     * @return list of reservations for the user
+     * @param userId ID użytkownika
+     * @return lista rezerwacji
      */
     @GetMapping("/user/{userId}")
     public ResponseEntity<HttpResponse> getUserReservations(
@@ -146,6 +144,12 @@ public class ReservationController {
                 .build());
     }
 
+    /**
+     * Zwraca aktywne rezerwacje użytkownika.
+     *
+     * @param userId ID użytkownika
+     * @return lista aktywnych rezerwacji
+     */
     @GetMapping("/user/{userId}/active")
     public ResponseEntity<HttpResponse> getActiveUserReservations(
             @PathVariable("userId") long userId) {
@@ -163,12 +167,17 @@ public class ReservationController {
                 .build());
     }
 
+    /**
+     * Zwraca rezerwacje zalogowanego użytkownika.
+     *
+     * @param authentication dane użytkownika
+     * @return lista rezerwacji użytkownika
+     */
     @GetMapping("/my")
     public ResponseEntity<HttpResponse> getMyReservations(
             Authentication authentication) {
 
         final long userId = userExternalService.getUserIdByEmail(authentication.getName());
-
         final List<Reservation> reservations = reservationService.getUserReservations(userId);
 
         return ResponseEntity.ok(HttpResponse.builder()
@@ -179,6 +188,71 @@ public class ReservationController {
                 .data(Map.of("reservations", reservations.stream()
                         .map(reservationDtoMapper::toDto)
                         .toList()))
+                .build());
+    }
+
+    /**
+     * Wygasza rezerwację.
+     *
+     * @param reservationId ID rezerwacji
+     * @return zaktualizowana rezerwacja
+     */
+    @PostMapping("/{reservationId}/expire")
+    public ResponseEntity<HttpResponse> expireReservation(
+            @PathVariable long reservationId) {
+
+        Reservation reservation = reservationService.expireReservation(reservationId);
+
+        return ResponseEntity.ok(HttpResponse.builder()
+                .statusCode(200)
+                .httpStatus(OK)
+                .reason("Reservation expired")
+                .message("Reservation marked as expired")
+                .data(Map.of("reservation", reservationDtoMapper.toDto(reservation)))
+                .build());
+    }
+
+    /**
+     * Zatwierdza rezerwację jako zrealizowaną.
+     *
+     * @param reservationId ID rezerwacji
+     * @param authentication dane użytkownika
+     * @return zaktualizowana rezerwacja
+     */
+    @PostMapping("/{reservationId}/complete")
+    public ResponseEntity<HttpResponse> completeReservation(
+            @PathVariable long reservationId,
+            Authentication authentication) {
+
+        Reservation reservation = reservationService.completeReservation(reservationId);
+
+        return ResponseEntity.ok(HttpResponse.builder()
+                .statusCode(200)
+                .httpStatus(OK)
+                .reason("Reservation completed")
+                .message("Reservation marked as completed")
+                .data(Map.of("reservation", reservationDtoMapper.toDto(reservation)))
+                .build());
+    }
+
+    /**
+     * Przedłuża ważność rezerwacji.
+     *
+     * @param reservationId ID rezerwacji
+     * @return zaktualizowana rezerwacja
+     */
+    @PostMapping("/{reservationId}/extend")
+    public ResponseEntity<HttpResponse> extendReservation(
+            @PathVariable long reservationId) {
+
+        Reservation reservation = reservationService.extendReservation(reservationId);
+
+        return ResponseEntity.ok(HttpResponse.builder()
+                .statusCode(200)
+                .httpStatus(OK)
+                .reason("Reservation extended")
+                .message("Reservation expiration extended")
+                .data(Map.of("reservation", reservationDtoMapper.toDto(reservation)))
                 .build());
     }
 }

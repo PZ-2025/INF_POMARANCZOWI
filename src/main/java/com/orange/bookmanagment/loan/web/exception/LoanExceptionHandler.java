@@ -11,11 +11,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+/**
+ * Globalna obsługa wyjątków związanych z wypożyczeniami.
+ */
 @ControllerAdvice
 class LoanExceptionHandler {
 
-    @ExceptionHandler
-            (LoanNotFoundException.class)
+    /**
+     * Obsługuje wyjątek, gdy wypożyczenie nie zostało znalezione.
+     *
+     * @param e wyjątek
+     * @return odpowiedź HTTP 404
+     */
+    @ExceptionHandler(LoanNotFoundException.class)
     public ResponseEntity<HttpResponse> handleLoanNotFoundException(LoanNotFoundException e) {
         return ResponseEntity.status(NOT_FOUND).body(
                 HttpResponse.builder()
@@ -28,6 +36,12 @@ class LoanExceptionHandler {
         );
     }
 
+    /**
+     * Obsługuje wyjątek, gdy książka nie jest dostępna do wypożyczenia.
+     *
+     * @param e wyjątek
+     * @return odpowiedź HTTP 400
+     */
     @ExceptionHandler(BookNotAvailableException.class)
     public ResponseEntity<HttpResponse> handleBookNotAvailableException(BookNotAvailableException e) {
         return ResponseEntity.status(BAD_REQUEST).body(
@@ -40,5 +54,4 @@ class LoanExceptionHandler {
                         .build()
         );
     }
-
 }
