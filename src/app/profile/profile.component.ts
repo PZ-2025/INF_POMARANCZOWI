@@ -411,7 +411,7 @@ export class ProfileComponent {
           forkJoin<any[]>(bookRequests).subscribe({
             next: (loansWithBooks) => {
               this.activeRentals = loansWithBooks.filter(loan => loan.status === 'ACTIVE');
-              this.returnedRentals = loansWithBooks.filter(loan => loan.status === 'RETURNED');
+              this.returnedRentals = loansWithBooks.filter(loan => loan.status === 'RETURNED' || loan.status === 'LOST');
               console.log('Wypożyczone książki:', this.activeRentals);
               console.log('Zwrócone książki:', this.returnedRentals);
               this.cdr.detectChanges();
@@ -725,6 +725,35 @@ export class ProfileComponent {
     const now = new Date();
     const expires = new Date(expiresAt);
     const diff = (expires.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+
     return diff <= 3;
+  }
+
+  markBookAsLost(loanId: number): void {
+    if (this.userType !== 'READER') return;
+
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      return;
+    }
+
+    this.http.post(`http://localhost:8080/api/v1/loans/${loanId}/lost`, {}, {
+      params: { notes: 'Zgubiona przez użytkownika' },
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    }).subscribe({
+      next: () => {
+        this.messageService.setMessage('Książka została oznaczona jako zgubiona.');
+        this.fetchReservations();
+        this.fetchRentals();
+      },
+      error: err => {
+        console.error('Błąd przy oznaczaniu książki jako zgubionej:', err);
+        this.badMessageService.setMessage('Nie udało się oznaczyć książki jako zgubionej.');
+      }
+    });
   }
 }
