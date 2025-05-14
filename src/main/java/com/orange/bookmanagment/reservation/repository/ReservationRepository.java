@@ -53,6 +53,17 @@ public class ReservationRepository {
     }
 
     /**
+     * Sprawdza, czy książka ma przynajmniej jedną rezerwację o podanym statusie.
+     *
+     * @param bookId ID książki
+     * @param statusList lista statusów
+     * @return true, jeśli istnieje co najmniej jedna rezerwacja
+     */
+    public boolean existsByBookIdAndStatusIn(long bookId, List<ReservationStatus> statusList) {
+        return reservationJpaRepository.existsByBookIdAndStatusIn(bookId, statusList);
+    }
+
+    /**
      * Pobiera rezerwację po ID.
      *
      * @param id identyfikator rezerwacji

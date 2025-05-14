@@ -93,8 +93,16 @@ class LoanServiceImpl implements LoanService, LoanExternalService {
         List<ReservationExternalDto> reservations = reservationExternalService.getPendingReservations(bookId);
 
         if (reservations.isEmpty()) {
-            // Brak rezerwacji – książka dostępna
-            bookExternalService.updateBookStatus(bookId, BookStatus.AVAILABLE);
+            boolean hasOtherActiveLoans = loanRepository.existsByBookIdAndStatusIn(
+                    bookId, List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE)
+            );
+
+            if (hasOtherActiveLoans) {
+                bookExternalService.updateBookStatus(bookId, BookStatus.BORROWED);
+            } else {
+                bookExternalService.updateBookStatus(bookId, BookStatus.AVAILABLE);
+            }
+
             return loan;
         }
 

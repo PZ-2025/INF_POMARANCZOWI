@@ -89,4 +89,15 @@ public class LoanRepository {
     public List<Loan> findAll() {
         return loanJpaRepository.findAll();
     }
+
+    /**
+     * Sprawdza, czy istnieje co najmniej jedno aktywne wypożyczenie danej książki o jednym z podanych statusów.
+     *
+     * @param bookId ID książki
+     * @param statuses lista statusów wypożyczenia do sprawdzenia
+     * @return true, jeśli istnieje takie wypożyczenie; false w przeciwnym razie
+     */
+    public boolean existsByBookIdAndStatusIn(long bookId, List<LoanStatus> statuses) {
+        return loanJpaRepository.existsByBookIdAndStatusIn(bookId, statuses);
+    }
 }

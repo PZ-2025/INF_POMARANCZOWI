@@ -48,4 +48,14 @@ public interface LoanJpaRepository extends JpaRepository<Loan, Long> {
      * @return lista wypożyczeń użytkownika z danym statusem
      */
     List<Loan> findByUserIdAndStatusIn(Long userId, List<LoanStatus> statuses);
+
+    /**
+     * Sprawdza, czy istnieje przynajmniej jedno wypożyczenie dla danej książki
+     * o jednym z podanych statusów.
+     *
+     * @param bookId ID książki
+     * @param statuses lista statusów wypożyczenia (np. ACTIVE, OVERDUE)
+     * @return true, jeśli istnieje takie wypożyczenie; false w przeciwnym razie
+     */
+    boolean existsByBookIdAndStatusIn(long bookId, List<LoanStatus> statuses);
 }

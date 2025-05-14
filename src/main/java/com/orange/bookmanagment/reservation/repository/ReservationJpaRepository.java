@@ -37,6 +37,15 @@ public interface ReservationJpaRepository extends JpaRepository<Reservation,Long
     int countByBookIdAndStatusIn(Long bookId, List<ReservationStatus> statusList);
 
     /**
+     * Czy dla danej książki istnieje jakakolwiek rezerwacja o jednym z podanych statusów.
+     *
+     * @param bookId ID książki
+     * @param statusList lista statusów do sprawdzenia
+     * @return true, jeśli istnieje co najmniej jedna taka rezerwacja
+     */
+    boolean existsByBookIdAndStatusIn(long bookId, List<ReservationStatus> statusList);
+
+    /**
      * Zwraca pierwszą rezerwację dla książki o podanym statusie, posortowaną według pozycji w kolejce.
      *
      * @param bookId identyfikator książki

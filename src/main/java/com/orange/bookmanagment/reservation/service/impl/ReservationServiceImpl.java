@@ -113,18 +113,28 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
                 // Oznacz następną rezerwację jako gotową do odbioru
                 nextReservation.get().setStatus(ReservationStatus.READY);
                 reservationRepository.saveReservation(nextReservation.get());
+                bookExternalService.updateBookStatus(bookId, BookStatus.RESERVED);
             } else {
                 // Brak innych rezerwacji, oznacz książkę jako dostępną
+                bookExternalService.updateBookStatus(bookId, BookStatus.AVAILABLE);
+            }
+        } else {
+            // Anulowana rezerwacja była PENDING i nie ma żadnej READY to sprawdzenie, czy coś zostało
+            boolean hasActive = reservationRepository.existsByBookIdAndStatusIn(
+                    bookId, List.of(ReservationStatus.PENDING, ReservationStatus.READY)
+            );
+            if (!hasActive) {
                 bookExternalService.updateBookStatus(bookId, BookStatus.AVAILABLE);
             }
         }
 
         reservation.setStatus(ReservationStatus.CANCELLED);
-
-        // Aktualizuj pozycje w kolejce pozostałych rezerwacji
+        reservationRepository.saveReservation(reservation);
         updateQueuePositions(bookId);
 
-        return reservationRepository.saveReservation(reservation);
+        updateBookStatusBasedOnReservationsAndLoans(bookId);
+
+        return reservation;
     }
 
     /**
@@ -147,7 +157,7 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
             reservationRepository.saveReservation(reservation);
 
             // Zaktualizuj status książki
-            bookExternalService.updateBookStatus(bookId, BookStatus.RESERVED);
+            updateBookStatusBasedOnReservationsAndLoans(bookId);
 
             // Zaktualizuj pozycje w kolejce
             updateQueuePositions(bookId);
@@ -255,30 +265,6 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
     public boolean isBookReservedForUser(Long bookId, Long userId) {
         return reservationRepository.existsByBookIdAndUserIdAndStatusIn(
                 bookId, userId, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
-    }
-
-    /**
-     * Finalizuje rezerwację użytkownika dla danej książki.
-     *
-     * @param bookId ID książki
-     * @param userId ID użytkownika
-     * @return DTO rezerwacji
-     */
-    @Override
-    @Transactional
-    public ReservationExternalDto completeReservation(long bookId, long userId) {
-        Optional<Reservation> reservationOpt = reservationRepository.findByBookIdAndUserIdAndStatus(
-                bookId, userId, ReservationStatus.READY);
-
-        if (reservationOpt.isPresent()) {
-            Reservation reservation = reservationOpt.get();
-            reservation.setStatus(ReservationStatus.COMPLETED);
-            final Reservation savedReservation = reservationRepository.saveReservation(reservation);
-
-            return reservationInternalMapper.toDto(savedReservation);
-        } else {
-            throw new ReservationNotFoundException("Reservation not found");
-        }
     }
 
     /**
@@ -400,20 +386,28 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
             throw new IllegalStateException("Only active reservations can be expired.");
         }
 
+        boolean wasReady = reservation.getStatus() == ReservationStatus.READY;
         reservation.setStatus(ReservationStatus.EXPIRED);
         reservationRepository.saveReservation(reservation);
 
-        updateQueuePositions(reservation.getBookId());
+        long bookId = reservation.getBookId();
+        updateQueuePositions(bookId);
 
         // Pierwsza rezerwacja READY i została wygaszona, to kolejna staje się READY
-        if (reservation.getStatus() == ReservationStatus.READY) {
+        if (wasReady) {
             Optional<Reservation> next = reservationRepository.findFirstByBookIdAndStatusOrderByQueuePosition(
                     reservation.getBookId(), ReservationStatus.PENDING);
 
-            next.ifPresent(nextReady -> {
+            if (next.isPresent()) {
+                Reservation nextReady = next.get();
                 nextReady.setStatus(ReservationStatus.READY);
                 reservationRepository.saveReservation(nextReady);
-            });
+                bookExternalService.updateBookStatus(bookId, BookStatus.RESERVED);
+            } else {
+                bookExternalService.updateBookStatus(bookId, BookStatus.AVAILABLE);
+            }
+        } else {
+            updateBookStatusBasedOnReservationsAndLoans(bookId);
         }
 
         return reservation;
@@ -437,7 +431,6 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         reservation.setStatus(ReservationStatus.COMPLETED);
         reservationRepository.saveReservation(reservation);
 
-        // Pobranie losowego bibliotekarza
         User librarian = userRepository.findRandomLibrarian()
                 .orElseThrow(() -> new RuntimeException("No librarian found"));
 
@@ -451,7 +444,35 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
 
         loanRepository.saveLoan(loan);
 
+        updateBookStatusBasedOnReservationsAndLoans(reservation.getBookId());
+
         return reservation;
+    }
+
+    /**
+     * Finalizuje rezerwację użytkownika dla danej książki.
+     *
+     * @param bookId ID książki
+     * @param userId ID użytkownika
+     * @return DTO rezerwacji
+     */
+    @Override
+    @Transactional
+    public ReservationExternalDto completeReservation(long bookId, long userId) {
+        Optional<Reservation> reservationOpt = reservationRepository.findByBookIdAndUserIdAndStatus(
+                bookId, userId, ReservationStatus.READY);
+
+        if (reservationOpt.isEmpty()) {
+            throw new ReservationNotFoundException("Reservation not found");
+        }
+
+        Reservation reservation = reservationOpt.get();
+        reservation.setStatus(ReservationStatus.COMPLETED);
+        Reservation savedReservation = reservationRepository.saveReservation(reservation);
+
+        updateBookStatusBasedOnReservationsAndLoans(bookId);
+
+        return reservationInternalMapper.toDto(savedReservation);
     }
 
     /**
@@ -476,5 +497,20 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
         reservation.setExpiresAt(reservation.getExpiresAt().plus(Duration.ofDays(5)));
 
         return reservationRepository.saveReservation(reservation);
+    }
+
+    private void updateBookStatusBasedOnReservationsAndLoans(long bookId) {
+        boolean hasActiveReservations = reservationRepository.existsByBookIdAndStatusIn(
+                bookId, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
+        boolean hasActiveLoans = loanRepository.existsByBookIdAndStatusIn(
+                bookId, List.of(LoanStatus.ACTIVE, LoanStatus.OVERDUE));
+
+        if (hasActiveReservations) {
+            bookExternalService.updateBookStatus(bookId, BookStatus.RESERVED);
+        } else if (hasActiveLoans) {
+            bookExternalService.updateBookStatus(bookId, BookStatus.BORROWED);
+        } else {
+            bookExternalService.updateBookStatus(bookId, BookStatus.AVAILABLE);
+        }
     }
 }

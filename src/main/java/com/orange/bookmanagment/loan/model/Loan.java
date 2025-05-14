@@ -65,7 +65,7 @@ public class Loan {
         this.notes = notes;
         this.lendingLibrarianId = librarian;
         this.borrowedAt = Instant.now();
-        this.dueDate = Instant.now().plusSeconds(604800); // 7 days in seconds
+        this.dueDate = Instant.now().plusSeconds(2419200); // 28 days in seconds
     }
 
     /**
