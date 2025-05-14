@@ -1,5 +1,18 @@
 <app-navbar></app-navbar>
 <main class="w-full" style="background-color: var(--bg-content);">
+  <div *ngIf="message"
+    class="text-center mt-10 mx-10 p-4 font-semibold rounded-md shadow-md border"
+    style="background-color: var(--box-login-color); color: var(--text-color);"
+  >
+    {{ message }}
+  </div>
+  <div *ngIf="badMessage"
+    class="text-center mt-10 mx-10 p-4 font-semibold rounded-md shadow-md border"
+    style="background-color: var(--box-bad-message-color); color: var(--text-color);"
+  >
+    {{ badMessage }}
+  </div>
+
   <div class="min-w-[624px] max-w-[1284px] px-16 py-12 mx-auto">
     <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Szczegółowy widok książki</h1>
 
@@ -16,12 +29,12 @@
             [src]="bookImageUrl"
             alt="Okładka książki"
             (error)="onImageError($event)"
-            class="w-[296px] md:w-[296px] lg:w-[396px] h-auto aspect-square object-cover lg:rounded invert dark:invert-0"
+            class="w-[296px] md:w-[296px] lg:w-[396px] h-auto aspect-square object-cover lg:rounded-md invert dark:invert-0"
           />
         </div>
 
         <!-- Tekst -->
-        <div class="flex-1 space-y-3 text-left">
+        <div class="flex-1 space-y-3 text-left pr-2">
           <h1 class="text-5xl font-bold lg:mt-1 mb-16 italic">{{ removeDot(book.title) }}</h1>
           <p class="text-2xl opacity-90 leading-tight mb-1.5"><strong>Gatunek:</strong> {{ book.genre }}</p>
           <p class="text-2xl opacity-90 leading-tight mb-1.5"><strong>Autor:</strong> {{ formatAuthors(book.authors) }}</p>
@@ -35,9 +48,33 @@
         </div>
       </div>
 
-      <!-- Opis -->
+      <!-- Opis i przyciski -->
       <div class="mt-10 lg:mt-4">
         <p class="text-lg text-base leading-tight leading-relaxed"><strong>Opis:</strong> {{ book.description }}</p>
+
+        <div *ngIf="userType === 'READER'" class="mt-3.5 w-full flex justify-center">
+          <div class="flex flex-wrap justify-center items-center gap-4">
+            <!-- Książka wypożyczona przez użytkownika -->
+            <ng-container *ngIf="isMyLoan">
+              <button (click)="returnBook(myLoan.id)" class="w-[110px] px-4 py-2 rounded border cursor-pointer text-center" style="background-color: var(--profile-button-user);">Zwróć</button>
+              <button *ngIf="canExtendLoan(myLoan.extendedCount, myLoan.dueDate) && !myLoan.isReserved" (click)="extendLoan(myLoan.id, myLoan.extendedCount, myLoan.dueDate, myLoan.isReserved)" class="w-[110px] px-4 py-2 rounded border cursor-pointer text-center" style="background-color: var(--profile-button-user);">Przedłuż</button>
+              <button (click)="markBookAsLost(myLoan.id)" class="w-[110px] px-4 py-2 rounded border cursor-pointer text-center" style="background-color: var(--profile-button-user);">Zgubiona</button>
+            </ng-container>
+
+            <!-- Książka nie wypożyczona i zarezerwowana przez użytkownika -->
+            <ng-container *ngIf="!isMyLoan && hasReadyReservation">
+              <button *ngIf="myReservation.status !== 'CANCELLED' && myReservation.status !== 'COMPLETED' && myReservation.status !== 'EXPIRED'" (click)="cancelReservation(myReservation.id)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zrezygnuj</button>
+              <button *ngIf="myReservation.status === 'READY'" (click)="completeReservation(myReservation.id)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Wypożycz</button>
+              <button *ngIf="(myReservation.status === 'READY' || myReservation.status === 'PENDING') && canExtendReservation(myReservation.expiresAt)" (click)="extendReservation(myReservation.id, myReservation.expiresAt)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Przedłuż</button>
+            </ng-container>
+
+            <!-- Książka nie wypożyczona i nie zarezerwowana przez użytkownika -->
+            <ng-container *ngIf="!isMyLoan && book?.status !== 'LOST' && !hasReadyReservation">
+              <button *ngIf="book?.status === 'AVAILABLE'" (click)="borrowBook(book.id)" class="w-[110px] px-4 py-2 rounded border cursor-pointer text-center" style="background-color: var(--profile-button-user);">Wypożycz</button>
+              <button *ngIf="(book?.status === 'BORROWED' || 'RESERVED') && book?.status !== 'AVAILABLE'" (click)="reserveBook(book.id)" class="w-[110px] px-4 py-2 rounded border cursor-pointer text-center" style="background-color: var(--profile-button-user);">Zarezerwuj</button>
+            </ng-container>
+          </div>
+        </div>
       </div>
     </div>
   </div>

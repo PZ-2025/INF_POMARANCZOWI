@@ -173,7 +173,7 @@
             <!-- Guziki -->
             <div class="flex justify-start items-start">
               <div class="flex flex-col gap-4 justify-start items-start">
-                <button *ngIf="reservation.status !== 'CANCELLED'" (click)="cancelReservation(reservation.id)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Anuluj</button>
+                <button *ngIf="reservation.status !== 'CANCELLED' && reservation.status !== 'COMPLETED' && reservation.status !== 'EXPIRED'" (click)="cancelReservation(reservation.id)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zrezygnuj</button>
                 <button *ngIf="reservation.status === 'READY'" (click)="completeReservation(reservation.id)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Wypożycz</button>
                 <button *ngIf="(reservation.status === 'READY' || reservation.status === 'PENDING') && canExtendReservation(reservation.expiresAt)" (click)="extendReservation(reservation.id, reservation.expiresAt)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Przedłuż</button>
               </div>
@@ -227,7 +227,7 @@
                 <div class="text-sm opacity-60 mt-6">
                   <p><strong>Przedłużono:</strong> {{ loan.extendedCount }} raz{{ loan.extendedCount === 1 ? '' : 'y' }}</p>
                   <p><strong>Wypożyczono:</strong> {{ loan.borrowedAt | date: 'dd.MM.yyyy' }}</p>
-                  <p><strong>Oddano:</strong> {{ loan.returnedAt | date: 'dd.MM.yyyy' }}</p>
+                  <p><strong>Oddano:</strong> {{ loan.returnedAt ? (loan.returnedAt | date: 'dd.MM.yyyy') : 'Zgubiona przez użytkownika' }}</p>
                 </div>
               </div>
             </div>
@@ -298,6 +298,7 @@
               <div class="flex flex-col gap-4 justify-start items-start">
                 <button (click)="returnBook(loan.id)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zwróć</button>
                 <button (click)="extendLoan(loan.id, loan.extendedCount, loan.dueDate, loan.isReserved)" *ngIf="canExtendLoan(loan.extendedCount, loan.dueDate) && !loan.isReserved" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Przedłuż</button>
+                <button (click)="markBookAsLost(loan.id)" class="w-[110px] px-4 py-2 rounded border cursor-pointer text-center" style="background-color: var(--profile-button-user);">Zgubiona</button>
               </div>
             </div>
           </div>
