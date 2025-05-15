@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../auth/auth.interface';
+import { BookService, BookDto } from '../services/book.service';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +22,7 @@ export class ProfileComponent {
   message: string | null = null;
   badMessage: string | null = null;
 
-  constructor(private authService: AuthService, private messageService: MessageService, private badMessageService: BadMessageService, private cookieService: CookieService, private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private themeService: ThemeService, private authService: AuthService, private messageService: MessageService, private badMessageService: BadMessageService, private cookieService: CookieService, private http: HttpClient, private cdr: ChangeDetectorRef, private bookService: BookService) {}
 
   userType: string | null = null;
   email: string | null = null;
@@ -29,6 +31,8 @@ export class ProfileComponent {
   userId: number | null = null;
   avatarPath: string | null = null;
   user: User | null = null;
+
+  isDarkTheme = false;
 
   showEditForm = false;
 
@@ -55,6 +59,34 @@ export class ProfileComponent {
     console.log('Avatar path:', this.avatarPath);
     console.log('Id:', this.userId);
 
+    this.isDarkTheme = localStorage.getItem('dark-theme-enabled') === 'true';
+
+    this.themeService.themeChanged.subscribe((val) => {
+      this.isDarkTheme = val;
+    });
+
+    this.allMessageService();
+
+    const tab = localStorage.getItem('profileTab');
+    this.activeTab = tab || 'profile';
+
+    this.fetchRentals();
+    this.fetchReservations();
+
+    if (this.userType === 'ADMIN' || this.userType === 'LIBRARIAN') {
+      const storedBooksPerPage = localStorage.getItem('booksPerPage');
+      if (storedBooksPerPage) {
+        const parsed = parseInt(storedBooksPerPage, 10);
+        if ([10, 25, 50].includes(parsed)) {
+          this.booksPerPage = parsed;
+        }
+      }
+
+      this.fetchAllBooks();
+    }
+  }
+
+  allMessageService() {
     this.messageService.message$.subscribe(msg => {
       this.message = msg;
       if (msg) {
@@ -92,17 +124,108 @@ export class ProfileComponent {
       this.badMessage = currentBadMessage;
       this.autoClearBadMessage();
     }
-
-    const tab = localStorage.getItem('profileTab');
-    this.activeTab = tab || 'profile';
-
-    this.fetchRentals();
-    this.fetchReservations();
   }
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
     localStorage.setItem('profileTab', tab);
+  }
+
+  allBooks: BookDto[] = [];
+  loadAllBookError: boolean = false;
+  currentPage: number = 1;
+  booksPerPage: number = 10;
+
+  get paginatedBooks(): BookDto[] {
+    const start = (this.currentPage - 1) * this.booksPerPage;
+    return this.allBooks.slice(start, start + this.booksPerPage);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.allBooks.length / this.booksPerPage);
+  }
+
+  onBooksPerPageChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    const value = parseInt(select.value, 10);
+    if (value > 0) {
+      this.booksPerPage = value;
+      this.currentPage = 1;
+      localStorage.setItem('booksPerPage', value.toString());
+    }
+  }
+
+  fetchAllBooks() {
+    if (this.userType !== 'ADMIN' && this.userType !== 'LIBRARIAN') return;
+
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      this.loadAllBookError = true;
+      return;
+    }
+
+    this.bookService.getAllBooks().subscribe({
+      next: (books) => {
+        this.allBooks = books.map(book => ({
+          ...book,
+
+          coverImage: (() => {
+            const key = `book-image-${book.id}`;
+            const existing = localStorage.getItem(key);
+
+            if (existing) return existing;
+
+            const source = book.coverImage && book.coverImage.trim() !== ''
+              ? book.coverImage
+              : `https://picsum.photos/seed/book${book.id}/216/216`;
+
+            localStorage.setItem(key, source);
+            return source;
+          })()
+        }));
+
+        console.log(this.allBooks);
+
+
+        this.loadAllBookError = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Błąd przy pobieraniu wszystkich książek:', err);
+        this.loadAllBookError = true;
+      }
+    });
+  }
+
+  getPolishStatus(status: string): string {
+    switch (status) {
+      case 'AVAILABLE':
+        return 'Dostępna';
+      case 'RESERVED':
+        return 'Zarezerwowana';
+      case 'BORROWED':
+        return 'Wypożyczona';
+      case 'LOST':
+        return 'Zagubiona';
+      default:
+        return status;
+    }
+  }
+
+  getStatusColorVar(status: string): string {
+    switch (status) {
+      case 'AVAILABLE':
+        return 'var(--status-available)';
+      case 'RESERVED':
+        return 'var(--status-reserved)';
+      case 'BORROWED':
+        return 'var(--status-borrowed)';
+      case 'LOST':
+        return 'var(--status-lost)';
+      default:
+        return 'var(--text-color)';
+    }
   }
 
   showModal = false;
