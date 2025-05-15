@@ -66,6 +66,7 @@ class SecurityConfig {
                                 .requestMatchers(POST, "/api/v1/auth/changePassword").authenticated()
                                 .requestMatchers(POST, "/api/v1/book/create").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/all").permitAll()
+                                .requestMatchers(GET, "/api/v1/book/all/unpaged").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/{id}").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/random/category/**").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/search").permitAll()

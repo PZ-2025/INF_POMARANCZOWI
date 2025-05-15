@@ -82,6 +82,16 @@ class BookServiceImpl implements BookService, BookExternalService {
     }
 
     /**
+     * Zwraca wszystkie książki bez paginacji.
+     *
+     * @return lista wszystkich książek
+     */
+    @Override
+    public List<Book> getAllBooksUnpaged() {
+        return bookRepository.findAll();
+    }
+
+    /**
      * Wyszukuje książki po tytule.
      *
      * @param title tytuł książki

@@ -35,12 +35,19 @@ public interface BookService {
     Book getBookById(long id) throws BookNotFoundException;
 
     /**
-     * Zwraca wszystkie książki (stronicowane).
+     * Zwraca wszystkie książki w formie stronicowanej.
      *
      * @param pageable dane dotyczące paginacji
      * @return strona książek
      */
     Page<Book> getAllBooks(Pageable pageable);
+
+    /**
+     * Zwraca wszystkie książki bez paginacji.
+     *
+     * @return lista wszystkich książek
+     */
+    List<Book> getAllBooksUnpaged();
 
     /**
      * Zwraca książki o podanym tytule.

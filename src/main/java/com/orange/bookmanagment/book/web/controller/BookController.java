@@ -95,6 +95,26 @@ class BookController {
     }
 
     /**
+     * Zwraca wszystkie książki bez paginacji.
+     *
+     * @return odpowiedź z listą książek
+     */
+    @GetMapping("/all/unpaged")
+    public ResponseEntity<HttpResponse> getAllBooksUnpaged() {
+        List<Book> books = bookService.getAllBooksUnpaged();
+
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .reason("All books (no pagination) request")
+                        .message("All books unpaged")
+                        .data(Map.of("books", books.stream().map(bookDtoMapper::toDto).toList()))
+                        .build());
+    }
+
+    /**
      * Tworzy nową książkę.
      *
      * @param bookCreateRequest dane nowej książki
