@@ -76,6 +76,7 @@ class SecurityConfig {
                                 .requestMatchers(POST, "/api/v1/reservations/{reservationId}/extend").authenticated()
                                 .requestMatchers(POST, "/api/v1/reservations/{reservationId}/expire").authenticated()
                                 .requestMatchers("/api/v1/reservations/my").authenticated()
+                                .requestMatchers(GET, "/api/v1/user/all").hasAuthority("ADMIN")
                                 .requestMatchers(PUT, "/api/v1/user/me").authenticated()
                                 .requestMatchers(POST, "/api/v1/user/upload-avatar").authenticated()
                                 .requestMatchers(DELETE, "/api/v1/user/delete-avatar").authenticated()

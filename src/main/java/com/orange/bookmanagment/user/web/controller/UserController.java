@@ -2,8 +2,10 @@ package com.orange.bookmanagment.user.web.controller;
 
 import com.orange.bookmanagment.shared.model.HttpResponse;
 import com.orange.bookmanagment.shared.util.TimeUtil;
+import com.orange.bookmanagment.user.model.User;
 import com.orange.bookmanagment.user.service.UserService;
 import com.orange.bookmanagment.user.web.mapper.UserDtoMapper;
+import com.orange.bookmanagment.user.web.model.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -119,5 +122,30 @@ class UserController {
         Long userId = Long.parseLong(jwt.getClaimAsString("id"));
         userService.deleteUserAvatar(userId);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Zwraca wszystkich użytkowników w systemie.
+     *
+     * @return odpowiedź HTTP zawierająca listę użytkowników w formacie DTO
+     */
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<HttpResponse> getAllUsers() {
+        List<UserDto> userDtos = userService.getAllUsers()
+                .stream()
+                .map(userDtoMapper::toDto)
+                .toList();
+
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .reason("All users")
+                        .message("Returned all users")
+                        .data(Map.of("users", userDtos))
+                        .build()
+        );
     }
 }

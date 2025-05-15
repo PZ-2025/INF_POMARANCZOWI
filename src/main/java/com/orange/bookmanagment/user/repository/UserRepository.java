@@ -86,4 +86,13 @@ public class UserRepository {
     public Optional<User> findRandomLibrarian() {
         return userJpaRepository.findRandomLibrarian();
     }
+
+    /**
+     * Zwraca wszystkich użytkowników w systemie.
+     *
+     * @return lista wszystkich użytkowników
+     */
+    public List<User> getAllUsers() {
+        return userJpaRepository.findAll();
+    }
 }

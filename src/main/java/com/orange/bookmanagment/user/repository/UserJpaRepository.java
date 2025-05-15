@@ -24,7 +24,6 @@ public interface UserJpaRepository extends JpaRepository<User,Long> {
      */
     Optional<User> findUserByEmail(String email);
 
-
     /**
      * Wyszukuje użytkowników o podanym imieniu.
      *

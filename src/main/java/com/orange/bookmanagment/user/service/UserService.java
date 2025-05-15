@@ -107,4 +107,11 @@ public interface UserService {
      * @param userId ID użytkownika
      */
     void deleteUserAvatar(Long userId);
+
+    /**
+     * Zwraca wszystkich użytkowników.
+     *
+     * @return lista użytkowników
+     */
+    List<User> getAllUsers();
 }

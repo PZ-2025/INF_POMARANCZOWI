@@ -197,8 +197,23 @@ class UserServiceImpl implements UserService, UserExternalService {
         }
     }
 
+    /**
+     * Zwraca identyfikator losowo bibliotekarza.
+     *
+     * @return ID użytkownika LIBRARIAN, jeśli taki istnieje
+     */
     @Override
     public Optional<Long> getRandomLibrarianId() {
         return userRepository.findRandomLibrarian().map(User::getId);
+    }
+
+    /**
+     * Zwraca wszystkich użytkowników.
+     *
+     * @return lista użytkowników
+     */
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.getAllUsers();
     }
 }
