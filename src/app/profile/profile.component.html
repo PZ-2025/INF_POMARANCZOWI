@@ -170,7 +170,7 @@
               'background-color': currentPage === totalPages ? 'var(--box-pagination-disabled-color)' : 'var(--box-pagination-color)'
             }"
           >
-            <img [class.invert]="isDarkTheme" src="assets/imgs/next.png" alt="Poprzednia strona">
+            <img [class.invert]="isDarkTheme" src="assets/imgs/next.png" alt="Następna strona">
           </button>
         </div>
 
@@ -178,7 +178,10 @@
         <div class="absolute right-0.5 top-1.5 flex justify-center items-center gap-2">
           <label for="booksPerPage" class="text-sm opacity-70">Na stronę:</label>
           <select id="booksPerPage" [(ngModel)]="booksPerPage" (change)="onBooksPerPageChange($event)" class="border rounded-lg px-2 py-1.5 text-sm cursor-pointer" style="background-color: var(--box-pagination-color);">
+            <option [value]="3">3</option>
+            <option [value]="5">5</option>
             <option [value]="10">10</option>
+            <option [value]="15">15</option>
             <option [value]="25">25</option>
             <option [value]="50">50</option>
           </select>
@@ -201,7 +204,7 @@
         <div class="w-full">
           <!-- Tytuł -->
           <div class="flex-1 px-6 pr-2 flex flex-col justify-between">
-            <p class="mb-5.5 font-semibold italic leading-[1.1] text-2xl">{{ removeDot(book.title) }}</p>
+            <p class="mb-5.5 font-semibold italic leading-[1.1] text-3xl">{{ removeDot(book.title) }}</p>
           </div>
 
           <div class="flex flex-row">
@@ -229,7 +232,104 @@
 
     <!-- Użytkownicy / userType === 'ADMIN' -->
     <div *ngIf="activeTab === 'users' && userType === 'ADMIN'" class="flex flex-col gap-6">
+      <!-- Błąd ładowania -->
+      <p *ngIf="loadUsersError" class="text-center text-2xl mt-2 text-red-600 font-semibold">
+        Nie udało się załadować użytkowników
+      </p>
 
+      <!-- Brak użytkowników w systemie -->
+      <div *ngIf="!loadUsersError && allUsers.length === 0">
+        <p class="text-center text-4xl font-semibold mt-0 opacity-70">
+          Brak zarejestrowanych użytkowników
+        </p>
+      </div>
+
+      <div *ngIf="!loadUsersError && allUsers.length !== 0" class="relative w-full">
+        <!-- Paginacja -->
+        <div class="flex justify-center items-center gap-4">
+          <button
+            (click)="currentUsersPage = currentUsersPage - 1"
+            [disabled]="currentUsersPage === 1"
+            [ngClass]="{
+              'cursor-not-allowed opacity-50': currentUsersPage === 1,
+              'cursor-pointer': currentUsersPage > 1
+            }"
+            class="p-2 py-1 border rounded-lg transition"
+            [ngStyle]="{
+              'background-color': currentUsersPage === 1 ? 'var(--box-pagination-disabled-color)' : 'var(--box-pagination-color)'
+            }"
+          >
+            <img [class.invert]="isDarkTheme" src="assets/imgs/previous.png" alt="Poprzednia strona">
+          </button>
+          <span>Strona {{ currentUsersPage }} z {{ totalUsersPages }}</span>
+          <button
+            (click)="currentUsersPage = currentUsersPage + 1"
+            [disabled]="currentUsersPage === totalUsersPages"
+            [ngClass]="{
+              'cursor-not-allowed opacity-50': currentUsersPage === totalUsersPages,
+              'cursor-pointer': currentUsersPage < totalUsersPages
+            }"
+            class="p-2 py-1 border rounded-lg transition"
+            [ngStyle]="{
+              'background-color': currentUsersPage === totalUsersPages ? 'var(--box-pagination-disabled-color)' : 'var(--box-pagination-color)'
+            }"
+          >
+            <img [class.invert]="isDarkTheme" src="assets/imgs/next.png" alt="Następna strona">
+          </button>
+        </div>
+
+        <!-- Select ilości użytkowników -->
+        <div class="absolute right-0.5 top-1.5 flex justify-center items-center gap-2">
+          <label for="usersPerPage" class="text-sm opacity-70">Na stronę:</label>
+          <select id="usersPerPage" [(ngModel)]="usersPerPage" (change)="onUsersPerPageChange($event)" class="border rounded-lg px-2 py-1.5 text-sm cursor-pointer" style="background-color: var(--box-pagination-color);">
+            <option [value]="3">3</option>
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="15">15</option>
+            <option [value]="25">25</option>
+            <option [value]="50">50</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Lista użytkowników w bibliotece -->
+      <div *ngFor="let user of paginatedUsers" class="flex flex-row shadow-md rounded-xl border p-4 w-full" style="background-color: var(--box-color); color: var(--text-color);">
+        <!-- Zdjęcie użytkownika -->
+        <div
+          class="rounded-lg bg-white max-[900px]:w-full max-[900px]:h-[300px] max-[900px]:flex max-[900px]:justify-center max-[900px]:items-center w-[192px] h-[224px]"
+          style="background-color: var(--inner-book-box);"
+        >
+          <img
+            [src]="getUserAvatar(user)"
+            (error)="onImageError($event)"
+            alt="Użytkownik"
+            class="w-full h-full object-contain rounded-lg border"
+          />
+        </div>
+
+        <!-- Dane użytkownika -->
+        <div class="flex-1 px-6 flex flex-col justify-between text-center min-[900px]:text-left">
+          <div>
+            <p class="text-2xl font-bold">{{ user.firstName }} {{ user.lastName }}</p>
+            <p class="text-xl">{{ user.email }}</p>
+          </div>
+        </div>
+
+        <!-- Przyciski -->
+        <div class="w-full min-[900px]:w-[136px] flex min-[900px]:flex-col min-[900px]:items-center min-[900px]:justify-center gap-4 flex-row justify-between max-[900px]:mt-1">
+          <button (click)="openUserEditModal(user)" class="w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień dane</button>
+          <app-edit-user-modal
+            *ngIf="userToEdit && showUserModal"
+            [firstName]="userToEdit.firstName"
+            [lastName]="userToEdit.lastName"
+            (firstNameChange)="userToEdit.firstName = $event"
+            (lastNameChange)="userToEdit.lastName = $event"
+            (save)="saveUserChanges()"
+            (cancel)="cancelUserEdit()"
+          >
+          </app-edit-user-modal>
+        </div>
+      </div>
     </div>
 
     <!-- Zamówienia / userType === 'ADMIN' -->
