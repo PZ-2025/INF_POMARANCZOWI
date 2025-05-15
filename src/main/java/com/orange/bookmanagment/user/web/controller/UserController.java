@@ -64,6 +64,7 @@ class UserController {
      * @return potwierdzenie wykonania aktualizacji
      */
     @PutMapping("/me")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<HttpResponse> updateUser(@RequestBody UpdateUserRequest request) {
 
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -76,6 +77,31 @@ class UserController {
                         .statusCode(OK.value())
                         .httpStatus(OK)
                         .reason("User data update request")
+                        .message("User updated successfully")
+                        .data(Map.of())
+                        .build());
+    }
+
+    /**
+     * Aktualizuje dane zalogowanego użytkownika (jako ADMIN).
+     *
+     * @param request obiekt zawierający nowe dane użytkownika
+     * @return potwierdzenie wykonania aktualizacji
+     */
+    @PutMapping("/admin/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<HttpResponse> updateUserById(
+            @PathVariable("id") Long id,
+            @RequestBody UpdateUserRequest request) {
+
+        userService.updateUserData(id, request);
+
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .reason("User update by admin")
                         .message("User updated successfully")
                         .data(Map.of())
                         .build());
