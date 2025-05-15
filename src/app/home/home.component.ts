@@ -84,12 +84,12 @@ export class HomeComponent implements OnInit {
     this.bookService.getRandomBooksByGenre(genre).subscribe({
       next: books => {
         this.books = books;
-        this.sectionTitle = `Polecane tytuły z kategorii "${genre}"`;
+        this.sectionTitle = `Polecane tytuły z kategorii "${this.genreTranslations[genre] || genre}"`;
       },
       error: err => {
         console.error('Błąd przy pobieraniu książek po kategorii', err);
         this.books = [];
-        this.sectionTitle = `Brak książek do wyświetlenia w kategorii "${genre}"`;
+        this.sectionTitle = `Brak książek do wyświetlenia w kategorii "${this.genreTranslations[genre] || genre}"`;
       }
     });
   }
@@ -137,4 +137,12 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+
+  genreTranslations: { [key: string]: string } = {
+    'Fiction': 'Fikcja',
+    'History': 'Historia',
+    'Fantasy': 'Fantastyka',
+    'Biography': 'Biografia',
+    'Sci-Fi': 'Science Fiction',
+  };
 }

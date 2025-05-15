@@ -8,6 +8,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../auth/auth.interface';
+import { BookService, BookDto } from '../services/book.service';
+import { ThemeService } from '../services/theme.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +23,7 @@ export class ProfileComponent {
   message: string | null = null;
   badMessage: string | null = null;
 
-  constructor(private authService: AuthService, private messageService: MessageService, private badMessageService: BadMessageService, private cookieService: CookieService, private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private userService: UserService, private themeService: ThemeService, private authService: AuthService, private messageService: MessageService, private badMessageService: BadMessageService, private cookieService: CookieService, private http: HttpClient, private cdr: ChangeDetectorRef, private bookService: BookService) {}
 
   userType: string | null = null;
   email: string | null = null;
@@ -29,6 +32,8 @@ export class ProfileComponent {
   userId: number | null = null;
   avatarPath: string | null = null;
   user: User | null = null;
+
+  isDarkTheme = false;
 
   showEditForm = false;
 
@@ -44,9 +49,9 @@ export class ProfileComponent {
     if (!rawPath || rawPath === '/assets/imgs/user.png') {
       this.avatarPath = '/assets/imgs/user.png';
     } else {
-      this.avatarPath = rawPath.startsWith('http') ? rawPath : `http://localhost:8080${rawPath}`;
+      const basePath = rawPath.startsWith('http') ? rawPath : `http://localhost:8080${rawPath}`;
+      this.avatarPath = `${basePath}?t=${Date.now()}`;
     }
-    localStorage.setItem('avatarPath', this.avatarPath);
 
     console.log('User type:', this.userType);
     console.log('Rmail:', this.email);
@@ -55,6 +60,46 @@ export class ProfileComponent {
     console.log('Avatar path:', this.avatarPath);
     console.log('Id:', this.userId);
 
+    this.isDarkTheme = localStorage.getItem('dark-theme-enabled') === 'true';
+
+    this.themeService.themeChanged.subscribe((val) => {
+      this.isDarkTheme = val;
+    });
+
+    this.allMessageService();
+
+    const tab = localStorage.getItem('profileTab');
+    this.activeTab = tab || 'profile';
+
+    this.fetchRentals();
+    this.fetchReservations();
+
+    if (this.userType === 'ADMIN' || this.userType === 'LIBRARIAN') {
+      const storedBooksPerPage = localStorage.getItem('booksPerPage');
+      if (storedBooksPerPage) {
+        const parsed = parseInt(storedBooksPerPage, 10);
+        if ([3, 5, 10, 15, 25, 50].includes(parsed)) {
+          this.booksPerPage = parsed;
+        }
+      }
+
+      this.fetchAllBooks();
+    }
+
+    if (this.userType === 'ADMIN') {
+      const storedUsersPerPage = localStorage.getItem('usersPerPage');
+      if (storedUsersPerPage) {
+        const parsed = parseInt(storedUsersPerPage, 10);
+        if ([3, 5, 10, 15, 25, 50].includes(parsed)) {
+          this.usersPerPage = parsed;
+        }
+      }
+
+      this.fetchAllUsers();
+    }
+  }
+
+  allMessageService() {
     this.messageService.message$.subscribe(msg => {
       this.message = msg;
       if (msg) {
@@ -92,17 +137,225 @@ export class ProfileComponent {
       this.badMessage = currentBadMessage;
       this.autoClearBadMessage();
     }
-
-    const tab = localStorage.getItem('profileTab');
-    this.activeTab = tab || 'profile';
-
-    this.fetchRentals();
-    this.fetchReservations();
   }
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
     localStorage.setItem('profileTab', tab);
+  }
+
+  allBooks: BookDto[] = [];
+  loadAllBookError: boolean = false;
+  currentPage: number = 1;
+  booksPerPage: number = 10;
+
+  get paginatedBooks(): BookDto[] {
+    const start = (this.currentPage - 1) * this.booksPerPage;
+    return this.allBooks.slice(start, start + this.booksPerPage);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.allBooks.length / this.booksPerPage);
+  }
+
+  onBooksPerPageChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    const value = parseInt(select.value, 10);
+    if (value > 0) {
+      this.booksPerPage = value;
+      this.currentPage = 1;
+      localStorage.setItem('booksPerPage', value.toString());
+    }
+  }
+
+  fetchAllBooks() {
+    if (this.userType !== 'ADMIN' && this.userType !== 'LIBRARIAN') return;
+
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      this.loadAllBookError = true;
+      return;
+    }
+
+    this.bookService.getAllBooks().subscribe({
+      next: (books) => {
+        this.allBooks = books.map(book => ({
+          ...book,
+
+          coverImage: (() => {
+            const key = `book-image-${book.id}`;
+            const existing = localStorage.getItem(key);
+
+            if (existing) return existing;
+
+            const source = book.coverImage && book.coverImage.trim() !== ''
+              ? book.coverImage
+              : `https://picsum.photos/seed/book${book.id}/216/216`;
+
+            localStorage.setItem(key, source);
+            return source;
+          })()
+        }));
+
+        console.log(this.allBooks);
+
+        this.loadAllBookError = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Błąd przy pobieraniu wszystkich książek:', err);
+        this.loadAllBookError = true;
+      }
+    });
+  }
+
+  getPolishStatus(status: string): string {
+    switch (status) {
+      case 'AVAILABLE':
+        return 'Dostępna';
+      case 'RESERVED':
+        return 'Zarezerwowana';
+      case 'BORROWED':
+        return 'Wypożyczona';
+      case 'LOST':
+        return 'Zagubiona';
+      default:
+        return status;
+    }
+  }
+
+  getStatusColorVar(status: string): string {
+    switch (status) {
+      case 'AVAILABLE':
+        return 'var(--status-available)';
+      case 'RESERVED':
+        return 'var(--status-reserved)';
+      case 'BORROWED':
+        return 'var(--status-borrowed)';
+      case 'LOST':
+        return 'var(--status-lost)';
+      default:
+        return 'var(--text-color)';
+    }
+  }
+
+  allUsers: User[] = [];
+  loadUsersError: boolean = false;
+  currentUsersPage: number = 1;
+  usersPerPage: number = 5;
+
+  get paginatedUsers(): User[] {
+    const start = (this.currentUsersPage - 1) * this.usersPerPage;
+    return this.allUsers.slice(start, start + this.usersPerPage);
+  }
+
+  get totalUsersPages(): number {
+    return Math.ceil(this.allUsers.length / this.usersPerPage);
+  }
+
+  onUsersPerPageChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    const value = parseInt(select.value, 10);
+    if (value > 0) {
+      this.usersPerPage = value;
+      this.currentUsersPage = 1;
+      localStorage.setItem('usersPerPage', value.toString());
+    }
+  }
+
+  fetchAllUsers() {
+    if (this.userType !== 'ADMIN') return;
+
+    const token = this.cookieService.get('token');
+    if (!token) {
+      this.badMessageService.setMessage('Token użytkownika stracił ważność.');
+      this.loadUsersError = true;
+      return;
+    }
+
+    this.userService.getAllUsers().subscribe({
+      next: (users) => {
+        this.allUsers = users.map(user => {
+          const key = `user-avatar-${user.id}`;
+          const rawPath = user.avatarPath;
+
+          localStorage.setItem(key, rawPath || '/assets/imgs/user.png');
+
+          const path =
+            (!rawPath || rawPath === '/assets/imgs/user.png')
+              ? '/assets/imgs/user.png'
+              : rawPath.startsWith('http')
+                ? `${rawPath}?t=${Date.now()}`
+                : `http://localhost:8080${rawPath}?t=${Date.now()}`;
+
+          return {
+            ...user,
+            avatarPath: path
+          };
+        });
+
+        console.log(this.allUsers);
+
+        this.loadUsersError = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Błąd przy pobieraniu użytkowników:', err);
+        this.loadUsersError = true;
+      }
+    });
+  }
+
+  getUserAvatar(user: User): string {
+    const fallback = '/assets/imgs/user.png';
+
+    if (!user.avatarPath || user.avatarPath.trim() === '') {
+      return fallback;
+    }
+
+    return user.avatarPath;
+  }
+
+  userToEdit: any = null;
+  showUserModal: boolean = false;
+
+  openUserEditModal(user: any) {
+    this.userToEdit = { ...user };
+    this.showUserModal = true;
+  }
+
+  cancelUserEdit() {
+    this.userToEdit = null;
+    this.showUserModal = false;
+  }
+
+  saveUserChanges() {
+    const trimmedFirstName = this.userToEdit.firstName?.trim();
+    const trimmedLastName = this.userToEdit.lastName?.trim();
+
+    if (trimmedFirstName && trimmedLastName) {
+      this.userToEdit.firstName = trimmedFirstName;
+      this.userToEdit.lastName = trimmedLastName;
+
+      this.userService.updateUser(this.userToEdit.id, {
+        firstName: trimmedFirstName,
+        lastName: trimmedLastName
+      }).subscribe({
+        next: () => {
+          this.messageService.setMessage('Zaktualizowano dane użytkownika.');
+          this.cancelUserEdit();
+          this.fetchAllUsers();
+        },
+        error: (err) => {
+          console.error('Błąd podczas aktualizacji danych użytkownika:', err);
+          this.badMessageService.setMessage('Nie udało się zaktualizować danych użytkownika. Spróbuj ponownie później.');
+        }
+      });
+    } else {
+      this.badMessageService.setMessage('Oba pola są wymagane.');
+    }
+    this.cancelUserEdit();
   }
 
   showModal = false;
@@ -124,13 +377,17 @@ export class ProfileComponent {
         next: () => {
           localStorage.setItem('firstName', this.firstName!);
           localStorage.setItem('lastName', this.lastName!);
+          
           this.showEditForm = false;
           this.messageService.setMessage('Zaktualizowano dane.');
-          console.log("Zapisano", this.firstName, this.lastName);
+
+          if (this.userType === 'ADMIN') {
+            this.fetchAllUsers();
+          }
         },
         error: (err: HttpErrorResponse) => {
           console.error('Błąd podczas aktualizacji profilu:', err);
-          this.badMessageService.setMessage('Nie udało się zaktualizować danych, spróbuj ponownie później.');
+          this.badMessageService.setMessage('Nie udało się zaktualizować danych. Spróbuj ponownie później.');
         }
       });
     } else {
@@ -201,7 +458,7 @@ export class ProfileComponent {
         if (err.status === 403 || err.error?.message?.includes('Invalid old password')) {
           this.badMessageService.setMessage('Stare hasło jest niepoprawne.');
         } else {
-          this.badMessageService.setMessage('Nie udało się zmienić hasła, spróbuj ponownie później.');
+          this.badMessageService.setMessage('Nie udało się zmienić hasła. Spróbuj ponownie później.');
         }
       }
     });
@@ -210,8 +467,9 @@ export class ProfileComponent {
   showAvatarModal = false;
 
   reloadUserAvatar() {
-    this.avatarPath = `http://localhost:8080/uploads/avatars/user-${this.userId}.jpg?${new Date().getTime()}`;
-    localStorage.setItem('avatarPath', this.avatarPath);
+    const basePath = `/uploads/avatars/user-${this.userId}.jpg`;
+    this.avatarPath = `http://localhost:8080${basePath}?t=${new Date().getTime()}`;
+    localStorage.setItem('avatarPath', basePath);
   }
 
   toggleAvatarModal() {
@@ -249,12 +507,16 @@ export class ProfileComponent {
       next: () => {
         this.messageService.setMessage('Zdjęcie zostało zaktualizowane.');
         this.reloadUserAvatar();
+
+        if (this.userType === 'ADMIN') {
+          this.fetchAllUsers();
+        }
       },
       error: (err) => {
         if (err.status === 413) {
           this.badMessageService.setMessage('Plik jest za duży. Maksymalny rozmiar to 5MB.');
         } else {
-          this.badMessageService.setMessage('Nie udało się zaktualizować zdjęcia, spróbuj ponownie później.');
+          this.badMessageService.setMessage('Nie udało się zaktualizować zdjęcia. Spróbuj ponownie później.');
         }
       }
     });
@@ -296,10 +558,14 @@ export class ProfileComponent {
         this.messageService.setMessage('Zdjęcie zostało usunięte.');
         this.avatarPath = '/assets/imgs/user.png';
         localStorage.removeItem('avatarPath');
+
+        if (this.userType === 'ADMIN') {
+          this.fetchAllUsers();
+        }
       },
       error: (err) => {
         console.error('Błąd podczas usuwania zdjęcia:', err);
-        this.badMessageService.setMessage('Nie udało się usunąć zdjęcia, spróbuj ponownie później.');
+        this.badMessageService.setMessage('Nie udało się usunąć zdjęcia. Spróbuj ponownie później.');
       }
     });
   }
@@ -479,7 +745,7 @@ export class ProfileComponent {
       },
       error: (err) => {
         console.error('Błąd przy przedłużaniu wypożyczenia:', err);
-        this.badMessageService.setMessage('Nie udało się przedłużyć wypożyczenia.');
+        this.badMessageService.setMessage('Nie udało się przedłużyć wypożyczenia. Spróbuj ponownie później.');
       }
     });
   }
@@ -502,7 +768,7 @@ export class ProfileComponent {
       },
       error: (err) => {
         console.error('Błąd przy zwracaniu książki:', err);
-        this.badMessageService.setMessage('Nie udało się zwrócić książki.');
+        this.badMessageService.setMessage('Nie udało się zwrócić książki. Spróbuj ponownie później.');
       }
     });
   }
@@ -662,7 +928,7 @@ export class ProfileComponent {
       },
       error: err => {
         console.error('Błąd przy anulowaniu rezerwacji:', err);
-        this.badMessageService.setMessage('Nie udało się anulować rezerwacji.');
+        this.badMessageService.setMessage('Nie udało się anulować rezerwacji. Spróbuj ponownie później.');
       }
     });
   }
@@ -687,7 +953,7 @@ export class ProfileComponent {
       },
       error: err => {
         console.error('Błąd przy realizowaniu rezerwacji:', err);
-        this.badMessageService.setMessage('Nie udało się zrealizować rezerwacji.');
+        this.badMessageService.setMessage('Nie udało się zrealizować rezerwacji. Spróbuj ponownie później.');
       }
     });
   }
@@ -716,7 +982,7 @@ export class ProfileComponent {
       },
       error: err => {
         console.error('Błąd przy przedłużaniu rezerwacji:', err);
-        this.badMessageService.setMessage('Nie udało się przedłużyć rezerwacji.');
+        this.badMessageService.setMessage('Nie udało się przedłużyć rezerwacji. Spróbuj ponownie później.');
       }
     });
   }
@@ -752,7 +1018,7 @@ export class ProfileComponent {
       },
       error: err => {
         console.error('Błąd przy oznaczaniu książki jako zgubionej:', err);
-        this.badMessageService.setMessage('Nie udało się oznaczyć książki jako zgubionej.');
+        this.badMessageService.setMessage('Nie udało się oznaczyć książki jako zgubionej. Spróbuj ponownie później.');
       }
     });
   }

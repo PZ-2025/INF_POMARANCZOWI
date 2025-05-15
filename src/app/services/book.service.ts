@@ -53,4 +53,9 @@ export class BookService {
     return this.http.get<{ data: { book: BookDto } }>(`${this.apiUrl}/${id}`)
       .pipe(map(res => res.data.book));
   }
+
+  getAllBooks(): Observable<BookDto[]> {
+    return this.http.get<{ data: { books: BookDto[] } }>(`${this.apiUrl}/all/unpaged`)
+      .pipe(map(res => res.data.books));
+  }
 }
