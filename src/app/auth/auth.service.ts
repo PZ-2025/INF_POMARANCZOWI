@@ -22,6 +22,10 @@ export class AuthService {
     return !!this.token;
   }
 
+  get getUserType(): string | null {
+    return localStorage.getItem('userType');
+  }
+
   login(payload: {email: string, password: string}) {
     return this.http.post<TokenResponse>(
       `${this.baseApiUrl}login`,

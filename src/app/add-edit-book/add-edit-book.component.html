@@ -1,7 +1,8 @@
 <app-navbar></app-navbar>
-<div class="p-4 min-h-screen" style="background-color: var(--bg-content); color: var(--text-color)">
-  <div class="flex flex-col items-center justify-center flex-1 w-full mt-32">
-    <div class="p-8 rounded-3xl shadow-lg w-[600px] border border-black-400" style="background-color: var(--box-color)">
+<main class="w-full" style="background-color: var(--bg-content);">
+  <div class="max-w-[624px] px-8 py-12 mx-auto">
+    <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Dodawanie książki</h1>
+    <div class="w-full p-8 rounded-3xl shadow-lg border border-black-400 box-border mt-8" style="background-color: var(--box-color);">
       <form class="flex flex-col space-y-6" [formGroup]="form">
         <div class="mt-0 flex gap-x-6 rounded-lg w-full max-w-full">
           <input
@@ -72,4 +73,4 @@
       </form>
     </div>
   </div>
-</div>
+</main>

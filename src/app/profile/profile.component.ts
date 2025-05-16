@@ -377,7 +377,7 @@ export class ProfileComponent {
         next: () => {
           localStorage.setItem('firstName', this.firstName!);
           localStorage.setItem('lastName', this.lastName!);
-          
+
           this.showEditForm = false;
           this.messageService.setMessage('Zaktualizowano dane.');
 
