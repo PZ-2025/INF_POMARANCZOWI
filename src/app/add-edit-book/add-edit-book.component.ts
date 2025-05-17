@@ -22,4 +22,15 @@ export class AddEditBookComponent {
     pages: new FormControl(null, Validators.required),
     description: new FormControl(null, Validators.required)
   })
+
+  userType: string | null = null;
+
+  ngOnInit(): void {
+    this.userType = localStorage.getItem('userType');
+
+    if (this.userType !== 'ADMIN' && this.userType !== 'LIBRARIAN') {
+      this.router.navigate(['/']);
+      return;
+    }
+  }
 }

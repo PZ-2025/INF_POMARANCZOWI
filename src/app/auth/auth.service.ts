@@ -8,9 +8,9 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root'
 })
 export class AuthService {
-  http =inject(HttpClient);
-  baseApiUrl= 'http://localhost:8080/api/v1/auth/'
-  cookieService =inject(CookieService)
+  http = inject(HttpClient);
+  baseApiUrl = 'http://localhost:8080/api/v1/auth/'
+  cookieService = inject(CookieService)
 
   token: string |null = null;
   refreshToken: string |null = null;
@@ -22,14 +22,18 @@ export class AuthService {
     return !!this.token;
   }
 
+  get getUserType(): string | null {
+    return localStorage.getItem('userType');
+  }
+
   login(payload: {email: string, password: string}) {
     return this.http.post<TokenResponse>(
       `${this.baseApiUrl}login`,
       payload,
     ).pipe(
       tap(val => {
-        this.token=val.access_token;
-        this.refreshToken=val.refresh_token;
+        this.token = val.access_token;
+        this.refreshToken = val.refresh_token;
 
         this.cookieService.set('token', this.token);
         this.cookieService.set('refreshToken', this.refreshToken);
@@ -64,6 +68,7 @@ export class AuthService {
 
   updateProfile(firstName: string, lastName: string) {
     const token = this.cookieService.get('token');
+
     return this.http.put(
       'http://localhost:8080/api/v1/user/me',
       { firstName, lastName },

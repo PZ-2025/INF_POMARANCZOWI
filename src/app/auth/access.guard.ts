@@ -3,11 +3,14 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 export const canActivateAuth =() => {
-  const isLoggedIn = inject(AuthService).isAuth;
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-  if (isLoggedIn) {
-    return true;
+  const isLoggedIn = authService.isAuth;
+
+  if (!isLoggedIn) {
+    return router.createUrlTree(['/login']);
   }
 
-  return inject(Router).createUrlTree(['/login']);
+  return true;
 }

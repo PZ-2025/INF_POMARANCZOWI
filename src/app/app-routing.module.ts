@@ -9,16 +9,15 @@ import { canActivateAuth } from './auth/access.guard';
 import { BookDetailsComponent } from './pages/book-details/book-details.component';
 
 const routes: Routes = [
-  {path: '', component: HomeComponent},
+  { path: '', component: HomeComponent},
 
-  {path: 'me', component: ProfileComponent, canActivate: [canActivateAuth]},
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent},
-  {path: 'books/:id', component: BookDetailsComponent},
+  { path: 'me', component: ProfileComponent, canActivate: [canActivateAuth] },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'books/:id', component: BookDetailsComponent },
+  { path: 'book/add', component: AddEditBookComponent, canActivate: [canActivateAuth], data: { roles: ['ADMIN','LIBRARIAN'] } },
 
-  {path: 'add-book', component: AddEditBookComponent},
-
-  {path: '**', redirectTo: '', pathMatch: 'full'}
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({
