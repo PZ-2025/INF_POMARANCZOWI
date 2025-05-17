@@ -19,4 +19,11 @@ public interface AuthorService {
      * @return lista utworzonych encji autorów
      */
     List<Author> createAuthors(List<AuthorCreateRequest> authorCreateRequests);
+
+    /**
+     * Zwraca listę wszystkich autorów zapisanych w bazie danych.
+     *
+     * @return lista autorów
+     */
+    List<Author> getAllAuthors();
 }

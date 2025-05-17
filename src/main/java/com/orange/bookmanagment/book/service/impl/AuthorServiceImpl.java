@@ -37,4 +37,14 @@ class AuthorServiceImpl implements AuthorService {
 
         return authorRepository.saveAllAuthors(authors);
     }
+
+    /**
+     * Zwraca listę wszystkich autorów zapisanych w bazie danych.
+     *
+     * @return lista autorów
+     */
+    @Override
+    public List<Author> getAllAuthors() {
+        return authorRepository.findAll();
+    }
 }

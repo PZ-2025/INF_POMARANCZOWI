@@ -26,4 +26,13 @@ public class AuthorRepository {
     public List<Author> saveAllAuthors(List<Author> authors) {
         return authorJpaRepository.saveAll(authors);
     }
+
+    /**
+     * Zwraca listę wszystkich autorów zapisanych w bazie danych.
+     *
+     * @return lista autorów
+     */
+    public List<Author> findAll() {
+        return authorJpaRepository.findAll();
+    }
 }

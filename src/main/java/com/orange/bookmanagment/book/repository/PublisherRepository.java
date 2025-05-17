@@ -4,6 +4,8 @@ import com.orange.bookmanagment.book.model.Publisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Repozytorium do zarządzania encjami {@link Publisher}.
  * <p>
@@ -33,5 +35,14 @@ public class PublisherRepository {
      */
     public Publisher findPublisherById(Long id) {
         return publisherJpaRepository.findById(id).orElse(null);
+    }
+
+    /**
+     * Zwraca listę wszystkich wydawców zapisanych w bazie danych.
+     *
+     * @return lista wydawców
+     */
+    public List<Publisher> findAll() {
+        return publisherJpaRepository.findAll();
     }
 }

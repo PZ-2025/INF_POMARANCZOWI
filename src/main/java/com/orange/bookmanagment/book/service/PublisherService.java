@@ -3,6 +3,8 @@ package com.orange.bookmanagment.book.service;
 import com.orange.bookmanagment.book.model.Publisher;
 import com.orange.bookmanagment.book.web.requests.PublisherCreateRequest;
 
+import java.util.List;
+
 /**
  * Serwis do zarządzania wydawcami książek.
  * <p>
@@ -17,4 +19,11 @@ public interface PublisherService {
      * @return utworzony wydawca
      */
     Publisher createPublisher(PublisherCreateRequest publisherCreateRequest);
+
+    /**
+     * Zwraca listę wszystkich wydawców zapisanych w bazie danych.
+     *
+     * @return lista wydawców
+     */
+    List<Publisher> getAllPublishers();
 }

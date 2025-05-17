@@ -7,6 +7,8 @@ import com.orange.bookmanagment.book.web.requests.PublisherCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Implementacja serwisu {@link PublisherService}.
  * <p>
@@ -28,5 +30,15 @@ class PublisherServiceImpl implements PublisherService {
     public Publisher createPublisher(PublisherCreateRequest publisherCreateRequest) {
         final Publisher publisher = new Publisher(publisherCreateRequest.name(), publisherCreateRequest.description());
         return publisherRepository.savePublisher(publisher);
+    }
+
+    /**
+     * Zwraca listę wszystkich wydawców zapisanych w bazie danych.
+     *
+     * @return lista wydawców
+     */
+    @Override
+    public List<Publisher> getAllPublishers() {
+        return publisherRepository.findAll();
     }
 }
