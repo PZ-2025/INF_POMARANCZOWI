@@ -12,12 +12,12 @@
 
   <div class="flex items-center space-x-6">
     <!-- Navbar dla niezalogowanego użytkownika -->
-    <a *ngIf="!isLoggedIn" href="/login" class="text-xl">Zaloguj się</a>
-    <a *ngIf="!isLoggedIn" href="/register" class="text-xl">Zarejestruj się</a>
+    <a *ngIf="!isLoggedIn" [routerLink]="['/register']" class="text-xl">Zaloguj się</a>
+    <a *ngIf="!isLoggedIn" [routerLink]="['/register']" class="text-xl">Zarejestruj się</a>
 
     <!-- Navbar dla zalogowanego użytkownika -->
-    <a *ngIf="isLoggedIn" href="/me" class="text-xl">Mój profil</a>
-    <a *ngIf="isLoggedIn" (click)="logout()" href="#" class="text-xl">Wyloguj się</a>
+    <a *ngIf="isLoggedIn" [routerLink]="['/me']" class="text-xl">Mój profil</a>
+    <a *ngIf="isLoggedIn" (click)="logout()" [routerLink]="['#']" class="text-xl">Wyloguj się</a>
 
     <!-- Ikona zmiany motywu -->
     <button (click)="toggleTheme()" aria-label="Przełącz motyw" class="cursor-pointer">
