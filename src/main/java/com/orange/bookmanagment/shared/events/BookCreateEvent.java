@@ -1,29 +1,28 @@
-package com.orange.bookmanagment.order.model;
+package com.orange.bookmanagment.shared.events;
 
 import java.util.List;
 
-public record OrderedBook(
+public record BookCreateEvent(
         String title,
-        List<OrderedBookAuthor> authors,
-        OrderedBookPublisher publisher,
+        List<EventBookAuthor> authors,
+        EventBookPublisher publisher,
         String description,
         String genre,
         String coverImage
 ) {
 
-    public record OrderedBookAuthor(
+    public record EventBookAuthor(
             String firstName,
             String lastName,
             String biography
-    ){
+    ) {
 
     }
-    public record OrderedBookPublisher(
+
+    public record EventBookPublisher(
             String name,
             String description
-    ){
+    ) {
 
     }
-
-
 }

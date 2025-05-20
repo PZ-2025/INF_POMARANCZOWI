@@ -3,13 +3,10 @@ package com.orange.bookmanagment.order.service;
 import com.orange.bookmanagment.order.exception.InvalidOrderArgumentException;
 import com.orange.bookmanagment.order.exception.OrderNotFoundException;
 import com.orange.bookmanagment.order.model.Order;
-import com.orange.bookmanagment.order.model.enums.OrderPriority;
-import com.orange.bookmanagment.order.model.enums.OrderStatus;
 import com.orange.bookmanagment.order.web.requests.OrderCreateRequest;
 import com.orange.bookmanagment.order.web.requests.OrderPriorityUpdateRequest;
 import com.orange.bookmanagment.order.web.requests.OrderStatusUpdateRequest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Set;
@@ -39,6 +36,8 @@ public interface OrderService {
    Order updateOrderStatus(OrderStatusUpdateRequest orderStatusUpdateRequest) throws InvalidOrderArgumentException, OrderNotFoundException;
 
    Order updateOrderPriority(OrderPriorityUpdateRequest orderPriorityUpdateRequest) throws InvalidOrderArgumentException, OrderNotFoundException;
+
+   Order finishOrder(long id) throws OrderNotFoundException;
 
 
 }

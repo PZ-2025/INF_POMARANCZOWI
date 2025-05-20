@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  */
 @Component
 public class BookInternalMapper {
-
     /**
      * Mapuje encję książki na DTO do użytku zewnętrznego.
      *
