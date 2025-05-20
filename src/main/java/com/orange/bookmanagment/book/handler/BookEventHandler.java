@@ -9,6 +9,7 @@ import com.orange.bookmanagment.shared.events.BookCreateEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ class BookEventHandler {
 
 
     @EventListener(BookCreateEvent.class)
+    @Transactional
     public void onBookCreate(BookCreateEvent event) {
 
         bookService.createBook(new BookCreateRequest(event.title(),

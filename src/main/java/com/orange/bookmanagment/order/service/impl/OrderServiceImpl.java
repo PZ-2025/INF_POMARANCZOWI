@@ -144,6 +144,7 @@ class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order finishOrder(long id) throws OrderNotFoundException {
         final Order order = orderRepository.findOrderById(id).orElseThrow(() -> new OrderNotFoundException("Order by id not found"));
 
