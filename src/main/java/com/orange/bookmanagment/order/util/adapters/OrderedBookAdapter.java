@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderedBookAdapter implements JsonDeserializer<OrderedBook>, JsonSerializer<OrderedBook> {
+
     @Override
     public OrderedBook deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        if(!json.isJsonObject()){
+        if (!json.isJsonObject()) {
             throw new JsonParseException("not a JSON object!");
         }
 
         final JsonObject jsonObject = (JsonObject) json;
-
         final JsonElement title = jsonObject.get("title");
         final JsonElement publisherName = jsonObject.get("publisherName");
         final JsonElement publisherDescription = jsonObject.get("publisherDescription");
@@ -25,35 +25,35 @@ public class OrderedBookAdapter implements JsonDeserializer<OrderedBook>, JsonSe
         final JsonElement coverImage = jsonObject.get("coverImage");
         final JsonElement authors = jsonObject.get("authors");
 
-        if(title == null || publisherName == null || publisherDescription == null || description == null || genre == null || coverImage == null || authors == null) {
+        if (title == null || publisherName == null || publisherDescription == null || description == null || genre == null || coverImage == null || authors == null) {
             throw new JsonParseException("Malformed orderedBook json string!");
         }
 
-        if(!title.isJsonPrimitive() || !((JsonPrimitive) title).isString()){
+        if (!title.isJsonPrimitive() || !((JsonPrimitive) title).isString()) {
             throw new JsonParseException("Title is not a string!");
         }
 
-        if(!authors.isJsonArray()){
+        if (!authors.isJsonArray()) {
             throw new JsonParseException("Authors is not a json array!");
         }
 
-        if(!publisherName.isJsonPrimitive() || !((JsonPrimitive) publisherName).isString()){
+        if (!publisherName.isJsonPrimitive() || !((JsonPrimitive) publisherName).isString()) {
             throw new JsonParseException("Publisher name is not a string!");
         }
 
-        if(!publisherDescription.isJsonPrimitive() || !((JsonPrimitive) publisherDescription).isString()){
+        if (!publisherDescription.isJsonPrimitive() || !((JsonPrimitive) publisherDescription).isString()) {
             throw new JsonParseException("Publisher description is not a string!");
         }
 
-        if(!description.isJsonPrimitive() || !((JsonPrimitive) description).isString()){
+        if (!description.isJsonPrimitive() || !((JsonPrimitive) description).isString()) {
             throw new JsonParseException("Description is not a string!");
         }
 
-        if(!genre.isJsonPrimitive() || !((JsonPrimitive) genre).isString()){
+        if (!genre.isJsonPrimitive() || !((JsonPrimitive) genre).isString()) {
             throw new JsonParseException("Genre is not a string!");
         }
 
-        if(!coverImage.isJsonPrimitive() || !((JsonPrimitive) coverImage).isString()){
+        if (!coverImage.isJsonPrimitive() || !((JsonPrimitive) coverImage).isString()) {
             throw new JsonParseException("Cover image is not a string!");
         }
 
@@ -119,7 +119,6 @@ public class OrderedBookAdapter implements JsonDeserializer<OrderedBook>, JsonSe
         jsonObject.addProperty("description", orderedBook.description());
         jsonObject.addProperty("genre", orderedBook.genre());
         jsonObject.addProperty("coverImage", orderedBook.coverImage());
-
         jsonObject.addProperty("publisherName", orderedBook.publisher().name());
         jsonObject.addProperty("publisherDescription", orderedBook.publisher().description());
 

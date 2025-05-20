@@ -1,6 +1,5 @@
 package com.orange.bookmanagment.book.handler;
 
-
 import com.orange.bookmanagment.book.service.BookService;
 import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
 import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
@@ -15,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 class BookEventHandler {
 
-
     private final BookService bookService;
-
 
     @EventListener(BookCreateEvent.class)
     @Transactional
@@ -31,5 +28,4 @@ class BookEventHandler {
                 event.coverImage()));
 
     }
-
 }

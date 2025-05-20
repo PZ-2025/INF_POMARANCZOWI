@@ -10,20 +10,14 @@ public record OrderedBook(
         String genre,
         String coverImage
 ) {
-
     public record OrderedBookAuthor(
             String firstName,
             String lastName,
             String biography
-    ){
+    ) { }
 
-    }
     public record OrderedBookPublisher(
             String name,
             String description
-    ){
-
-    }
-
-
+    ) { }
 }

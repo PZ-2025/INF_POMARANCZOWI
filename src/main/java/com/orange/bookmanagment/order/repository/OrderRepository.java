@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -27,29 +28,31 @@ public class OrderRepository {
         return orderJpaRepository.findById(id);
     }
 
-    public List<Order> findOrdersByOrderPriority(OrderPriority orderPriority){
+    public List<Order> findOrdersByOrderPriority(OrderPriority orderPriority) {
         return orderJpaRepository.findByOrderPriority(orderPriority);
     }
 
-    public List<Order> findOrdersByOrderStatus(OrderStatus orderStatus){
+    public List<Order> findOrdersByOrderStatus(OrderStatus orderStatus) {
         return orderJpaRepository.findByOrderStatus(orderStatus);
     }
 
-    public List<Order> findOrderByStatusAndOrderPriority(OrderStatus orderStatus, OrderPriority orderPriority){
+    public List<Order> findOrderByStatusAndOrderPriority(OrderStatus orderStatus, OrderPriority orderPriority) {
         return orderJpaRepository.findByOrderStatusAndOrderPriority(orderStatus, orderPriority);
     }
 
-    public List<Order> findOrdersBySupplier(String supplier){
+    public List<Order> findOrdersBySupplier(String supplier) {
         return orderJpaRepository.findBySupplier(supplier);
     }
 
-    public List<Order> findOrdersByOrderDate(LocalDate orderDate){
+    public List<Order> findOrdersByOrderDate(LocalDate orderDate) {
         return orderJpaRepository.findByOrderDate(orderDate);
     }
 
-    public Page<Order> findAll(Pageable pageable){
-        return orderJpaRepository.findAll(pageable);
+    public List<Order> findByOrderTime(Instant orderTime) {
+        return orderJpaRepository.findByOrderTime(orderTime);
     }
 
-
+    public Page<Order> findAll(Pageable pageable) {
+        return orderJpaRepository.findAll(pageable);
+    }
 }

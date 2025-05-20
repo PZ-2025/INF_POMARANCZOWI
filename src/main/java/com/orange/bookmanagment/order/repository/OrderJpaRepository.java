@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,7 +23,9 @@ interface OrderJpaRepository extends JpaRepository<Order, Long> {
 
     List<Order> findBySupplier(String supplier);
 
-    List<Order> findByOrderDate(LocalDate date);
+    List<Order> findByOrderDate(LocalDate orderDate);
+
+    List<Order> findByOrderTime(Instant orderTime);
 
     Page<Order> findAll(Pageable pageable);
 }

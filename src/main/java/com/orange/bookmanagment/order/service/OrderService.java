@@ -38,6 +38,4 @@ public interface OrderService {
    Order updateOrderPriority(OrderPriorityUpdateRequest orderPriorityUpdateRequest) throws InvalidOrderArgumentException, OrderNotFoundException;
 
    Order finishOrder(long id) throws OrderNotFoundException;
-
-
 }

@@ -13,6 +13,7 @@ public class GsonUtil {
         gsonBuilder = new GsonBuilder();
         gson = gsonBuilder.create();
     }
+
     public static JsonElement toJsonTree(Object src) {
         return gson.toJsonTree(src);
     }

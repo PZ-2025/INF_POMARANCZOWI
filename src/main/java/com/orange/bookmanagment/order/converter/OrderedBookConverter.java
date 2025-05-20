@@ -15,7 +15,7 @@ public class OrderedBookConverter implements AttributeConverter<List<OrderedBook
     public String convertToDatabaseColumn(List<OrderedBook> attribute) {
        final StringBuilder sb = new StringBuilder();
 
-       for(int i = 0 ; i < attribute.size() ; i++) {
+       for (int i = 0; i < attribute.size(); i++) {
            sb.append(attribute.get(i).toString());
            if(i != attribute.size() - 1) sb.append(",");
        }
@@ -28,10 +28,11 @@ public class OrderedBookConverter implements AttributeConverter<List<OrderedBook
 
         final List<OrderedBook> books = new ArrayList<>();
 
-        for(String s : data) {
+        for (String s : data) {
             final OrderedBook orderedBook = GsonUtil.fromJson(s, OrderedBook.class);
             books.add(orderedBook);
         }
+
         return books;
     }
 }

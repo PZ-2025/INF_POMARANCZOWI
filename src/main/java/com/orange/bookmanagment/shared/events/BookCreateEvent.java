@@ -10,19 +10,14 @@ public record BookCreateEvent(
         String genre,
         String coverImage
 ) {
-
     public record EventBookAuthor(
             String firstName,
             String lastName,
             String biography
-    ) {
-
-    }
+    ) { }
 
     public record EventBookPublisher(
             String name,
             String description
-    ) {
-
-    }
+    ) { }
 }

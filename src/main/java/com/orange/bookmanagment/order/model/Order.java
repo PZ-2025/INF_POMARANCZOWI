@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class Order {
 
     private Instant updateTime;
 
+    private LocalDate orderDate;
 
     public Order(String supplier, List<OrderedBook> orderedBooks, OrderPriority orderPriority) {
         this.supplier = supplier;
@@ -48,6 +50,7 @@ public class Order {
         this.orderPriority = orderPriority;
         this.orderStatus = OrderStatus.PLACED;
         this.orderTime = Instant.now();
+        this.orderDate = LocalDate.now();
     }
 
     public void updateOrderStatus(OrderStatus orderStatus) {

@@ -36,11 +36,11 @@ class OrderServiceImpl implements OrderService {
     @Transactional
     public Order createOrder(OrderCreateRequest orderCreateRequest) throws InvalidOrderArgumentException {
 
-        if(!OrderPriority.existByName(orderCreateRequest.orderPriority())){
+        if (!OrderPriority.existByName(orderCreateRequest.orderPriority())) {
             throw new InvalidOrderArgumentException("Invalid order priority");
         }
-        final OrderPriority orderPriority = OrderPriority.valueOf(orderCreateRequest.orderPriority());
 
+        final OrderPriority orderPriority = OrderPriority.valueOf(orderCreateRequest.orderPriority());
         final Order order = new Order(orderCreateRequest.supplier(),orderCreateRequest.orderedBooks(), orderPriority);
 
         return orderRepository.save(order);
@@ -51,10 +51,9 @@ class OrderServiceImpl implements OrderService {
         return orderRepository.findOrderById(id).orElseThrow(() -> new OrderNotFoundException("Order by id not found"));
     }
 
-
     @Override
     public List<Order> getOrdersByOrderPriority(String orderPriority) throws InvalidOrderArgumentException {
-        if(!OrderPriority.existByName(orderPriority)){
+        if (!OrderPriority.existByName(orderPriority)) {
             throw new InvalidOrderArgumentException("Invalid order priority");
         }
 
@@ -63,7 +62,7 @@ class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getOrdersByOrderStatus(String orderStatus) throws InvalidOrderArgumentException {
-        if(!OrderStatus.existByName(orderStatus)){
+        if (!OrderStatus.existByName(orderStatus)) {
             throw new InvalidOrderArgumentException("Invalid order status");
         }
 
@@ -72,15 +71,16 @@ class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getOrdersByOrderPriorityAndStatus(String orderPriority, String orderStatus) throws InvalidOrderArgumentException {
-        if(!OrderPriority.existByName(orderPriority)){
+        if (!OrderPriority.existByName(orderPriority)) {
             throw new InvalidOrderArgumentException("Invalid order priority");
         }
-        if(!OrderStatus.existByName(orderStatus)){
+
+        if (!OrderStatus.existByName(orderStatus)) {
             throw new InvalidOrderArgumentException("Invalid order status");
         }
+
         final OrderStatus status = OrderStatus.valueOf(orderStatus);
         final  OrderPriority priority = OrderPriority.valueOf(orderPriority);
-
 
         return orderRepository.findOrderByStatusAndOrderPriority(status,priority);
     }
@@ -117,7 +117,7 @@ class OrderServiceImpl implements OrderService {
     public Order updateOrderStatus(OrderStatusUpdateRequest orderStatusUpdateRequest) throws InvalidOrderArgumentException, OrderNotFoundException {
         final Order order = orderRepository.findOrderById(orderStatusUpdateRequest.orderId()).orElseThrow(() -> new OrderNotFoundException("Order by id not found"));
 
-        if(!OrderStatus.existByName(orderStatusUpdateRequest.orderStatus())){
+        if (!OrderStatus.existByName(orderStatusUpdateRequest.orderStatus())) {
             throw new InvalidOrderArgumentException("Invalid order status");
         }
 
@@ -132,7 +132,7 @@ class OrderServiceImpl implements OrderService {
     public Order updateOrderPriority(OrderPriorityUpdateRequest orderPriorityUpdateRequest) throws InvalidOrderArgumentException, OrderNotFoundException {
         final Order order = orderRepository.findOrderById(orderPriorityUpdateRequest.orderId()).orElseThrow(() -> new OrderNotFoundException("Order by id not found"));
 
-        if(!OrderPriority.existByName(orderPriorityUpdateRequest.orderPriority())){
+        if (!OrderPriority.existByName(orderPriorityUpdateRequest.orderPriority())) {
             throw new InvalidOrderArgumentException("Invalid order priority");
         }
 
@@ -148,7 +148,7 @@ class OrderServiceImpl implements OrderService {
     public Order finishOrder(long id) throws OrderNotFoundException {
         final Order order = orderRepository.findOrderById(id).orElseThrow(() -> new OrderNotFoundException("Order by id not found"));
 
-        for(OrderedBook orderedBook : order.getOrderedBooks()){
+        for (OrderedBook orderedBook : order.getOrderedBooks()) {
             eventPublisher.publishEvent(
                     new BookCreateEvent(orderedBook.title(),orderedBook.authors().stream().map(orderedBookAuthor -> new BookCreateEvent.EventBookAuthor(orderedBookAuthor.firstName(),orderedBookAuthor.lastName(),orderedBookAuthor.biography())).toList(),
                     new BookCreateEvent.EventBookPublisher(orderedBook.publisher().name(),orderedBook.publisher().description()),orderedBook.description(),orderedBook.genre(),orderedBook.coverImage()));

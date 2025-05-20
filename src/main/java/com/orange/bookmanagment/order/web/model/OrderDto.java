@@ -13,5 +13,4 @@ public record OrderDto(
         OrderPriority orderPriority,
         OrderStatus orderStatus,
         String orderTime
-) {
-}
+) { }

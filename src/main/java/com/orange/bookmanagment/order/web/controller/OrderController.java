@@ -1,6 +1,5 @@
 package com.orange.bookmanagment.order.web.controller;
 
-
 import com.orange.bookmanagment.order.service.OrderService;
 import com.orange.bookmanagment.order.web.mapper.OrderDtoMapper;
 import com.orange.bookmanagment.order.web.model.OrderDto;
@@ -26,11 +25,13 @@ import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 class OrderController {
+
     private final OrderService orderService;
     private final OrderDtoMapper orderDtoMapper;
 
     @PostMapping("/place")
-    public ResponseEntity<HttpResponse> placeOrder(@Valid @RequestBody OrderCreateRequest orderCreateRequest){
+    public ResponseEntity<HttpResponse> placeOrder(@Valid @RequestBody OrderCreateRequest orderCreateRequest) {
+
         final OrderDto order = orderDtoMapper.toDto(orderService.createOrder(orderCreateRequest));
 
         return ResponseEntity.status(CREATED).body(HttpResponse.builder()
@@ -44,7 +45,8 @@ class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HttpResponse> findOrderById(@PathVariable("id") Long id){
+    public ResponseEntity<HttpResponse> findOrderById(@PathVariable("id") Long id) {
+
         final OrderDto orderDto = orderDtoMapper.toDto(orderService.getOrderById(id));
 
         return ResponseEntity.status(OK).body(HttpResponse.builder()
@@ -56,10 +58,11 @@ class OrderController {
                 .timeStamp(TimeUtil.getCurrentTimeWithFormat())
                 .build());
     }
+
     @GetMapping("/all")
     public ResponseEntity<HttpResponse> findAllOrders(
             @RequestParam @Valid @Min(value = 0, message = "Numer strony musi być wiekszy niż 0") int page,
-            @RequestParam @Valid @Min(value = 0, message = "Rozmiar strony musi być większy niż 0") int size){
+            @RequestParam @Valid @Min(value = 0, message = "Rozmiar strony musi być większy niż 0") int size) {
 
         final List<OrderDto> orders = orderService.findOrders(page,size).stream().map(orderDtoMapper::toDto).toList();
 
@@ -72,8 +75,9 @@ class OrderController {
                 .timeStamp(TimeUtil.getCurrentTimeWithFormat())
                 .build());
     }
+
     @GetMapping("/priority/{priority}")
-    public ResponseEntity<HttpResponse> findOrdersByPriority(@PathVariable @Valid @NotNull String priority){
+    public ResponseEntity<HttpResponse> findOrdersByPriority(@PathVariable @Valid @NotNull String priority) {
 
         final List<OrderDto> orders = orderService.getOrdersByOrderPriority(priority).stream().map(orderDtoMapper::toDto).toList();
 
@@ -86,8 +90,9 @@ class OrderController {
                 .timeStamp(TimeUtil.getCurrentTimeWithFormat())
                 .build());
     }
+
     @GetMapping("/status/{status}")
-    public ResponseEntity<HttpResponse> findOrdersByStatus(@PathVariable @Valid @NotNull String status){
+    public ResponseEntity<HttpResponse> findOrdersByStatus(@PathVariable @Valid @NotNull String status) {
 
         final List<OrderDto> orders = orderService.getOrdersByOrderStatus(status).stream().map(orderDtoMapper::toDto).toList();
 
@@ -102,7 +107,9 @@ class OrderController {
     }
 
     @PostMapping("/finish/{id}")
-    public ResponseEntity<HttpResponse> finishOrder(@PathVariable @Valid @NotNull @Min(value = 0, message = "Id zamówienia musi być wieksze niż 0") int id){
+    public ResponseEntity<HttpResponse> finishOrder(
+            @PathVariable @Valid @NotNull @Min(value = 0, message = "Id zamówienia musi być wieksze niż 0") int id) {
+
         final OrderDto orderDto = orderDtoMapper.toDto(orderService.finishOrder(id));
 
         return ResponseEntity.status(OK).body(HttpResponse.builder()
@@ -114,8 +121,11 @@ class OrderController {
                         .reason("Order finish request")
                 .build());
     }
+
     @PatchMapping("/priority")
-    public ResponseEntity<HttpResponse> updateOrderPriority(@Valid @RequestBody OrderPriorityUpdateRequest orderPriorityUpdateRequest){
+    public ResponseEntity<HttpResponse> updateOrderPriority(
+            @Valid @RequestBody OrderPriorityUpdateRequest orderPriorityUpdateRequest) {
+
         final OrderDto orderDto = orderDtoMapper.toDto(orderService.updateOrderPriority(orderPriorityUpdateRequest));
 
         return ResponseEntity.status(OK).body(HttpResponse.builder()
@@ -129,7 +139,9 @@ class OrderController {
     }
 
     @PatchMapping("/status")
-    public ResponseEntity<HttpResponse> updateOrderStatus(@Valid @RequestBody OrderStatusUpdateRequest orderStatusUpdateRequest){
+    public ResponseEntity<HttpResponse> updateOrderStatus(
+            @Valid @RequestBody OrderStatusUpdateRequest orderStatusUpdateRequest) {
+
         final OrderDto orderDto = orderDtoMapper.toDto(orderService.updateOrderStatus(orderStatusUpdateRequest));
 
         return ResponseEntity.status(OK).body(HttpResponse.builder()
@@ -143,7 +155,7 @@ class OrderController {
     }
 
     @GetMapping("/data/{type}")
-    public ResponseEntity<HttpResponse> getOrderData(@PathVariable @Valid @NotNull String type){
+    public ResponseEntity<HttpResponse> getOrderData(@PathVariable @Valid @NotNull String type) {
         return switch (type) {
             case "priorities" -> ResponseEntity.status(OK).body(HttpResponse.builder()
                     .httpStatus(OK)
@@ -169,6 +181,5 @@ class OrderController {
                     .timeStamp(TimeUtil.getCurrentTimeWithFormat())
                     .build());
         };
-
     }
 }
