@@ -12,7 +12,7 @@
 
   <div class="flex items-center space-x-6">
     <!-- Navbar dla niezalogowanego użytkownika -->
-    <a *ngIf="!isLoggedIn" [routerLink]="['/register']" class="text-xl">Zaloguj się</a>
+    <a *ngIf="!isLoggedIn" [routerLink]="['/login']" class="text-xl">Zaloguj się</a>
     <a *ngIf="!isLoggedIn" [routerLink]="['/register']" class="text-xl">Zarejestruj się</a>
 
     <!-- Navbar dla zalogowanego użytkownika -->
