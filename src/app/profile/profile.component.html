@@ -122,8 +122,11 @@
     </div>
 
     <!-- Raporty / userType === 'LIBRARIAN' || userType === 'ADMIN' -->
-    <div *ngIf="activeTab === 'users' && (userType === 'LIBRARIAN' || userType === 'ADMIN')" class="flex flex-col gap-6">
-
+    <div *ngIf="activeTab === 'reports' && (userType === 'LIBRARIAN' || userType === 'ADMIN')" class="flex flex-col gap-6">
+    <app-reports
+      [userFirstName]="firstName"
+      [userLastName]="lastName">
+    </app-reports>
     </div>
 
     <!-- Księgozbiór / userType === 'LIBRARIAN' || userType === 'ADMIN' -->

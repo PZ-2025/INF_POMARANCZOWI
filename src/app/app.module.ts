@@ -17,6 +17,7 @@ import { EditUserModalComponent } from './components/edit-user-modal/edit-user-m
 import { EditPasswordModalComponent } from './components/edit-password-modal/edit-password-modal.component';
 import { EditAvatarModalComponent } from './components/edit-avatar-modal/edit-avatar-modal.component';
 import { BookDetailsComponent } from './pages/book-details/book-details.component';
+import {ReportsComponent} from './report/reports.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { BookDetailsComponent } from './pages/book-details/book-details.componen
     EditUserModalComponent,
     EditPasswordModalComponent,
     EditAvatarModalComponent,
-    BookDetailsComponent
+    BookDetailsComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,
