@@ -3,7 +3,6 @@ import { AuthService } from '../auth/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from '../services/message.service';
 import { BadMessageService } from '../services/bad-message.service';
-import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -23,7 +22,7 @@ export class ProfileComponent {
   message: string | null = null;
   badMessage: string | null = null;
 
-  constructor(private userService: UserService, private themeService: ThemeService, private authService: AuthService, private messageService: MessageService, private badMessageService: BadMessageService, private cookieService: CookieService, private http: HttpClient, private cdr: ChangeDetectorRef, private bookService: BookService) {}
+  constructor(private userService: UserService, private themeService: ThemeService, private authService: AuthService, private messageService: MessageService, private badMessageService: BadMessageService, private http: HttpClient, private cdr: ChangeDetectorRef, private bookService: BookService) {}
 
   userType: string | null = null;
   email: string | null = null;
@@ -171,7 +170,7 @@ export class ProfileComponent {
   fetchAllBooks() {
     if (this.userType !== 'ADMIN' && this.userType !== 'LIBRARIAN') return;
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       this.loadAllBookError = true;
@@ -267,7 +266,7 @@ export class ProfileComponent {
   fetchAllUsers() {
     if (this.userType !== 'ADMIN') return;
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       this.loadUsersError = true;
@@ -493,7 +492,7 @@ export class ProfileComponent {
     const formData = new FormData();
     formData.append('file', file);
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -543,7 +542,7 @@ export class ProfileComponent {
       return;
     }
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -618,7 +617,7 @@ export class ProfileComponent {
   fetchRentals() {
     if (this.userType !== 'READER') return;
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -628,7 +627,7 @@ export class ProfileComponent {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: (response) => {
         const loans = response.data?.loans || [];
@@ -644,7 +643,7 @@ export class ProfileComponent {
             headers: {
               Authorization: `Bearer ${token}`
             },
-            withCredentials: true
+
           }).pipe(
             map(bookResponse => {
               const bookData = bookResponse.data?.book || bookResponse.data || bookResponse;
@@ -728,7 +727,7 @@ export class ProfileComponent {
       return;
     }
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -751,7 +750,7 @@ export class ProfileComponent {
   }
 
   returnBook(loanId: number) {
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -779,7 +778,7 @@ export class ProfileComponent {
   fetchReservations() {
     if (this.userType !== 'READER') return;
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -789,7 +788,7 @@ export class ProfileComponent {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: (response) => {
         const reservations = response.data?.reservations || [];
@@ -815,7 +814,7 @@ export class ProfileComponent {
             headers: {
               Authorization: `Bearer ${token}`
             },
-            withCredentials: true
+
           }).pipe(
             map(bookResponse => {
               const bookData = bookResponse.data?.book || bookResponse.data || bookResponse;
@@ -881,7 +880,7 @@ export class ProfileComponent {
   }
 
   expireReservation(reservationId: number) {
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -891,7 +890,7 @@ export class ProfileComponent {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: () => {
         // console.log(`Rezerwacja ${reservationId} została oznaczona jako EXPIRED`);
@@ -910,7 +909,7 @@ export class ProfileComponent {
       return;
     }
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -920,7 +919,7 @@ export class ProfileComponent {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: () => {
         this.messageService.setMessage('Rezerwacja została anulowana.');
@@ -934,7 +933,7 @@ export class ProfileComponent {
   }
 
   completeReservation(reservationId: number) {
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -944,7 +943,7 @@ export class ProfileComponent {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: () => {
         this.messageService.setMessage('Rezerwacja została zrealizowana.');
@@ -964,7 +963,7 @@ export class ProfileComponent {
       return;
     }
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -974,7 +973,6 @@ export class ProfileComponent {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
     }).subscribe({
       next: () => {
         this.messageService.setMessage('Rezerwacja została przedłużona.');
@@ -998,7 +996,7 @@ export class ProfileComponent {
   markBookAsLost(loanId: number): void {
     if (this.userType !== 'READER') return;
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -1009,7 +1007,7 @@ export class ProfileComponent {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: () => {
         this.messageService.setMessage('Książka została oznaczona jako zgubiona.');

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BookService, BookDto } from '../../services/book.service';
 import { MessageService } from '../../services/message.service';
 import { BadMessageService } from '../../services/bad-message.service';
-import { CookieService } from 'ngx-cookie-service';
+
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { User } from '../../auth/auth.interface';
@@ -22,7 +22,7 @@ export class BookDetailsComponent implements OnInit {
   message: string | null = null;
   badMessage: string | null = null;
 
-  constructor(private route: ActivatedRoute, private bookService: BookService, private router: Router, private messageService: MessageService, private badMessageService: BadMessageService, private cookieService: CookieService, private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private route: ActivatedRoute, private bookService: BookService, private router: Router, private messageService: MessageService, private badMessageService: BadMessageService, private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   userType: string | null = null;
   email: string | null = null;
@@ -141,7 +141,7 @@ export class BookDetailsComponent implements OnInit {
   fetchRentalsAndReservations() {
     if (this.userType !== 'READER') return;
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -151,7 +151,6 @@ export class BookDetailsComponent implements OnInit {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
     }).subscribe({
       next: (response) => {
         this.userLoans = response.data?.loans || [];
@@ -169,7 +168,7 @@ export class BookDetailsComponent implements OnInit {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: (response) => {
         const reservations = response.data?.reservations || [];
@@ -295,7 +294,7 @@ export class BookDetailsComponent implements OnInit {
       return;
     }
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -318,7 +317,7 @@ export class BookDetailsComponent implements OnInit {
   }
 
   returnBook(loanId: number) {
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -354,7 +353,7 @@ export class BookDetailsComponent implements OnInit {
   }
 
   expireReservation(reservationId: number) {
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -364,7 +363,7 @@ export class BookDetailsComponent implements OnInit {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: () => {
         // console.log(`Rezerwacja ${reservationId} została oznaczona jako EXPIRED`);
@@ -377,7 +376,7 @@ export class BookDetailsComponent implements OnInit {
   }
 
   cancelReservation(reservationId: number) {
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -387,7 +386,7 @@ export class BookDetailsComponent implements OnInit {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: () => {
         this.messageService.setMessage('Rezerwacja została anulowana.');
@@ -401,7 +400,7 @@ export class BookDetailsComponent implements OnInit {
   }
 
   completeReservation(reservationId: number) {
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -411,7 +410,7 @@ export class BookDetailsComponent implements OnInit {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: () => {
         this.messageService.setMessage('Rezerwacja została zrealizowana.');
@@ -430,7 +429,7 @@ export class BookDetailsComponent implements OnInit {
       return;
     }
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -440,7 +439,7 @@ export class BookDetailsComponent implements OnInit {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: () => {
         this.messageService.setMessage('Rezerwacja została przedłużona.');
@@ -464,7 +463,7 @@ export class BookDetailsComponent implements OnInit {
   markBookAsLost(loanId: number): void {
     if (this.userType !== 'READER') return;
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -475,7 +474,7 @@ export class BookDetailsComponent implements OnInit {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: () => {
         this.messageService.setMessage('Książka została oznaczona jako zgubiona.');
@@ -491,7 +490,7 @@ export class BookDetailsComponent implements OnInit {
   borrowBook(bookId: number): void {
     if (this.userType !== 'READER') return;
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -506,7 +505,7 @@ export class BookDetailsComponent implements OnInit {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true
+
     }).subscribe({
       next: () => {
         this.messageService.setMessage('Książka została wypożyczona.');
@@ -522,7 +521,7 @@ export class BookDetailsComponent implements OnInit {
   reserveBook(bookId: number): void {
     if (this.userType !== 'READER') return;
 
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.badMessageService.setMessage('Token użytkownika stracił ważność.');
       return;
@@ -531,8 +530,7 @@ export class BookDetailsComponent implements OnInit {
     this.http.post(`http://localhost:8080/api/v1/reservations/book/${bookId}`, {}, {
       headers: {
         Authorization: `Bearer ${token}`
-      },
-      withCredentials: true
+      }
     }).subscribe({
       next: () => {
         this.messageService.setMessage('Książka została zarezerwowana.');

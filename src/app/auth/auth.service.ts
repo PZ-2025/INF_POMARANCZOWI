@@ -2,24 +2,16 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { TokenResponse } from './auth.interface';
-import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   http = inject(HttpClient);
-  baseApiUrl = 'http://localhost:8080/api/v1/auth/'
-  cookieService = inject(CookieService)
-
-  token: string |null = null;
-  refreshToken: string |null = null;
+  baseApiUrl = 'http://localhost:8080/api/v1/auth/';
 
   get isAuth(): boolean {
-    if (!this.token) {
-      this.token = this.cookieService.get('token');
-    }
-    return !!this.token;
+    return !!localStorage.getItem('token');
   }
 
   get getUserType(): string | null {
@@ -32,11 +24,9 @@ export class AuthService {
       payload,
     ).pipe(
       tap(val => {
-        this.token = val.access_token;
-        this.refreshToken = val.refresh_token;
+        // Zapisz token w localStorage
+        localStorage.setItem('token', val.access_token);
 
-        this.cookieService.set('token', this.token);
-        this.cookieService.set('refreshToken', this.refreshToken);
         console.log("Login response:", val);
         const user = val.data.user;
         localStorage.setItem('userType', user.userType);
@@ -47,7 +37,7 @@ export class AuthService {
         localStorage.removeItem('profileTab');
 
         if (user.avatarPath == null) {
-          localStorage.setItem('avatarPath', '/assets/imgs/user.png');
+          localStorage.setItem('avatarPath', './assets/imgs/user.png');
         } else {
           localStorage.setItem('avatarPath', user.avatarPath);
         }
@@ -56,10 +46,14 @@ export class AuthService {
   }
 
   logout(): void {
-    this.cookieService.delete('token', '');
-    this.cookieService.delete('refreshToken', '');
-    this.token = null;
-    this.refreshToken = null;
+    // Usuwanie wszystkich danych z localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('userType');
+    localStorage.removeItem('email');
+    localStorage.removeItem('firstName');
+    localStorage.removeItem('lastName');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('avatarPath');
   }
 
   register(payload: RegisterPayload) {
@@ -67,7 +61,7 @@ export class AuthService {
   }
 
   updateProfile(firstName: string, lastName: string) {
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
 
     return this.http.put(
       'http://localhost:8080/api/v1/user/me',
@@ -81,7 +75,7 @@ export class AuthService {
   }
 
   changePassword(oldPassword: string, newPassword: string) {
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     const body = {
       oldPassword,
       newPassword
@@ -93,8 +87,8 @@ export class AuthService {
     });
   }
 
-  getToken(): string {
-    return this.cookieService.get('token');
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 }
 
