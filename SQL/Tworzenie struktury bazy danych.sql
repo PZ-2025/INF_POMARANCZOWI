@@ -1,0 +1,22 @@
+CREATE TABLE authors (id BIGINT NOT NULL AUTO_INCREMENT, biography VARCHAR(2000), first_name VARCHAR(255), last_name VARCHAR(255), PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE book_authors (author_id BIGINT NOT NULL, book_id BIGINT NOT NULL) ENGINE=InnoDB;
+CREATE TABLE books (id BIGINT NOT NULL AUTO_INCREMENT, created_at DATETIME(6), publisher_id BIGINT, updated_at DATETIME(6), cover_image VARCHAR(255), description VARCHAR(255), genre VARCHAR(255), title VARCHAR(255), status ENUM('AVAILABLE','BORROWED','LOST','RESERVED'), PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE event_publication (id BINARY(16) NOT NULL, completion_date DATETIME(6), publication_date DATETIME(6), event_type VARCHAR(255), listener_id VARCHAR(255), serialized_event VARCHAR(255), PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE loans (id BIGINT NOT NULL AUTO_INCREMENT, book_id BIGINT NOT NULL, user_id BIGINT NOT NULL, lending_librarian_id BIGINT, returning_librarian_id BIGINT, borrowed_at DATETIME(6), due_date DATETIME(6), returned_at DATETIME(6), updated_at DATETIME(6), extended_count INT DEFAULT 0, notes VARCHAR(255), status ENUM('ACTIVE', 'RETURNED', 'OVERDUE', 'LOST') NOT NULL DEFAULT 'ACTIVE', PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE notifications (id BIGINT NOT NULL AUTO_INCREMENT, created_at DATETIME(6), updated_at DATETIME(6), user_id BIGINT NOT NULL, body VARCHAR(255), title VARCHAR(255), notification_status ENUM('CREATED','READ','SENT'), notification_type ENUM('ERROR','INFO','REMINDER','WARNING'), PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE publishers (id BIGINT NOT NULL AUTO_INCREMENT, description VARCHAR(255), name VARCHAR(255), PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE reservations (id BIGINT NOT NULL AUTO_INCREMENT, queue_position INT NOT NULL, book_id BIGINT NOT NULL, expires_at DATETIME(6), reserved_at DATETIME(6), updated_at DATETIME(6), user_id BIGINT NOT NULL, status ENUM('CANCELLED','COMPLETED','EXPIRED','PENDING','READY'), PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE users (id BIGINT NOT NULL AUTO_INCREMENT, blocked BIT NOT NULL, locked BIT NOT NULL, verified BIT NOT NULL, blocked_at DATETIME(6), changed_password_at DATETIME(6), created_at DATETIME(6), locked_at DATETIME(6), updated_at DATETIME(6), user_settings BIGINT, verified_at DATETIME(6), email VARCHAR(255), first_name VARCHAR(255), last_name VARCHAR(255), password VARCHAR(255), avatar_path VARCHAR(512), user_type ENUM('ADMIN','LIBRARIAN','READER'), PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE user_settings (id BIGINT NOT NULL AUTO_INCREMENT, dark_mode BIT NOT NULL, email_notifications_enabled BIT NOT NULL, email_reminders_enabled BIT NOT NULL, new_books_notifications_enabled BIT NOT NULL, notifications_enabled BIT NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB;
+
+ALTER TABLE users ADD CONSTRAINT UK6y1l5ijwp9ho34tkofoanm04n UNIQUE (user_settings);
+ALTER TABLE book_authors ADD CONSTRAINT FKo86065vktj3hy1m7syr9cn7va FOREIGN KEY (author_id) REFERENCES authors (id);
+ALTER TABLE book_authors ADD CONSTRAINT FKbhqtkv2cndf10uhtknaqbyo0a FOREIGN KEY (book_id) REFERENCES books (id);
+ALTER TABLE books ADD CONSTRAINT FKayy5edfrqnegqj3882nce6qo8 FOREIGN KEY (publisher_id) REFERENCES publishers (id);
+ALTER TABLE loans ADD CONSTRAINT FKokwvlrv6o4i4h3le3bwhe6kie FOREIGN KEY (book_id) REFERENCES books (id);
+ALTER TABLE loans ADD CONSTRAINT FKlnwo8xfptp66rt9cawvsm5d35 FOREIGN KEY (lending_librarian_id) REFERENCES users (id);
+ALTER TABLE loans ADD CONSTRAINT FKo0l5wrb6fneai60e5nebsny8k FOREIGN KEY (returning_librarian_id) REFERENCES users (id);
+ALTER TABLE loans ADD CONSTRAINT FK6xxlcjc0rqtn5nq28vjnx5t9d FOREIGN KEY (user_id) REFERENCES users (id);
+ALTER TABLE reservations ADD CONSTRAINT FKrsdd3ib3landfpmgoolccjakt FOREIGN KEY (book_id) REFERENCES books (id);
+ALTER TABLE reservations ADD CONSTRAINT FKb5g9io5h54iwl2inkno50ppln FOREIGN KEY (user_id) REFERENCES users (id);
+ALTER TABLE users ADD CONSTRAINT FKoyu22rg9veuhq9gsi2syk89x1 FOREIGN KEY (user_settings) REFERENCES user_settings (id);
