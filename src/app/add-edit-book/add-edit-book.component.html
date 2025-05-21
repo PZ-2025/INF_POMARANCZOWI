@@ -4,71 +4,108 @@
     <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Dodawanie książki</h1>
     <div class="w-full p-8 rounded-3xl shadow-lg border border-black-400 box-border mt-8" style="background-color: var(--box-color);">
       <form class="flex flex-col space-y-6" [formGroup]="form">
-        <div class="mt-0 flex gap-x-6 rounded-lg w-full max-w-full">
-          <input
-            type="file"
-            class="h-[200px] border rounded-lg w-full max-w-full bg-[var(--input-bg)] cursor-pointer"
-          />
-          <input
-            type="file"
-            class="h-[200px] border rounded-lg w-full max-w-full bg-[var(--input-bg)] cursor-pointer"
-          />
-        </div>
+        <!-- Okładka -->
+        <input
+          type="file"
+          placeholder="Okładka"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl cursor-pointer"
+          style="background-color: var(--input-bg);"
+        />
+
+        <!-- Tytuł -->
         <input
           formControlName="title"
           type="text"
           placeholder="Tytuł"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl text-[var(--text-color)]"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg);"
           required
         />
-        <input
-          formControlName="author"
-          type="text"
-          placeholder="Autor"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl text-[var(--text-color)]"
-          required
-        />
+
+        <!-- Gatunek -->
         <input
           formControlName="genre"
           type="text"
           placeholder="Gatunek"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl text-[var(--text-color)]"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg);"
           required
         />
-        <input
-          formControlName="publisher"
-          type="text"
-          placeholder="Wydawnictwo"
-          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl text-[var(--text-color)]"
-          required
-        />
-        <div class="flex gap-x-6 w-full max-w-full">
-          <input
-            formControlName="year_of_publication"
-            type="text"
-            placeholder="Rok wydania"
-            class="flex-1 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl w-full max-w-full text-[var(--text-color)]"
-            required
-          />
-          <input
-            formControlName="pages"
-            type="text"
-            placeholder="Liczba stron"
-            class="flex-1 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl w-full max-w-full text-[var(--text-color)]"
-            required
-          />
-        </div>
+
+        <!-- Opis -->
         <textarea
           formControlName="description"
           placeholder="Opis"
           rows="3"
-          class="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--input-bg)] text-2xl text-[var(--text-color)]"
+          class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+          style="background-color: var(--input-bg);"
+          required
         ></textarea>
+
+
+
+
+
+
+<!--
+        Ilość autorów
+        <label class="text-white text-xl">Ilu autorów?</label>
+        <select formControlName="authorCount" class="input">
+          <option *ngFor="let num of [1, 2, 3, 4, 5]" [value]="num">{{ num }}</option>
+        </select>
+
+        <Autorzy
+        <div *ngFor="let i of [].constructor(form.get('authorCount')?.value || 1); let idx = index" class="border p-4 rounded-lg space-y-4">
+          <label class="text-white">Autor #{{ idx + 1 }}</label>
+
+          <select [formControlName]="'authorChoice' + idx" class="input">
+            <option value="existing">Wybierz istniejącego</option>
+            <option value="new">Dodaj nowego</option>
+          </select>
+
+          <ng-container *ngIf="form.get('authorChoice' + idx)?.value === 'new'">
+            <input [formControlName]="'authorFirstName' + idx" type="text" placeholder="Imię autora" class="input" />
+            <input [formControlName]="'authorLastName' + idx" type="text" placeholder="Nazwisko autora" class="input" />
+            <textarea [formControlName]="'authorBio' + idx" placeholder="Biografia" class="input" rows="2"></textarea>
+          </ng-container>
+
+          <ng-container *ngIf="form.get('authorChoice' + idx)?.value === 'existing'">
+            <select [formControlName]="'authorExisting' + idx" class="input">
+              <option *ngFor="let a of existingAuthors" [value]="a.id">{{ a.firstName }} {{ a.lastName }}</option>
+            </select>
+          </ng-container>
+        </div>
+
+        Wydawca
+        <label class="text-white text-xl">Wydawnictwo</label>
+        <select formControlName="publisherChoice" class="input">
+          <option value="existing">Wybierz istniejące</option>
+          <option value="new">Dodaj nowe</option>
+        </select>
+
+        <ng-container *ngIf="form.get('publisherChoice')?.value === 'new'">
+          <input formControlName="publisherName" type="text" placeholder="Nazwa wydawnictwa" class="input" />
+          <textarea formControlName="publisherDescription" placeholder="Opis wydawnictwa" class="input" rows="2"></textarea>
+        </ng-container>
+
+        <ng-container *ngIf="form.get('publisherChoice')?.value === 'existing'">
+          <select formControlName="publisherExisting" class="input">
+            <option *ngFor="let p of existingPublishers" [value]="p.id">{{ p.name }}</option>
+          </select>
+        </ng-container>
+ -->
+
+
+
+
+
+
+        <!-- Przycisk do wysyłania -->
         <button
-          type="submit"
-          class="bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-all text-3xl mt-2 cursor-pointer"
+          type="submit" style="background-color: var(--button-login-bg); color: var(--button-login-text)"
+          class="py-3 pb-1 px-4 rounded-lg transition-all text-3xl mt-4 cursor-pointer w-full text-center overflow-hidden"
         >
-          Dodaj
+          <span class="inline-block w-full text-center overflow-hidden whitespace-nowrap">Dodaj</span>
         </button>
       </form>
     </div>

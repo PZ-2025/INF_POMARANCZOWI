@@ -20,6 +20,7 @@ export class LoginComponent {
   })
 
   constructor(private messageService: MessageService) {}
+  
   errorMessage: string | null = null;
 
   onSubmit() {
