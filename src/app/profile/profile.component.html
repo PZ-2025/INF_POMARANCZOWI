@@ -192,7 +192,7 @@
       </div>
 
       <!-- Dodawanie książki -->
-      <div class="flex justify-center items-center gap-2">
+      <div *ngIf="paginatedBooks.length !== 0" class="flex justify-center items-center gap-2">
         <button [routerLink]="['/book/add']" class="px-4 py-2 w-[136px] rounded-lg border cursor-pointer" style="background-color: var(--box-pagination-color);">Dodaj książkę</button>
       </div>
 
