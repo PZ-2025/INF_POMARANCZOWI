@@ -20,7 +20,7 @@ import static org.springframework.http.HttpStatus.*;
  */
 @RestController
 @RequestMapping("/api/v1/reservations")
- @RequiredArgsConstructor
+@RequiredArgsConstructor
 public class ReservationController {
 
     private final ReservationService reservationService;
@@ -192,6 +192,27 @@ public class ReservationController {
     }
 
     /**
+     * Zwraca długość kolejki rezerwacji dla danej książki.
+     *
+     * @param bookId ID książki
+     * @return długość kolejki
+     */
+    @GetMapping("/queue-length/{bookId}")
+    public ResponseEntity<HttpResponse> getQueueLength(
+            @PathVariable("bookId") long bookId) {
+
+        int queueLength = reservationService.getQueueLength(bookId);
+
+        return ResponseEntity.ok(HttpResponse.builder()
+                .statusCode(200)
+                .httpStatus(OK)
+                .reason("Queue length retrieved")
+                .message("Queue length retrieved successfully")
+                .data(Map.of("queueLength", queueLength))
+                .build());
+    }
+
+    /**
      * Wygasza rezerwację.
      *
      * @param reservationId ID rezerwacji
@@ -255,4 +276,6 @@ public class ReservationController {
                 .data(Map.of("reservation", reservationDtoMapper.toDto(reservation)))
                 .build());
     }
+
+
 }

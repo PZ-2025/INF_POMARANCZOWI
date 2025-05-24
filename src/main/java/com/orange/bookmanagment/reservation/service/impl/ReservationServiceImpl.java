@@ -555,4 +555,10 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
 
         updateQueuePositions(reservation.getBookId());
     }
+
+    @Override
+    public int getQueueLength(long bookId) {
+        return reservationRepository.countByBookIdAndStatusIn(
+                bookId, List.of(ReservationStatus.PENDING, ReservationStatus.READY));
+    }
 }

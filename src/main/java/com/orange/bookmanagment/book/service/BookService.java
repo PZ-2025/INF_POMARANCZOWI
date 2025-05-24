@@ -113,4 +113,6 @@ public interface BookService {
      * @return lista dopasowanych książek
      */
     List<Book> searchBooks(String query);
+
+    List<Book> getLostBooks();
 }

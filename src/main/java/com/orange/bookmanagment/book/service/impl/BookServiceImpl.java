@@ -261,4 +261,9 @@ class BookServiceImpl implements BookService, BookExternalService {
     public List<Book> searchBooks(String query) {
         return bookRepository.searchBooks(query.toLowerCase());
     }
+
+    @Override
+    public List<Book> getLostBooks() {
+        return bookRepository.findLostBooks();
+    }
 }

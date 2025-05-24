@@ -135,6 +135,25 @@ class BookController {
     }
 
     /**
+     * Zwraca książki, które są aktualnie zgubione.
+     *
+     * @return lista wypożyczonych książek
+     */
+    @GetMapping("/lost")
+    public ResponseEntity<HttpResponse> getLostBooks() {
+        List<Book> lostBooks = bookService.getLostBooks();
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .reason("Lost books request")
+                        .message("Successfully fetched lost books")
+                        .data(Map.of("books", lostBooks.stream().map(bookDtoMapper::toDto).toList()))
+                        .build());
+    }
+
+    /**
      * Zwraca losowe książki.
      *
      * @return lista 12 losowych książek

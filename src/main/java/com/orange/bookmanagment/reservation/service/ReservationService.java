@@ -106,4 +106,6 @@ public interface ReservationService {
       * @param reservationId ID rezerwacji
       */
      void cancelReservationForMark(Long reservationId);
+
+    int getQueueLength(long bookId);
 }

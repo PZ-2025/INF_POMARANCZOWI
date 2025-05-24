@@ -131,4 +131,13 @@ public class BookRepository {
     public List<Book> searchBooks(String query) {
         return bookJpaRepository.searchBooks(query);
     }
+
+    /**
+     * Zwraca książki, które zostały zgubione.
+     *
+     * @return lista książek o statusie LOST
+     */
+    public List<Book> findLostBooks() {
+        return bookJpaRepository.findByStatus(BookStatus.LOST);
+    }
 }
