@@ -68,6 +68,7 @@ class SecurityConfig {
                                 .requestMatchers(GET, "/api/v1/book/all").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/all/unpaged").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/{id}").permitAll()
+                                .requestMatchers(PUT, "/api/v1/book/{id}/update").hasAnyAuthority("ADMIN", "LIBRARIAN")
                                 .requestMatchers(GET, "/api/v1/book/lost").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/random/category/**").permitAll()
                                 .requestMatchers(GET, "/api/v1/book/search").permitAll()

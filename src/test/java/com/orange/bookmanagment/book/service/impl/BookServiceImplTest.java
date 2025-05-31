@@ -11,6 +11,7 @@ import com.orange.bookmanagment.book.service.PublisherService;
 import com.orange.bookmanagment.book.service.mapper.BookInternalMapper;
 import com.orange.bookmanagment.book.web.requests.AuthorCreateRequest;
 import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
+import com.orange.bookmanagment.book.web.requests.BookUpdateRequest;
 import com.orange.bookmanagment.book.web.requests.PublisherCreateRequest;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -248,50 +249,54 @@ class BookServiceImplTest {
     @Test
     void updateBook_whenBookExists_shouldUpdateBook() {
         // given
-        Book updatedBook = new Book(
+        BookUpdateRequest bookUpdateRequest = new BookUpdateRequest(
                 "Updated Title",
-                testAuthors,
-                testPublisher,
+                null, // authors - nie aktualizujemy
+                null, // publisher - nie aktualizujemy
                 "Updated Description",
                 "Updated Genre",
-                BookStatus.AVAILABLE,
                 "updated-cover.jpg"
         );
-        updatedBook.setId(BOOK_ID);
 
         when(bookRepository.findBookById(BOOK_ID)).thenReturn(Optional.of(testBook));
-        when(bookRepository.saveBook(updatedBook)).thenReturn(updatedBook);
+        when(bookRepository.saveBook(any(Book.class))).thenReturn(testBook);
 
         // when
-        Book result = bookService.updateBook(updatedBook);
+        Book result = bookService.updateBook(BOOK_ID, bookUpdateRequest);
 
         // then
         assertThat(result).isNotNull();
         assertThat(result.getTitle()).isEqualTo("Updated Title");
         assertThat(result.getDescription()).isEqualTo("Updated Description");
+        assertThat(result.getGenre()).isEqualTo("Updated Genre");
+        assertThat(result.getCoverImage()).isEqualTo("updated-cover.jpg");
 
         verify(bookRepository).findBookById(BOOK_ID);
-        verify(bookRepository).saveBook(updatedBook);
+        verify(bookRepository).saveBook(bookCaptor.capture());
+
+        Book capturedBook = bookCaptor.getValue();
+        assertThat(capturedBook.getTitle()).isEqualTo("Updated Title");
+        assertThat(capturedBook.getDescription()).isEqualTo("Updated Description");
+        assertThat(capturedBook.getGenre()).isEqualTo("Updated Genre");
+        assertThat(capturedBook.getCoverImage()).isEqualTo("updated-cover.jpg");
     }
 
     @Test
     void updateBook_whenBookDoesNotExist_shouldThrowException() {
         // given
-        Book updatedBook = new Book(
+        BookUpdateRequest bookUpdateRequest = new BookUpdateRequest(
                 "Updated Title",
-                testAuthors,
-                testPublisher,
+                null,
+                null,
                 "Updated Description",
                 "Updated Genre",
-                BookStatus.AVAILABLE,
                 "updated-cover.jpg"
         );
-        updatedBook.setId(BOOK_ID);
 
         when(bookRepository.findBookById(BOOK_ID)).thenReturn(Optional.empty());
 
         // when/then
-        assertThatThrownBy(() -> bookService.updateBook(updatedBook))
+        assertThatThrownBy(() -> bookService.updateBook(BOOK_ID, bookUpdateRequest))
                 .isInstanceOf(BookNotFoundException.class)
                 .hasMessage("Book not found by id");
 

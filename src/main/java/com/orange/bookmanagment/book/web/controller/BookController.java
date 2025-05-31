@@ -5,6 +5,7 @@ import com.orange.bookmanagment.book.service.BookService;
 import com.orange.bookmanagment.book.web.mapper.BookDtoMapper;
 import com.orange.bookmanagment.book.web.model.BookDto;
 import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
+import com.orange.bookmanagment.book.web.requests.BookUpdateRequest;
 import com.orange.bookmanagment.shared.model.HttpResponse;
 import com.orange.bookmanagment.shared.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -130,6 +131,25 @@ class BookController {
                         .httpStatus(OK)
                         .reason("Book creation request")
                         .message("Book created")
+                        .data(Map.of("book", bookDtoMapper.toDto(book)))
+                        .build());
+    }
+
+    /**
+     * Aktualizuje istniejącą książkę.
+     *
+     * @return odpowiedź z zaktualizowaną książką
+     */
+    @PutMapping("/{id}/update")
+    public ResponseEntity<HttpResponse> updateBook(@PathVariable("id") long id, @RequestBody BookUpdateRequest bookUpdateRequest) {
+        Book book = bookService.updateBook(id, bookUpdateRequest);
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .reason("Book update request")
+                        .message("Book updated")
                         .data(Map.of("book", bookDtoMapper.toDto(book)))
                         .build());
     }

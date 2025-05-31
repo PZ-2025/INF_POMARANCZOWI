@@ -3,10 +3,12 @@ package com.orange.bookmanagment.book.service;
 import com.orange.bookmanagment.book.exception.BookNotFoundException;
 import com.orange.bookmanagment.book.model.Book;
 import com.orange.bookmanagment.book.web.model.BookDto;
+import com.orange.bookmanagment.book.web.requests.BookUpdateRequest;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.book.web.requests.BookCreateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -60,11 +62,12 @@ public interface BookService {
     /**
      * Aktualizuje dane książki.
      *
-     * @param book książka do aktualizacji
+     * @param id identyfikator książki do aktualizacji
+     * @param bookUpdateRequest dane do aktualizacji książki
      * @return zaktualizowana książka
      * @throws BookNotFoundException jeśli książka nie istnieje
      */
-    Book updateBook(Book book) throws BookNotFoundException;
+    Book updateBook(long id, BookUpdateRequest bookUpdateRequest) throws BookNotFoundException;
 
     /**
      * Sprawdza istnienie książki po ID.

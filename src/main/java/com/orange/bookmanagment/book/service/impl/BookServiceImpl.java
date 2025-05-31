@@ -9,6 +9,7 @@ import com.orange.bookmanagment.book.model.Publisher;
 import com.orange.bookmanagment.book.service.mapper.BookInternalMapper;
 import com.orange.bookmanagment.book.web.mapper.BookDtoMapper;
 import com.orange.bookmanagment.book.web.model.BookDto;
+import com.orange.bookmanagment.book.web.requests.BookUpdateRequest;
 import com.orange.bookmanagment.shared.enums.BookStatus;
 import com.orange.bookmanagment.book.repository.BookRepository;
 import com.orange.bookmanagment.book.service.AuthorService;
@@ -105,15 +106,59 @@ class BookServiceImpl implements BookService, BookExternalService {
     /**
      * Aktualizuje książkę, jeśli istnieje.
      *
-     * @param book zaktualizowana encja książki
+     * @param id identyfikator książki do aktualizacji
+     * @param bookUpdateRequest dane do aktualizacji książki
      * @return zapisany obiekt książki
      * @throws BookNotFoundException jeśli książka nie istnieje
      */
     @Override
-    public Book updateBook(Book book) throws BookNotFoundException {
-        bookRepository.findBookById(book.getId()).orElseThrow(() -> new BookNotFoundException("Book not found by id"));
+    @Transactional
+    public Book updateBook(long id, BookUpdateRequest bookUpdateRequest) throws BookNotFoundException {
+        Book existingBook = bookRepository.findBookById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book not found by id"));
 
-        return bookRepository.saveBook(book);
+        // Aktualizuj podstawowe pola książki
+        if (bookUpdateRequest.title() != null && !bookUpdateRequest.title().trim().isEmpty()) {
+            existingBook.setTitle(bookUpdateRequest.title());
+        }
+
+        if (bookUpdateRequest.description() != null) {
+            existingBook.setDescription(bookUpdateRequest.description());
+        }
+
+        if (bookUpdateRequest.genre() != null && !bookUpdateRequest.genre().trim().isEmpty()) {
+            existingBook.setGenre(bookUpdateRequest.genre());
+        }
+
+        if (bookUpdateRequest.coverImage() != null) {
+            existingBook.setCoverImage(bookUpdateRequest.coverImage());
+        }
+
+        // Aktualizuj autorów jeśli zostali podani
+        if (bookUpdateRequest.authors() != null && !bookUpdateRequest.authors().isEmpty()) {
+            // Konwertuj AuthorUpdateRequest na AuthorCreateRequest
+            List<AuthorCreateRequest> authorCreateRequests = bookUpdateRequest.authors().stream()
+                    .map(authorUpdate -> new AuthorCreateRequest(
+                            authorUpdate.firstName(),
+                            authorUpdate.lastName(),
+                            authorUpdate.biography() // Dodaj biografię jeśli jest w AuthorUpdateRequest
+                    ))
+                    .toList();
+            List<Author> updatedAuthors = authorService.createAuthors(authorCreateRequests);
+            existingBook.setAuthors(updatedAuthors);
+        }
+
+        // Aktualizuj wydawcę jeśli został podany
+        if (bookUpdateRequest.publisher() != null) {
+            Publisher updatedPublisher = publisherService.createPublisher(bookUpdateRequest.publisher());
+            existingBook.setPublisher(updatedPublisher);
+        }
+
+        // Aktualizuj datę modyfikacji
+        existingBook.setUpdatedAt(java.time.Instant.now());
+
+        // Zapisz zaktualizowaną książkę
+        return bookRepository.saveBook(existingBook);
     }
 
     /**
