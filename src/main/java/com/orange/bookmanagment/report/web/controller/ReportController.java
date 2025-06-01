@@ -292,6 +292,80 @@ public class ReportController {
         }
     }
 
+    /**
+     * Generuje raport zalegających użytkowników
+     */
+    @GetMapping("/overdue")
+    public ResponseEntity<?> generateOverdueReport(
+            @RequestParam(value = "genre", required = false) String genre,
+            @RequestParam(value = "publisher", required = false) String publisher,
+            @RequestParam(value = "startDate", required = false) String startDateStr,
+            @RequestParam(value = "endDate", required = false) String endDateStr,
+            Authentication authentication) {
+        try {
+            String username = getUsernameFromAuthentication(authentication);
+
+            LocalDate startDate = parseDate(startDateStr, "Start date");
+            LocalDate endDate = parseDate(endDateStr, "End date");
+
+            if ((startDateStr != null && !startDateStr.isEmpty() && startDate == null) ||
+                    (endDateStr != null && !endDateStr.isEmpty() && endDate == null)) {
+                return buildInvalidDateResponse();
+            }
+
+            String reportPath = reportService.generateOverdueReport(genre, publisher, startDate, endDate, username);
+
+            StringBuilder fileName = new StringBuilder("overdue_report");
+            if (genre != null && !genre.isEmpty()) fileName.append("_").append(genre.toLowerCase());
+            if (publisher != null && !publisher.isEmpty()) fileName.append("_").append(publisher.toLowerCase().replace(" ", "_"));
+            if (startDateStr != null && !startDateStr.isEmpty()) fileName.append("_from_").append(startDateStr);
+            if (endDateStr != null && !endDateStr.isEmpty()) fileName.append("_to_").append(endDateStr);
+            fileName.append(".pdf");
+
+            Resource resource = new UrlResource(Path.of(reportPath).toUri());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName.toString() + "\"")
+                    .body(resource);
+        } catch (Exception e) {
+            return buildErrorResponse("Overdue report generation failed", e.getMessage());
+        }
+    }
+
+
+    private LocalDate parseDate(String dateStr, String fieldName) {
+        if (dateStr == null || dateStr.isEmpty()) {
+            return null;
+        }
+        try {
+            return LocalDate.parse(dateStr);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
+
+    private ResponseEntity<?> buildErrorResponse(String reason, String message) {
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .reason(reason)
+                        .message("Error: " + message)
+                        .build());
+    }
+
+    private ResponseEntity<?> buildInvalidDateResponse() {
+        return ResponseEntity.status(OK)
+                .body(HttpResponse.builder()
+                        .timeStamp(TimeUtil.getCurrentTimeWithFormat())
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
+                        .reason("Invalid date format")
+                        .message("Error: Date should be in format YYYY-MM-DD")
+                        .build());
+    }
+
 
 
 }

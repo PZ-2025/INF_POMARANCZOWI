@@ -92,6 +92,7 @@ class SecurityConfig {
                                 .requestMatchers(GET, "/api/v1/reports/inventory").permitAll()
                                 .requestMatchers(GET, "/api/v1/reports/filtered").permitAll()
                                 .requestMatchers(GET, "/api/v1/reports/popularity").permitAll()
+                                .requestMatchers(GET, "/api/v1/reports/overdue").permitAll()
                                 .requestMatchers(POST, "/api/v1/loans/borrow").permitAll()
                                 .requestMatchers(POST, "/api/v1/loans/borrow/self").authenticated()
                                 .requestMatchers(POST, "/api/v1/loans/{id}/return").permitAll()

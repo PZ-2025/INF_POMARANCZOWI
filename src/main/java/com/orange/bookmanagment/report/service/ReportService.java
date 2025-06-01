@@ -8,7 +8,12 @@ import com.orange.bookmanagment.report.model.BookPopularityData;
 import com.orange.bookmanagment.shared.enums.LoanStatus;
 import com.orange.bookmanagment.report.config.ReportConfig;
 import com.orange.bookmanagment.shared.enums.BookStatus;
+import com.orange.bookmanagment.user.api.UserExternalService;
+import com.orange.bookmanagment.user.api.dto.UserExternalDto;
+import com.orange.bookmanagment.user.model.User;
 import com.orange.pdf.builder.data.LibraryPdfTableItem;
+import com.orange.pdf.overdue.data.OverduePdfTableItem;
+import com.orange.pdf.overdue.service.OverduePdfService;
 import com.orange.pdf.service.LibraryPdfService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -35,6 +41,7 @@ public class ReportService {
 
     private final BookExternalService bookExternalService;
     private final LoanExternalService loanExternalService;
+    private final UserExternalService userExternalService;
     private final ReportConfig reportConfig;
 
     public String generateInventoryReport(String generatedBy) {
@@ -344,5 +351,142 @@ public class ReportService {
 
         return outputPath;
     }
+    /**
+     * Generuje raport zalegających użytkowników na podstawie przeterminowanych wypożyczeń
+     */
+    public String generateOverdueReport(String genre, String publisher, LocalDate startDate,
+                                        LocalDate endDate, String generatedBy) {
+
+        ensureReportDirectoryExists();
+
+        // Pobierz wszystkie wypożyczenia
+        List<LoanExternalDto> allLoans = loanExternalService.getAllLoans();
+
+        // Filtruj tylko zalegające wypożyczenia
+        List<LoanExternalDto> overdueLoans = allLoans.stream()
+                .filter(this::isLoanOverdue)
+                .collect(Collectors.toList());
+
+        // Filtrowanie według daty wypożyczenia
+        if (startDate != null || endDate != null) {
+            overdueLoans = overdueLoans.stream()
+                    .filter(loan -> startDate == null ||
+                            loan.borrowedAt().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(startDate.minusDays(1)) ||
+                            loan.borrowedAt().atZone(ZoneId.systemDefault()).toLocalDate().isEqual(startDate))
+                    .filter(loan -> endDate == null ||
+                            loan.borrowedAt().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(endDate.plusDays(1)) ||
+                            loan.borrowedAt().atZone(ZoneId.systemDefault()).toLocalDate().isEqual(endDate))
+                    .collect(Collectors.toList());
+        }
+
+        // Pobierz książki i użytkowników
+        List<BookExternalDto> allBooks = bookExternalService.getAllBooks();
+        List<User> allUsers = userExternalService.getAllUsers();
+
+        // Konwertuj użytkowników na DTO
+        List<UserExternalDto> userDtos = allUsers.stream()
+                .map(UserExternalDto::fromUser)
+                .collect(Collectors.toList());
+
+        // Mapy dla szybkiego dostępu
+        Map<Long, BookExternalDto> booksMap = allBooks.stream()
+                .collect(Collectors.toMap(BookExternalDto::id, book -> book));
+        Map<Long, UserExternalDto> usersMap = userDtos.stream()
+                .collect(Collectors.toMap(UserExternalDto::id, user -> user));
+
+        // Konwertuj na OverduePdfTableItem
+        List<OverduePdfTableItem> overduePdfItems = overdueLoans.stream()
+                .map(loan -> convertToOverduePdfItem(loan, booksMap, usersMap))
+                .filter(item -> item != null)
+                .filter(item -> genre == null || genre.isEmpty() ||
+                        (item.getGenre() != null && item.getGenre().equalsIgnoreCase(genre)))
+                .filter(item -> publisher == null || publisher.isEmpty() ||
+                        (item.getPublisher() != null && item.getPublisher().equalsIgnoreCase(publisher)))
+                .collect(Collectors.toList());
+
+        // Nazwa pliku
+        String fileName = "overdue_report_" +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) +
+                ".pdf";
+        String outputPath = Paths.get(reportConfig.getReportDirectory(), fileName).toString();
+
+        // Generuj raport
+        OverduePdfService overdueService = new OverduePdfService();
+        overdueService.generateOverdueReport(
+                overduePdfItems,
+                startDate,
+                endDate,
+                genre,
+                publisher,
+                outputPath,
+                generatedBy
+        );
+
+        return outputPath;
+    }
+
+    /**
+     * Sprawdza czy wypożyczenie jest zalegające
+     */
+    private boolean isLoanOverdue(LoanExternalDto loan) {
+        return loan.status() == LoanStatus.OVERDUE ||
+                (loan.status() == LoanStatus.ACTIVE && isOverdue(loan.dueDate()));
+    }
+
+    /**
+     * Sprawdza czy termin został przekroczony
+     */
+    private boolean isOverdue(Instant dueDate) {
+        return dueDate.isBefore(Instant.now());
+    }
+
+    /**
+     * Konwertuje LoanExternalDto na OverduePdfTableItem
+     * Dostosowane do Twojej struktury danych
+     */
+    private OverduePdfTableItem convertToOverduePdfItem(LoanExternalDto loan,
+                                                        Map<Long, BookExternalDto> booksMap,
+                                                        Map<Long, UserExternalDto> usersMap) {
+
+        BookExternalDto book = booksMap.get(loan.bookId());
+        UserExternalDto user = usersMap.get(loan.userId());
+
+        if (book == null || user == null) {
+            return null; // Pomijamy jeśli nie znaleźliśmy książki lub użytkownika
+        }
+
+        // Konwertuj autorów na string
+        String authorsString = book.authors().stream()
+                .map(author -> author.firstName() + " " + author.lastName())
+                .collect(Collectors.joining(", "));
+
+        // Pobierz nazwę wydawcy
+        String publisherName = book.publisher() != null ? book.publisher().name() : "";
+
+        // Utwórz pełną nazwę użytkownika
+        String userName = user.firstName() + " " + user.lastName();
+
+        // Użyj lendingLibrarianId z Twojego LoanExternalDto
+        String librarianId = loan.lendingLibrarianId() != null ?
+                "LIB-" + loan.lendingLibrarianId() :
+                "UNKNOWN";
+
+        return new OverduePdfTableItem(
+                String.valueOf(loan.id()),
+                String.valueOf(book.id()),
+                book.title(),
+                authorsString,
+                publisherName,
+                book.genre(),
+                String.valueOf(user.id()),
+                userName,
+                user.email(),
+                loan.borrowedAt(),
+                loan.dueDate(),
+                librarianId
+        );
+    }
+
+
 
 }

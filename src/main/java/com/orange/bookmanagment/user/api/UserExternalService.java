@@ -30,4 +30,14 @@ public interface UserExternalService {
      * @return Optional z losowym użytkownikiem o typie LIBRARIAN
      */
     Optional<Long> getRandomLibrarianId();
+
+    /**
+     * Zwraca wszystkich użytkowników - potrzebne dla raportów
+     */
+    List<User> getAllUsers();
+
+    /**
+     * Pobiera użytkownika po ID - potrzebne dla raportów
+     */
+    User getUserById(long id) throws UserNotFoundException;
 }
