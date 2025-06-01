@@ -1,5 +1,3 @@
-// src/app/report/report.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -13,7 +11,6 @@ export class ReportService {
 
   constructor(private http: HttpClient) {}
 
-  // Generowanie raportów - POPRAWIONA WERSJA
   generateReport(request: ReportRequest): Observable<Blob> {
     let params = new HttpParams();
 
@@ -40,7 +37,7 @@ export class ReportService {
     });
   }
 
-  // Pobieranie pliku - POPRAWIONA WERSJA
+  // Pobieranie pliku
   downloadFile(blob: Blob, filename: string): void {
     // Sprawdź czy blob nie jest pusty
     if (!blob || blob.size === 0) {
@@ -48,7 +45,7 @@ export class ReportService {
       return;
     }
 
-    // Sprawdź typ MIME
+
     console.log('Blob type:', blob.type);
     console.log('Blob size:', blob.size, 'bytes');
 
@@ -110,6 +107,7 @@ export class ReportService {
       case 'INVENTORY': return 'inventory';
       case 'FILTERED_INVENTORY': return 'filtered';
       case 'POPULARITY': return 'popularity';
+      case 'OVERDUE': return 'overdue';
       default: return 'inventory';
     }
   }
@@ -132,6 +130,7 @@ export class ReportService {
       case 'INVENTORY': return 'Raport inwentaryzacyjny';
       case 'FILTERED_INVENTORY': return 'Raport filtrowany';
       case 'POPULARITY': return 'Raport popularności';
+      case 'OVERDUE': return 'Raport zaległości';
       default: return 'Raport';
     }
   }

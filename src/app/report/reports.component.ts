@@ -1,5 +1,3 @@
-// src/app/report/reports.component.ts
-
 import { Component, Input, OnInit } from '@angular/core';
 import { ReportService } from './report.service';
 import { Report, ReportRequest } from './report.types';
@@ -33,7 +31,9 @@ export class ReportsComponent implements OnInit {
   reportsPerPage = 5;
   totalPages = 1;
 
-  constructor(private reportService: ReportService) {}
+  constructor(
+    private reportService: ReportService
+  ) {}
 
   ngOnInit() {
     this.loadReports();
@@ -208,6 +208,7 @@ export class ReportsComponent implements OnInit {
   get canGenerate(): boolean {
     return !this.isGenerating && this.isDateRangeValid;
   }
+
   get mostCommonReportType(): string {
     if (this.reports.length === 0) return 'Brak danych';
 
@@ -239,5 +240,22 @@ export class ReportsComponent implements OnInit {
   get lastReportDate(): string {
     if (this.reports.length === 0) return 'Brak';
     return this.formatDate(this.reports[0].createdAt);
+  }
+
+  // Metoda pomocnicza do sprawdzania czy raport potrzebuje określonych pól
+  get needsGenreAndPublisher(): boolean {
+    return this.reportType === 'FILTERED_INVENTORY' || this.reportType === 'OVERDUE';
+  }
+
+  get needsDateRange(): boolean {
+    return this.reportType === 'POPULARITY' || this.reportType === 'OVERDUE';
+  }
+
+  get needsLimit(): boolean {
+    return this.reportType === 'POPULARITY';
+  }
+
+  get needsStatus(): boolean {
+    return this.reportType === 'FILTERED_INVENTORY' || this.reportType === 'POPULARITY';
   }
 }
