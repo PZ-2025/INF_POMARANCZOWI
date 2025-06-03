@@ -8,8 +8,69 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter Gson do serializacji i deserializacji obiektów {@link OrderedBook} do/z formatu JSON.
+ *
+ * <p>Klasa OrderedBookAdapter implementuje interfejsy {@link JsonSerializer} i {@link JsonDeserializer}
+ * biblioteki Gson, umożliwiając niestandardową konwersję obiektów OrderedBook. Adapter obsługuje
+ * złożoną strukturę obiektu zawierającą zagnieżdżone obiekty autora i wydawcy.</p>
+ *
+ * <p>Podczas deserializacji adapter wykonuje szczegółową walidację wszystkich pól JSON,
+ * sprawdzając ich obecność, typ i strukturę. W przypadku błędów rzuca odpowiednie wyjątki
+ * {@link JsonParseException} z opisowymi komunikatami.</p>
+ *
+ * <p>Podczas serializacji adapter tworzy płaską strukturę JSON, wyciągając dane z zagnieżdżonych
+ * obiektów wydawcy i autorów do głównego obiektu JSON dla lepszej czytelności.</p>
+ *
+ * @since 1.0
+ * @see OrderedBook
+ * @see OrderedBook.OrderedBookAuthor
+ * @see OrderedBook.OrderedBookPublisher
+ * @see JsonSerializer
+ * @see JsonDeserializer
+ */
 public class OrderedBookAdapter implements JsonDeserializer<OrderedBook>, JsonSerializer<OrderedBook> {
 
+    /**
+     * Deserializuje obiekt JSON do instancji {@link OrderedBook}.
+     *
+     * <p>Metoda wykonuje kompleksową walidację struktury JSON, sprawdzając:
+     * <ul>
+     * <li>Obecność wszystkich wymaganych pól (title, publisherName, publisherDescription, description, genre, coverImage, authors)</li>
+     * <li>Poprawność typów danych dla każdego pola</li>
+     * <li>Strukturę tablicy autorów i jej elementów</li>
+     * <li>Poprawność zagnieżdżonych obiektów autorów</li>
+     * </ul></p>
+     *
+     * <p>Oczekiwana struktura JSON:
+     * <pre>
+     * {
+     *   "title": "string",
+     *   "publisherName": "string",
+     *   "publisherDescription": "string",
+     *   "description": "string",
+     *   "genre": "string",
+     *   "coverImage": "string",
+     *   "authors": [
+     *     {
+     *       "firstName": "string",
+     *       "lastName": "string",
+     *       "biography": "string"
+     *     }
+     *   ]
+     * }
+     * </pre></p>
+     *
+     * @param json element JSON do deserializacji; nie może być null
+     * @param type typ docelowy deserializacji; nie używany w tej implementacji
+     * @param jsonDeserializationContext kontekst deserializacji Gson; nie używany w tej implementacji
+     * @return zdeserializowany obiekt OrderedBook z wszystkimi zagnieżdżonymi obiektami
+     * @throws JsonParseException jeśli JSON nie jest obiektem
+     * @throws JsonParseException jeśli brakuje wymaganych pól w JSON
+     * @throws JsonParseException jeśli typy pól są nieprawidłowe (np. string zamiast array)
+     * @throws JsonParseException jeśli struktura autorów jest nieprawidłowa
+     * @throws JsonParseException jeśli obiekty autorów mają nieprawidłową strukturę
+     */
     @Override
     public OrderedBook deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         if (!json.isJsonObject()) {
@@ -111,6 +172,38 @@ public class OrderedBookAdapter implements JsonDeserializer<OrderedBook>, JsonSe
         );
     }
 
+    /**
+     * Serializuje obiekt {@link OrderedBook} do formatu JSON.
+     *
+     * <p>Metoda tworzy płaską strukturę JSON, w której dane z zagnieżdżonych obiektów
+     * wydawcy (publisher) są wyciągnięte do głównego poziomu jako publisherName i publisherDescription.
+     * Lista autorów jest serializowana jako tablica obiektów JSON.</p>
+     *
+     * <p>Wygenerowana struktura JSON:
+     * <pre>
+     * {
+     *   "title": "tytuł książki",
+     *   "description": "opis książki",
+     *   "genre": "gatunek",
+     *   "coverImage": "url do okładki",
+     *   "publisherName": "nazwa wydawcy",
+     *   "publisherDescription": "opis wydawcy",
+     *   "authors": [
+     *     {
+     *       "firstName": "imię autora",
+     *       "lastName": "nazwisko autora",
+     *       "biography": "biografia autora"
+     *     }
+     *   ]
+     * }
+     * </pre></p>
+     *
+     * @param orderedBook obiekt OrderedBook do serializacji; nie może być null
+     * @param type typ serializowanego obiektu; nie używany w tej implementacji
+     * @param jsonSerializationContext kontekst serializacji Gson; nie używany w tej implementacji
+     * @return element JSON reprezentujący zserializowany obiekt OrderedBook
+     * @throws NullPointerException jeśli orderedBook lub którekolwiek z jego wymaganych pól jest null
+     */
     @Override
     public JsonElement serialize(OrderedBook orderedBook, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonObject = new JsonObject();

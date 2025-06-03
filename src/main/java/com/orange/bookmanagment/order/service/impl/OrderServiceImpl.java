@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-class OrderServiceImpl implements OrderService {
+public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ApplicationEventPublisher eventPublisher;
