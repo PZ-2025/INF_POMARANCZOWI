@@ -4,9 +4,10 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
-import { AddEditBookComponent } from './add-edit-book/add-edit-book.component';
+
 import { canActivateAuth } from './auth/access.guard';
 import { BookDetailsComponent } from './pages/book-details/book-details.component';
+import {AddBookComponent} from './add-edit-book/add-book/add-book.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -15,7 +16,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'books/:id', component: BookDetailsComponent },
-  { path: 'book/add', component: AddEditBookComponent, canActivate: [canActivateAuth], data: { roles: ['ADMIN','LIBRARIAN'] } },
+  { path: 'book/add', component: AddBookComponent, canActivate: [canActivateAuth], data: { roles: ['ADMIN','LIBRARIAN'] } },
 
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

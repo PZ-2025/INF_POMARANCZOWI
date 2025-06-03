@@ -9,7 +9,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
-import { AddEditBookComponent } from './add-edit-book/add-edit-book.component';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
@@ -18,6 +17,7 @@ import { EditPasswordModalComponent } from './components/edit-password-modal/edi
 import { EditAvatarModalComponent } from './components/edit-avatar-modal/edit-avatar-modal.component';
 import { BookDetailsComponent } from './pages/book-details/book-details.component';
 import {ReportsComponent} from './report/reports.component';
+import {AddBookComponent} from './add-edit-book/add-book/add-book.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import {ReportsComponent} from './report/reports.component';
     NavbarComponent,
     HomeComponent,
     ProfileComponent,
-    AddEditBookComponent,
+    AddBookComponent,
     EditUserModalComponent,
     EditPasswordModalComponent,
     EditAvatarModalComponent,
@@ -47,6 +47,9 @@ import {ReportsComponent} from './report/reports.component';
       useClass: AuthInterceptor,
       multi: true
     }
+  ],
+  exports: [
+    NavbarComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -26,7 +26,7 @@
         <div class="flex justify-center lg:block w-full lg:w-[396px] rounded-md border" style="background-color: var(--inner-book-box);">
           <img
             *ngIf="bookImageUrl"
-            [src]="bookImageUrl"
+            [src]="bookImageUrl ? 'data:image/jpeg;base64,' + book.coverImage : '/assets/default-book.png'"
             alt="Okładka książki"
             (error)="onImageError($event)"
             class="w-[296px] md:w-[296px] lg:w-[396px] h-auto aspect-square object-cover lg:rounded-md invert dark:invert-0"

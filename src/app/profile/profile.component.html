@@ -193,7 +193,7 @@
 
       <!-- Dodawanie książki -->
       <div *ngIf="paginatedBooks.length !== 0" class="flex justify-center items-center gap-2">
-        <button [routerLink]="['/book/add']" class="px-4 py-2 w-[136px] rounded-lg border cursor-pointer" style="background-color: var(--box-pagination-color);">Dodaj książkę</button>
+        <button [routerLink]="['/book/add']" class="px-4 py-2 w-[136px] rounded-lg border cursor-pointer" style="background-color: var(--box-pagination-color);">Dodaj książk</button>
       </div>
 
       <!-- Lista książek w bibliotece -->
@@ -202,7 +202,7 @@
         <div [routerLink]="['/books', book.id]" class="cursor-pointer w-[192px] h-[224px] flex justify-center items-center border rounded-lg shrink-0" style="background-color: var(--inner-book-box);">
           <img
             *ngIf="book.coverImage"
-            [src]="book.coverImage"
+            [src]="book.coverImage ? 'data:image/jpeg;base64,' + book.coverImage : '/assets/default-book.png'"
             alt="Okładka książki"
             class="object-cover w-full h-full rounded-lg"
             (error)="onImageBookError($event, book?.id)"

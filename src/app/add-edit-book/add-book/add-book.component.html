@@ -1,0 +1,150 @@
+<app-navbar></app-navbar>
+<main class="w-full" style="background-color: var(--bg-content);">
+  <div class="max-w-[624px] px-8 py-12 mx-auto">
+    <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Dodawanie książki</h1>
+    <div class="w-full p-8 rounded-3xl shadow-lg border border-black-400 box-border mt-8" style="background-color: var(--box-color);">
+      <form class="flex flex-col space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <!-- Okładka - ZAKOMENTOWANE -->
+
+        <div class="flex flex-col space-y-2">
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            placeholder="Okładka"
+            class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl cursor-pointer"
+            style="background-color: var(--input-bg);"
+          />
+          <small class="text-sm opacity-70" style="color: var(--text-color);">
+            Wybierz okładkę książki (opcjonalne)
+          </small>
+        </div>
+
+
+<!--        &lt;!&ndash; Info o wyłączonym zdjęciu &ndash;&gt;-->
+<!--        <div class="p-4 border border-amber-400 rounded-lg" style="background-color: var(&#45;&#45;input-bg); border-color: #f59e0b;">-->
+<!--          <div class="flex items-center">-->
+<!--            <svg class="w-5 h-5 mr-3 text-amber-600" fill="currentColor" viewBox="0 0 20 20">-->
+<!--              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>-->
+<!--            </svg>-->
+<!--            <div>-->
+<!--              <p class="text-sm font-medium text-amber-600">Dodawanie okładek tymczasowo wyłączone</p>-->
+<!--              <p class="text-xs text-amber-600 opacity-80">Z powodu problemów z bazą danych</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+        <!-- Tytuł -->
+        <div class="flex flex-col space-y-2">
+          <input
+            formControlName="title"
+            type="text"
+            placeholder="Tytuł"
+            [class.border-red-500]="hasError('title')"
+            class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+            style="background-color: var(--input-bg);"
+            required
+          />
+          <div *ngIf="hasError('title')" class="text-red-500 text-sm">
+            {{ getErrorMessage('title') }}
+          </div>
+        </div>
+
+        <!-- Autor - Imię -->
+        <div class="flex flex-col space-y-2">
+          <input
+            formControlName="authorFirstName"
+            type="text"
+            placeholder="Imię autora"
+            [class.border-red-500]="hasError('authorFirstName')"
+            class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+            style="background-color: var(--input-bg);"
+            required
+          />
+          <div *ngIf="hasError('authorFirstName')" class="text-red-500 text-sm">
+            {{ getErrorMessage('authorFirstName') }}
+          </div>
+        </div>
+
+        <!-- Autor - Nazwisko -->
+        <div class="flex flex-col space-y-2">
+          <input
+            formControlName="authorLastName"
+            type="text"
+            placeholder="Nazwisko autora"
+            [class.border-red-500]="hasError('authorLastName')"
+            class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+            style="background-color: var(--input-bg);"
+            required
+          />
+          <div *ngIf="hasError('authorLastName')" class="text-red-500 text-sm">
+            {{ getErrorMessage('authorLastName') }}
+          </div>
+        </div>
+
+        <!-- Wydawca -->
+        <div class="flex flex-col space-y-2">
+          <input
+            formControlName="publisherName"
+            type="text"
+            placeholder="Nazwa wydawcy"
+            [class.border-red-500]="hasError('publisherName')"
+            class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+            style="background-color: var(--input-bg);"
+            required
+          />
+          <div *ngIf="hasError('publisherName')" class="text-red-500 text-sm">
+            {{ getErrorMessage('publisherName') }}
+          </div>
+        </div>
+
+        <!-- Gatunek -->
+        <div class="flex flex-col space-y-2">
+          <input
+            formControlName="genre"
+            type="text"
+            placeholder="Gatunek"
+            [class.border-red-500]="hasError('genre')"
+            class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+            style="background-color: var(--input-bg);"
+            required
+          />
+          <div *ngIf="hasError('genre')" class="text-red-5	text-sm">
+            {{ getErrorMessage('genre') }}
+          </div>
+        </div>
+
+        <!-- Opis -->
+        <div class="flex flex-col space-y-2">
+          <textarea
+            formControlName="description"
+            placeholder="Opis"
+            rows="3"
+            [class.border-red-500]="hasError('description')"
+            class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl resize-vertical"
+            style="background-color: var(--input-bg);"
+            required
+          ></textarea>
+          <div *ngIf="hasError('description')" class="text-red-500 text-sm">
+            {{ getErrorMessage('description') }}
+          </div>
+        </div>
+
+        <!-- Przycisk submit -->
+        <button
+          type="submit"
+          [disabled]="isSubmitting || form.invalid"
+          [class.opacity-50]="isSubmitting || form.invalid"
+          [class.cursor-not-allowed]="isSubmitting || form.invalid"
+          style="background-color: var(--button-login-bg); color: var(--button-login-text)"
+          class="py-3 pb-1 px-4 rounded-lg transition-all text-3xl mt-4 cursor-pointer w-full text-center overflow-hidden hover:opacity-90"
+        >
+          <span class="inline-block w-full text-center overflow-hidden whitespace-nowrap">
+            {{ isSubmitting ? 'Dodawanie...' : 'Dodaj' }}
+          </span>
+        </button>
+      </form>
+    </div>
+  </div>
+</main>
