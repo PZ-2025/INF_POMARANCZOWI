@@ -1,0 +1,166 @@
+<app-navbar></app-navbar>
+<main class="w-full" style="background-color: var(--bg-content);">
+  <div class="max-w-[624px] px-8 py-12 mx-auto">
+
+    <!-- Loading spinner -->
+    <div *ngIf="isLoading" class="text-center">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      <p class="mt-4 text-xl" style="color: var(--text-color);">Ładowanie danych książki...</p>
+    </div>
+
+    <!-- Main content -->
+    <div *ngIf="!isLoading">
+      <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Edycja książki</h1>
+
+      <div class="w-full p-8 rounded-3xl shadow-lg border border-black-400 box-border mt-8" style="background-color: var(--box-color);">
+        <form class="flex flex-col space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+          <!-- Okładka -->
+          <div class="flex flex-col space-y-2">
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              placeholder="Okładka"
+              class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl cursor-pointer"
+              style="background-color: var(--input-bg);"
+            />
+            <small class="text-sm opacity-70" style="color: var(--text-color);">
+              Wybierz nową okładkę książki (opcjonalne - pozostaw puste aby zachować obecną)
+            </small>
+            <!-- Podgląd obecnej okładki -->
+            <div *ngIf="currentBook?.coverImage && !selectedFile" class="mt-2 flex items-center space-x-3">
+              <img
+                [src]="getImageSrc(currentBook.coverImage)"
+                alt="Obecna okładka"
+                class="w-16 h-20 object-cover rounded border"
+                (error)="onImageError($event)"
+              />
+              <span class="text-sm opacity-70" style="color: var(--text-color);">Obecna okładka</span>
+            </div>
+          </div>
+
+          <!-- Tytuł -->
+          <div class="flex flex-col space-y-2">
+            <input
+              formControlName="title"
+              type="text"
+              placeholder="Tytuł"
+              [class.border-red-500]="hasError('title')"
+              class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+              style="background-color: var(--input-bg);"
+              required
+            />
+            <div *ngIf="hasError('title')" class="text-red-500 text-sm">
+              {{ getErrorMessage('title') }}
+            </div>
+          </div>
+
+          <!-- Autor - Imię -->
+          <div class="flex flex-col space-y-2">
+            <input
+              formControlName="authorFirstName"
+              type="text"
+              placeholder="Imię autora"
+              [class.border-red-500]="hasError('authorFirstName')"
+              class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+              style="background-color: var(--input-bg);"
+              required
+            />
+            <div *ngIf="hasError('authorFirstName')" class="text-red-500 text-sm">
+              {{ getErrorMessage('authorFirstName') }}
+            </div>
+          </div>
+
+          <!-- Autor - Nazwisko -->
+          <div class="flex flex-col space-y-2">
+            <input
+              formControlName="authorLastName"
+              type="text"
+              placeholder="Nazwisko autora"
+              [class.border-red-500]="hasError('authorLastName')"
+              class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+              style="background-color: var(--input-bg);"
+              required
+            />
+            <div *ngIf="hasError('authorLastName')" class="text-red-500 text-sm">
+              {{ getErrorMessage('authorLastName') }}
+            </div>
+          </div>
+
+          <!-- Wydawca -->
+          <div class="flex flex-col space-y-2">
+            <input
+              formControlName="publisherName"
+              type="text"
+              placeholder="Nazwa wydawcy"
+              [class.border-red-500]="hasError('publisherName')"
+              class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+              style="background-color: var(--input-bg);"
+              required
+            />
+            <div *ngIf="hasError('publisherName')" class="text-red-500 text-sm">
+              {{ getErrorMessage('publisherName') }}
+            </div>
+          </div>
+
+          <!-- Gatunek -->
+          <div class="flex flex-col space-y-2">
+            <input
+              formControlName="genre"
+              type="text"
+              placeholder="Gatunek"
+              [class.border-red-500]="hasError('genre')"
+              class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl"
+              style="background-color: var(--input-bg);"
+              required
+            />
+            <div *ngIf="hasError('genre')" class="text-red-500 text-sm">
+              {{ getErrorMessage('genre') }}
+            </div>
+          </div>
+
+          <!-- Opis -->
+          <div class="flex flex-col space-y-2">
+            <textarea
+              formControlName="description"
+              placeholder="Opis"
+              rows="3"
+              [class.border-red-500]="hasError('description')"
+              class="p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl resize-vertical"
+              style="background-color: var(--input-bg);"
+              required
+            ></textarea>
+            <div *ngIf="hasError('description')" class="text-red-500 text-sm">
+              {{ getErrorMessage('description') }}
+            </div>
+          </div>
+
+          <!-- Guziki -->
+          <div class="flex flex-col min-[900px]:flex-row gap-4 w-full mt-4">
+            <button
+              type="submit"
+              [disabled]="isSubmitting || form.invalid"
+              [class.opacity-50]="isSubmitting || form.invalid"
+              [class.cursor-not-allowed]="isSubmitting || form.invalid"
+              class="px-4 py-2 min-[900px]:w-auto w-full rounded border cursor-pointer transition-all hover:opacity-90"
+              style="background-color: var(--button-login-bg); color: var(--button-login-text);"
+            >
+              {{ isSubmitting ? 'Zapisywanie...' : 'Zapisz zmiany' }}
+            </button>
+
+            <button
+              type="button"
+              (click)="cancelEdit()"
+              [disabled]="isSubmitting"
+              class="px-4 py-2 min-[900px]:w-auto w-full rounded border cursor-pointer transition-all hover:opacity-90"
+              style="background-color: var(--profile-button-user); color: var(--text-color);"
+            >
+              Anuluj
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>

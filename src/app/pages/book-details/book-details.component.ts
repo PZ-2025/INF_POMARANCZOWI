@@ -558,4 +558,5 @@ export class BookDetailsComponent implements OnInit {
     // Jeśli base64 - dodaj prefix
     return `data:image/jpeg;base64,${coverImage}`;
   }
+
 }

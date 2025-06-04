@@ -525,14 +525,7 @@ export class ProfileComponent {
     return this.http.get<User>(`http://localhost:8080/api/v1/user/${id}`);
   }
 
-  onImageError(event: Event): void {
-    const img = event.target as HTMLImageElement;
 
-    img.src = '/assets/imgs/user.png';
-
-    event.preventDefault();
-    event.stopPropagation();
-  }
 
   deleteAvatar() {
     this.showAvatarModal = false;
@@ -1021,19 +1014,36 @@ export class ProfileComponent {
     });
   }
 
-  getBookImageUrl(coverImage: string | null): string {
-    if (!coverImage) return '/assets/default-book.png';
+  getBookImageUrl(coverImage: string): string {
+    if (!coverImage) return '';
 
-    // Zamień broken placeholder services
-    if (coverImage.includes('placeimg.com') ||
-      coverImage.includes('placekitten.com')) {
-      return 'https://via.placeholder.com/300x400/f0f0f0/666666?text=Book';
+    // Sprawdź czy to już pełny URL
+    if (coverImage.startsWith('http://') || coverImage.startsWith('https://')) {
+      return coverImage;
     }
 
-    // Jeśli URL - zwróć bezpośrednio
-    if (coverImage.startsWith('http')) return coverImage;
+    // Sprawdź czy base64 już ma prefix
+    if (coverImage.startsWith('data:image/')) {
+      return coverImage;
+    }
 
-    // Jeśli base64 - dodaj prefix
+    // Dodaj prefix base64 jeśli go nie ma
     return `data:image/jpeg;base64,${coverImage}`;
+  }
+
+  // Alias dla kompatybilności
+  getImageSrc(coverImage: string): string {
+    return this.getBookImageUrl(coverImage);
+  }
+
+
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+
+    img.src = '/assets/imgs/user.png';
+
+    event.preventDefault();
+    event.stopPropagation();
   }
 }

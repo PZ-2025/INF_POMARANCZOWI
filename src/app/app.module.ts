@@ -18,6 +18,7 @@ import { EditAvatarModalComponent } from './components/edit-avatar-modal/edit-av
 import { BookDetailsComponent } from './pages/book-details/book-details.component';
 import {ReportsComponent} from './report/reports.component';
 import {AddBookComponent} from './add-edit-book/add-book/add-book.component';
+import {EditBookComponent} from './add-edit-book/edit-book/edit-book.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {AddBookComponent} from './add-edit-book/add-book/add-book.component';
     EditPasswordModalComponent,
     EditAvatarModalComponent,
     BookDetailsComponent,
-    ReportsComponent
+    ReportsComponent,
+    EditBookComponent
   ],
   imports: [
     BrowserModule,
