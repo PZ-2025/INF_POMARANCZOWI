@@ -170,7 +170,6 @@ export class EditBookComponent implements OnInit {
         // ↑ IDENTYCZNE: jeśli wybrano nowy plik, konwertuj do base64, inaczej zachowaj obecny
       };
 
-      console.log('📚 Wysyłam aktualizację książki (z obsługą zdjęć):', updateData);
 
       this.http.put(`http://localhost:8080/api/v1/book/${this.bookId}/update`, updateData, {
         headers: {
@@ -179,13 +178,12 @@ export class EditBookComponent implements OnInit {
         }
       }).subscribe({
         next: (response: any) => {
-          console.log('✅ SUKCES! Książka zaktualizowana:', response);
 
           if (response.data && response.data.book) {
             const hasNewImage = this.selectedFile ? ' z nową okładką' : '';
-            alert(`🎉 Książka "${response.data.book.title}"${hasNewImage} została pomyślnie zaktualizowana!`);
+            alert(`Książka "${response.data.book.title}"${hasNewImage} została pomyślnie zaktualizowana!`);
           } else {
-            alert('🎉 Książka została pomyślnie zaktualizowana!');
+            alert('Książka została pomyślnie zaktualizowana!');
           }
 
           this.isSubmitting = false;
