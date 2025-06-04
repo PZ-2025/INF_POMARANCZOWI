@@ -63,7 +63,7 @@
         <div *ngFor="let book of books" class="rounded-lg shadow-md p-4 pb-3.5 w-[360px] max-[903px]:w-[304px] max-[783px]:w-[264px] border cursor-pointer" style="background-color: var(--box-book-color);" [routerLink]="['/books', book.id]">
           <div class="flex justify-center rounded-md border" style="background-color: var(--inner-book-box);">
             <img
-              [src]="book.coverImage ? 'data:image/jpeg;base64,' + book.coverImage : '/assets/default-book.png'"
+              [src]="getBookImageUrl(book.coverImage)"
               alt="Okładka książki"
               (error)="onImageError($event)"
               class="max-w-[216px] max-h-[216px] w-full h-auto aspect-square object-cover transition-all duration-300 invert dark:invert-0"

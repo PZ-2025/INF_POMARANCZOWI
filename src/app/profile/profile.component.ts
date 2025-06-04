@@ -1020,4 +1020,20 @@ export class ProfileComponent {
       }
     });
   }
+
+  getBookImageUrl(coverImage: string | null): string {
+    if (!coverImage) return '/assets/default-book.png';
+
+    // Zamień broken placeholder services
+    if (coverImage.includes('placeimg.com') ||
+      coverImage.includes('placekitten.com')) {
+      return 'https://via.placeholder.com/300x400/f0f0f0/666666?text=Book';
+    }
+
+    // Jeśli URL - zwróć bezpośrednio
+    if (coverImage.startsWith('http')) return coverImage;
+
+    // Jeśli base64 - dodaj prefix
+    return `data:image/jpeg;base64,${coverImage}`;
+  }
 }

@@ -202,7 +202,7 @@
         <div [routerLink]="['/books', book.id]" class="cursor-pointer w-[192px] h-[224px] flex justify-center items-center border rounded-lg shrink-0" style="background-color: var(--inner-book-box);">
           <img
             *ngIf="book.coverImage"
-            [src]="book.coverImage ? 'data:image/jpeg;base64,' + book.coverImage : '/assets/default-book.png'"
+            [src]="getBookImageUrl(book.coverImage)"
             alt="Okładka książki"
             class="object-cover w-full h-full rounded-lg"
             (error)="onImageBookError($event, book?.id)"
