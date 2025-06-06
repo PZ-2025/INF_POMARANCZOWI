@@ -6,6 +6,8 @@ export interface TokenResponse {
       email: string;
       firstName: string;
       lastName: string;
+      locked: boolean;
+      verified: boolean;
       avatarPath: string;
       id: number;
     }
@@ -18,5 +20,7 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
+  locked: boolean;
+  verified: boolean;
   avatarPath?: string;
 }

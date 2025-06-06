@@ -31,6 +31,8 @@ export class ProfileComponent {
   userId: number | null = null;
   avatarPath: string | null = null;
   user: User | null = null;
+  isLocked: boolean = false;
+  isVerified: boolean = false;
 
   isDarkTheme = false;
 
@@ -58,6 +60,11 @@ export class ProfileComponent {
     console.log('Last name:', this.lastName);
     console.log('Avatar path:', this.avatarPath);
     console.log('Id:', this.userId);
+
+    if (this.userType === 'READER') {
+      this.isLocked = localStorage.getItem('locked') === 'true';
+      this.isVerified = localStorage.getItem('verified') === 'true';
+    }
 
     this.isDarkTheme = localStorage.getItem('dark-theme-enabled') === 'true';
 
@@ -357,6 +364,42 @@ export class ProfileComponent {
     this.cancelUserEdit();
   }
 
+  blockUser(userId: number) {
+    this.userService.blockUser(userId).subscribe({
+      next: () => {
+        this.messageService.setMessage('Użytkownik został zablokowany.');
+        this.fetchAllUsers();
+      },
+      error: () => {
+        this.badMessageService.setMessage('Nie udało się zablokować użytkownika.');
+      }
+    });
+  }
+
+  unblockUser(userId: number) {
+    this.userService.unblockUser(userId).subscribe({
+      next: () => {
+        this.messageService.setMessage('Użytkownik został odblokowany.');
+        this.fetchAllUsers();
+      },
+      error: () => {
+        this.badMessageService.setMessage('Nie udało się odblokować użytkownika.');
+      }
+    });
+  }
+
+  verifyUser(userId: number) {
+    this.userService.verifyUser(userId).subscribe({
+      next: () => {
+        this.messageService.setMessage('Użytkownik został zweryfikowany.');
+        this.fetchAllUsers();
+      },
+      error: () => {
+        this.badMessageService.setMessage('Nie udało się zweryfikować użytkownika.');
+      }
+    });
+  }
+
   showModal = false;
   tempFirstName: string = '';
   tempLastName: string = '';
@@ -524,8 +567,6 @@ export class ProfileComponent {
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`http://localhost:8080/api/v1/user/${id}`);
   }
-
-
 
   deleteAvatar() {
     this.showAvatarModal = false;
@@ -1035,8 +1076,6 @@ export class ProfileComponent {
   getImageSrc(coverImage: string): string {
     return this.getBookImageUrl(coverImage);
   }
-
-
 
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;

@@ -45,7 +45,7 @@
           >
             <strong>Status:</strong> {{ getPolishStatus(book.status) }}
           </p>
-          <p *ngIf="queueLength > 0" class="text-xl opacity-70 mt-1" [ngStyle]="{ color: getStatusColorVar(book.status) }">
+          <p *ngIf="queueLength >= 0 && book.status === 'RESERVED'" class="text-xl opacity-70 mt-1" [ngStyle]="{ color: getStatusColorVar(book.status) }">
             Liczba oczekujących: {{ queueLength }}
           </p>
         </div>
@@ -61,7 +61,7 @@
           </div>
         </div>
 
-        <div *ngIf="userType === 'READER'" class="mt-3.5 w-full flex justify-center">
+        <div *ngIf="userType === 'READER' && isVerified && !isLocked" class="mt-3.5 w-full flex justify-center">
           <div class="flex flex-wrap justify-center items-center gap-4">
             <!-- Książka wypożyczona przez użytkownika -->
             <ng-container *ngIf="isMyLoan">

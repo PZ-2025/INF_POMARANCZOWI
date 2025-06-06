@@ -15,9 +15,9 @@
 
   <div class="min-w-[624px] max-w-[1284px] px-16 py-12 mx-auto">
     <h1 *ngIf="activeTab === 'profile'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Mój profil</h1>
-    <h1 *ngIf="activeTab === 'history' && userType === 'READER'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Historia</h1>
-    <h1 *ngIf="activeTab === 'rentals' && userType === 'READER'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Wypożyczenia</h1>
-    <h1 *ngIf="activeTab === 'reservations' && userType === 'READER'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Rezerwacje</h1>
+    <h1 *ngIf="activeTab === 'history' && userType === 'READER' && isVerified" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Historia</h1>
+    <h1 *ngIf="activeTab === 'rentals' && userType === 'READER' && isVerified && !isLocked" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Wypożyczenia</h1>
+    <h1 *ngIf="activeTab === 'reservations' && userType === 'READER' && isVerified && !isLocked" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Rezerwacje</h1>
     <h1 *ngIf="activeTab === 'users' && userType === 'ADMIN'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Użytkownicy</h1>
     <h1 *ngIf="activeTab === 'orders' && userType === 'ADMIN'" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Zamówienia</h1>
     <h1 *ngIf="activeTab === 'library' && (userType === 'LIBRARIAN' || userType === 'ADMIN')" class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Księgozbiór</h1>
@@ -26,7 +26,7 @@
     <!-- Przyciski zakładek -->
     <div class="flex flex-wrap justify-center gap-x-6 gap-y-6 mt-12 mb-12">
       <button
-        *ngIf="userType === 'READER'"
+        *ngIf="userType === 'READER' && isVerified"
         (click)="setActiveTab('history')"
         class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
         [ngStyle]="{
@@ -38,7 +38,7 @@
       </button>
 
       <button
-        *ngIf="userType === 'READER'"
+        *ngIf="userType === 'READER' && isVerified && !isLocked"
         (click)="setActiveTab('rentals')"
         class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
         [ngStyle]="{
@@ -98,7 +98,7 @@
       </button>
 
       <button
-        *ngIf="userType === 'READER'"
+        *ngIf="userType === 'READER' && isVerified && !isLocked"
         (click)="setActiveTab('reservations')"
         class="min-w-[172px] px-5 py-3 text-lg rounded shadow-sm cursor-pointer border transition-all"
         [ngStyle]="{
@@ -315,6 +315,7 @@
 
         <!-- Przyciski -->
         <div class="w-full min-[900px]:w-[136px] flex min-[900px]:flex-col min-[900px]:items-center min-[900px]:justify-center gap-4 flex-row justify-between max-[900px]:mt-1">
+          <!-- Zmiana imienia i nazwiska -->
           <button (click)="openUserEditModal(user)" class="w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień dane</button>
           <app-edit-user-modal
             *ngIf="userToEdit && showUserModal"
@@ -326,6 +327,37 @@
             (cancel)="cancelUserEdit()"
           >
           </app-edit-user-modal>
+
+          <!-- Użytkownik zweryfikowany -->
+          <ng-container *ngIf="user.verified">
+            <button
+              *ngIf="!user.locked"
+              (click)="blockUser(user.id)"
+              class="w-full px-4 py-2 rounded border cursor-pointer"
+              style="background-color: var(--profile-button-blocked);"
+            >
+              Zablokuj
+            </button>
+
+            <button
+              *ngIf="user.locked"
+              (click)="unblockUser(user.id)"
+              class="w-full px-4 py-2 rounded border cursor-pointer"
+              style="background-color: var(--profile-button-unblocked);"
+            >
+              Odblokuj
+            </button>
+          </ng-container>
+
+          <!-- Użytkownik niezweryfikowany -->
+          <button
+            *ngIf="!user.verified"
+            (click)="verifyUser(user.id)"
+            class="w-full px-4 py-2 rounded border cursor-pointer"
+            style="background-color: var(--profile-button-verified);"
+          >
+            Zweryfikuj
+          </button>
         </div>
       </div>
     </div>
@@ -336,7 +368,7 @@
     </div>
 
     <!-- Rezerwacje / userType === 'READER' -->
-    <div *ngIf="activeTab === 'reservations' && userType === 'READER'" class="flex flex-col gap-6">
+    <div *ngIf="activeTab === 'reservations' && userType === 'READER' && isVerified && !isLocked" class="flex flex-col gap-6">
       <!-- Błąd ładowania -->
       <p *ngIf="loadReservationError" class="text-center text-2xl mt-2 text-red-600 font-semibold">
         Nie udało się załadować rezerwacji
@@ -399,7 +431,7 @@
     </div>
 
     <!-- Historia / userType === 'READER' -->
-    <div *ngIf="activeTab === 'history' && userType === 'READER'" class="flex flex-col gap-6">
+    <div *ngIf="activeTab === 'history' && userType === 'READER' && isVerified" class="flex flex-col gap-6">
       <!-- Błąd ładowania -->
       <p *ngIf="loadError" class="text-center text-2xl mt-2 text-red-600 font-semibold">
         Nie udało się załadować historii
@@ -460,7 +492,7 @@
     </div>
 
     <!-- Wypożyczenia / userType === 'READER' -->
-    <div *ngIf="activeTab === 'rentals' && userType === 'READER'" class="flex flex-col gap-6">
+    <div *ngIf="activeTab === 'rentals' && userType === 'READER' && isVerified && !isLocked" class="flex flex-col gap-6">
       <!-- Błąd ładowania -->
       <p *ngIf="loadError" class="text-center text-2xl mt-2 text-red-600 font-semibold">
         Nie udało się załadować wypożyczeń
@@ -561,16 +593,18 @@
           (save)="changePassword($event)">
         </app-edit-password-modal>
 
-        <button (click)="toggleModal()" class="w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień dane</button>
-        <app-edit-user-modal
-          *ngIf="showModal"
-          [firstName]="tempFirstName"
-          [lastName]="tempLastName"
-          (firstNameChange)="tempFirstName = $event"
-          (lastNameChange)="tempLastName = $event"
-          (save)="saveChanges()"
-          (cancel)="showModal = false">
-        </app-edit-user-modal>
+        <div class="w-full" *ngIf="!isVerified && userType === 'READER'">
+          <button (click)="toggleModal()" class="w-full px-4 py-2 rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zmień dane</button>
+          <app-edit-user-modal
+            *ngIf="showModal"
+            [firstName]="tempFirstName"
+            [lastName]="tempLastName"
+            (firstNameChange)="tempFirstName = $event"
+            (lastNameChange)="tempLastName = $event"
+            (save)="saveChanges()"
+            (cancel)="showModal = false">
+          </app-edit-user-modal>
+        </div>
       </div>
     </div>
   </div>

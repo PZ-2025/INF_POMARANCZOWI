@@ -19,4 +19,16 @@ export class UserService {
   updateUser(userId: number, data: { firstName: string, lastName: string }) {
     return this.http.put(`${this.apiUrl}/admin/${userId}`, data);
   }
+
+  blockUser(userId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${userId}/block`, {});
+  }
+
+  unblockUser(userId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${userId}/unblock`, {});
+  }
+
+  verifyUser(userId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${userId}/verify`, {});
+  }
 }

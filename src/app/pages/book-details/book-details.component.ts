@@ -30,6 +30,8 @@ export class BookDetailsComponent implements OnInit {
   lastName: string = '';
   userId: number | null = null;
   user: User | null = null;
+  isLocked: boolean = false;
+  isVerified: boolean = false;
 
   userLoans: any[] = [];
   isMyLoan: boolean = false;
@@ -51,6 +53,8 @@ export class BookDetailsComponent implements OnInit {
     this.firstName = localStorage.getItem('firstName') || '';
     this.lastName = localStorage.getItem('lastName') || '';
     this.userId = parseInt(localStorage.getItem('userId') || '0', 10);
+    this.isLocked = localStorage.getItem('locked') === 'true';
+    this.isVerified = localStorage.getItem('verified') === 'true';
 
     const key = `book-details-image-${id}`;
     const stored = localStorage.getItem(key);
@@ -183,7 +187,7 @@ export class BookDetailsComponent implements OnInit {
         console.log("Wypożyczenie:", this.myLoan);
       },
       error: (err) => {
-        console.error('Błąd przy pobieraniu wypożyczeń:', err);
+        console.error('Błąd przy pobieraniu wypożyczeń');
       }
     });
 
@@ -215,7 +219,7 @@ export class BookDetailsComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Błąd przy pobieraniu wypożyczeń:', err);
+        console.error('Błąd przy pobieraniu wypożyczeń');
       }
     });
   }

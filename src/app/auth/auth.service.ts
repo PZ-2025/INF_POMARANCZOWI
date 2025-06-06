@@ -33,6 +33,8 @@ export class AuthService {
         localStorage.setItem('email', user.email);
         localStorage.setItem('firstName', user.firstName);
         localStorage.setItem('lastName', user.lastName);
+        localStorage.setItem('locked', user.locked.toString());
+        localStorage.setItem('verified', user.verified.toString());
         localStorage.setItem('userId', user.id.toString());
         localStorage.removeItem('profileTab');
 
@@ -52,6 +54,8 @@ export class AuthService {
     localStorage.removeItem('email');
     localStorage.removeItem('firstName');
     localStorage.removeItem('lastName');
+    localStorage.removeItem('locked');
+    localStorage.removeItem('verified');
     localStorage.removeItem('userId');
     localStorage.removeItem('avatarPath');
   }
