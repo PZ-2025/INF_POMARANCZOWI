@@ -7,7 +7,9 @@ public record UserExternalDto(
         Long id,
         String firstName,
         String lastName,
-        String email
+        String email,
+        boolean blocked,
+        boolean locked
 ) {
 
     /**
@@ -18,7 +20,9 @@ public record UserExternalDto(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail()
+                user.getEmail(),
+                user.isBlocked(),
+                user.isLocked()
         );
     }
 }

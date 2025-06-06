@@ -9,6 +9,7 @@ public record UserDto (
         String avatarPath,
         boolean verified,
         boolean blocked,
+        boolean locked,
         String createdAt,
         String updatedAt,
         String blockedAt,

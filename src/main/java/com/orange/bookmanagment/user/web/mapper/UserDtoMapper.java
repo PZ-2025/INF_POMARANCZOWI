@@ -29,6 +29,7 @@ public class UserDtoMapper {
                 user.getAvatarPath(),
                 user.isVerified(),
                 user.isBlocked(),
+                user.isLocked(),
                 TimeUtil.getTimeInStandardFormat(user.getCreatedAt()),
                 TimeUtil.getTimeInStandardFormat(user.getUpdatedAt()),
                 TimeUtil.getTimeInStandardFormat(user.getBlockedAt()),
