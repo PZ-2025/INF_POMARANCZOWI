@@ -148,10 +148,10 @@
         <div class="flex justify-center items-center gap-4">
           <button
             (click)="currentPage = currentPage - 1"
-            [disabled]="currentPage === 1"
+            [disabled]="currentPage === 1 || totalPages === 0"
             [ngClass]="{
-              'cursor-not-allowed opacity-50': currentPage === 1,
-              'cursor-pointer': currentPage > 1
+              'cursor-not-allowed opacity-50': currentPage === 1 || totalPages === 0,
+              'cursor-pointer': currentPage > 1 && totalPages > 0
             }"
             class="p-2 py-1 border rounded-lg transition"
             [ngStyle]="{
@@ -160,13 +160,13 @@
           >
             <img [class.invert]="isDarkTheme" src="assets/imgs/previous.png" alt="Poprzednia strona">
           </button>
-          <span>Strona {{ currentPage }} z {{ totalPages }}</span>
+          <span>Strona {{ totalPages === 0 ? 0 : currentPage }} z {{ totalPages }}</span>
           <button
             (click)="currentPage = currentPage + 1"
-            [disabled]="currentPage === totalPages"
+            [disabled]="currentPage === totalPages || totalPages === 0"
             [ngClass]="{
-              'cursor-not-allowed opacity-50': currentPage === totalPages,
-              'cursor-pointer': currentPage < totalPages
+              'cursor-not-allowed opacity-50': currentPage === totalPages || totalPages === 0,
+              'cursor-pointer': currentPage < totalPages && totalPages > 0
             }"
             class="p-2 py-1 border rounded-lg transition"
             [ngStyle]="{
@@ -193,7 +193,19 @@
 
       <!-- Dodawanie książki -->
       <div *ngIf="paginatedBooks.length !== 0" class="flex justify-center items-center gap-2">
-        <button [routerLink]="['/book/add']" class="px-4 py-2 w-[136px] rounded-lg border cursor-pointer" style="background-color: var(--box-pagination-color);">Dodaj książk</button>
+        <button [routerLink]="['/book/add']" class="px-4 py-2 w-[136px] rounded-lg border cursor-pointer" style="background-color: var(--box-pagination-color);">Dodaj książkę</button>
+      </div>
+
+      <!-- Filtr statusów książek -->
+      <div class="w-full flex flex-wrap justify-center items-center gap-x-16 gap-y-2 text-lg pb-2 pt-2" style="color: var(--text-color);">
+        <label *ngFor="let status of bookStatuses" class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" class="w-5 h-5 cursor-pointer"
+            [value]="status"
+            [(ngModel)]="selectedStatusesMap[status]"
+            (change)="filterLibraryBooks()"
+          />
+            {{ statusTranslations[status] || status }}
+        </label>
       </div>
 
       <!-- Lista książek w bibliotece -->
@@ -247,25 +259,25 @@
         <div class="flex justify-center items-center gap-4">
           <button
             (click)="currentUsersPage = currentUsersPage - 1"
-            [disabled]="currentUsersPage === 1"
+            [disabled]="currentUsersPage === 1 || totalUsersPages === 0"
             [ngClass]="{
-              'cursor-not-allowed opacity-50': currentUsersPage === 1,
-              'cursor-pointer': currentUsersPage > 1
+              'cursor-not-allowed opacity-50': currentUsersPage === 1 || totalUsersPages === 0,
+              'cursor-pointer': currentUsersPage > 1 && totalUsersPages > 0
             }"
             class="p-2 py-1 border rounded-lg transition"
             [ngStyle]="{
-              'background-color': currentUsersPage === 1 ? 'var(--box-pagination-disabled-color)' : 'var(--box-pagination-color)'
+              'background-color': (currentUsersPage === 1 || totalUsersPages === 0) ? 'var(--box-pagination-disabled-color)' : 'var(--box-pagination-color)'
             }"
           >
             <img [class.invert]="isDarkTheme" src="assets/imgs/previous.png" alt="Poprzednia strona">
           </button>
-          <span>Strona {{ currentUsersPage }} z {{ totalUsersPages }}</span>
+          <span>Strona {{ totalUsersPages === 0 ? 0 : currentUsersPage }} z {{ totalUsersPages }}</span>
           <button
             (click)="currentUsersPage = currentUsersPage + 1"
-            [disabled]="currentUsersPage === totalUsersPages"
+            [disabled]="currentUsersPage === totalUsersPages || totalUsersPages === 0"
             [ngClass]="{
-              'cursor-not-allowed opacity-50': currentUsersPage === totalUsersPages,
-              'cursor-pointer': currentUsersPage < totalUsersPages
+              'cursor-not-allowed opacity-50': currentUsersPage === totalUsersPages || totalUsersPages === 0,
+              'cursor-pointer': currentUsersPage < totalUsersPages && totalUsersPages > 0
             }"
             class="p-2 py-1 border rounded-lg transition"
             [ngStyle]="{
@@ -288,6 +300,14 @@
             <option [value]="50">50</option>
           </select>
         </div>
+      </div>
+
+      <!-- Filtr statusów książek -->
+      <div class="w-full flex flex-wrap justify-center items-center gap-x-16 gap-y-2 text-lg pb-2 pt-2" style="color: var(--text-color);">
+        <label class="flex items-center gap-2 cursor-pointer"><input class="w-5 h-5 cursor-pointer" type="checkbox" [(ngModel)]="userFilters.verified.true" (change)="filterUsers()"> Zweryfikowani</label>
+        <label class="flex items-center gap-2 cursor-pointer"><input class="w-5 h-5 cursor-pointer" type="checkbox" [(ngModel)]="userFilters.verified.false" (change)="filterUsers()"> Niezweryfikowani</label>
+        <label class="flex items-center gap-2 cursor-pointer"><input class="w-5 h-5 cursor-pointer" type="checkbox" [(ngModel)]="userFilters.locked.true" (change)="filterUsers()"> Zablokowani</label>
+        <label class="flex items-center gap-2 cursor-pointer"><input class="w-5 h-5 cursor-pointer" type="checkbox" [(ngModel)]="userFilters.locked.false" (change)="filterUsers()"> Odblokowani</label>
       </div>
 
       <!-- Lista użytkowników w bibliotece -->

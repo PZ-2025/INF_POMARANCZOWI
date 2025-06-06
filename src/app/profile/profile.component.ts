@@ -35,6 +35,20 @@ export class ProfileComponent {
   isVerified: boolean = false;
 
   isDarkTheme = false;
+  libraryBooksFiltered: BookDto[] = [];
+  bookStatuses: string[] = ['AVAILABLE', 'LOST', 'RESERVED', 'BORROWED'];
+  selectedStatusesMap: { [key: string]: boolean } = {
+    'AVAILABLE': false,
+    'LOST': false,
+    'RESERVED': false,
+    'BORROWED': false
+  };
+  statusTranslations: { [key: string]: string } = {
+    'AVAILABLE': 'Dostępne',
+    'LOST': 'Zagubione',
+    'RESERVED': 'Zarezerwowane',
+    'BORROWED': 'Wypożyczone'
+  };
 
   showEditForm = false;
 
@@ -89,6 +103,11 @@ export class ProfileComponent {
         }
       }
 
+      const savedFilters = localStorage.getItem('library-status-filters');
+      if (savedFilters) {
+        this.selectedStatusesMap = JSON.parse(savedFilters);
+      }
+
       this.fetchAllBooks();
     }
 
@@ -101,8 +120,34 @@ export class ProfileComponent {
         }
       }
 
+      const savedUserFilters = localStorage.getItem('user-filter-settings');
+      if (savedUserFilters) {
+        this.userFilters = JSON.parse(savedUserFilters);
+      }
+
       this.fetchAllUsers();
     }
+  }
+
+  filterLibraryBooks(): void {
+    localStorage.setItem('library-status-filters', JSON.stringify(this.selectedStatusesMap));
+    this.updateFilteredBooks();
+  }
+
+  updateFilteredBooks(): void {
+    const selectedStatuses = Object.entries(this.selectedStatusesMap)
+      .filter(([_, checked]) => checked)
+      .map(([status]) => status);
+
+    if (selectedStatuses.length === 0) {
+      this.libraryBooksFiltered = [...this.allBooks];
+    } else {
+      this.libraryBooksFiltered = this.allBooks.filter(book =>
+        selectedStatuses.includes(book.status)
+      );
+    }
+
+    this.currentPage = 1;
   }
 
   allMessageService() {
@@ -157,11 +202,12 @@ export class ProfileComponent {
 
   get paginatedBooks(): BookDto[] {
     const start = (this.currentPage - 1) * this.booksPerPage;
-    return this.allBooks.slice(start, start + this.booksPerPage);
+    return this.libraryBooksFiltered.slice(start, start + this.booksPerPage);
   }
 
   get totalPages(): number {
-    return Math.ceil(this.allBooks.length / this.booksPerPage);
+    const total = Math.ceil(this.libraryBooksFiltered.length / this.booksPerPage);
+    return total === 0 ? 0 : total;
   }
 
   onBooksPerPageChange(event: Event) {
@@ -207,6 +253,7 @@ export class ProfileComponent {
         console.log(this.allBooks);
 
         this.loadAllBookError = false;
+        this.updateFilteredBooks();
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -251,13 +298,56 @@ export class ProfileComponent {
   currentUsersPage: number = 1;
   usersPerPage: number = 5;
 
+  userFilters = {
+    verified: {
+      true: false,
+      false: false
+    },
+    locked: {
+      true: false,
+      false: false
+    }
+  };
+
+  filteredUsers: User[] = [];
+
   get paginatedUsers(): User[] {
     const start = (this.currentUsersPage - 1) * this.usersPerPage;
-    return this.allUsers.slice(start, start + this.usersPerPage);
+    return this.filteredUsers.slice(start, start + this.usersPerPage);
   }
 
   get totalUsersPages(): number {
-    return Math.ceil(this.allUsers.length / this.usersPerPage);
+    const total = Math.ceil(this.filteredUsers.length / this.usersPerPage);
+    return total === 0 ? 0 : total;
+  }
+
+  filterUsers(): void {
+    localStorage.setItem('user-filter-settings', JSON.stringify(this.userFilters));
+    this.updateFilteredUsers();
+  }
+
+  updateFilteredUsers(): void {
+    const { verified, locked } = this.userFilters;
+
+    const verifiedSelected = Object.entries(verified)
+      .filter(([_, checked]) => checked)
+      .map(([value]) => value === 'true');
+
+    const lockedSelected = Object.entries(locked)
+      .filter(([_, checked]) => checked)
+      .map(([value]) => value === 'true');
+
+    if (verifiedSelected.length === 0 && lockedSelected.length === 0) {
+      this.filteredUsers = [...this.allUsers];
+    } else {
+      this.filteredUsers = this.allUsers.filter(user => {
+        const matchVerified = verifiedSelected.length === 0 || verifiedSelected.includes(user.verified);
+        const matchLocked = lockedSelected.length === 0 || lockedSelected.includes(user.locked);
+        return matchVerified && matchLocked;
+      });
+    }
+
+    this.currentUsersPage = 1;
   }
 
   onUsersPerPageChange(event: Event) {
@@ -304,6 +394,7 @@ export class ProfileComponent {
         console.log(this.allUsers);
 
         this.loadUsersError = false;
+        this.updateFilteredUsers();
         this.cdr.detectChanges();
       },
       error: (err) => {
