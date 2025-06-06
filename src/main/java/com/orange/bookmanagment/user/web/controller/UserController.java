@@ -174,4 +174,52 @@ class UserController {
                         .build()
         );
     }
+
+    /**
+     * Blokuje użytkownika (blocked = true).
+     *
+     * @param id identyfikator użytkownika
+     * @return odpowiedź potwierdzająca zablokowanie użytkownika
+     */
+    @PutMapping("/{id}/block")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<HttpResponse> blockUser(@PathVariable Long id) {
+        userService.blockUser(id);
+        return ResponseEntity.ok(HttpResponse.builder()
+                .message("User has been blocked")
+                .statusCode(200)
+                .build());
+    }
+
+    /**
+     * Odblokowuje użytkownika (blocked = false).
+     *
+     * @param id identyfikator użytkownika
+     * @return odpowiedź potwierdzająca odblokowanie użytkownika
+     */
+    @PutMapping("/{id}/unblock")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<HttpResponse> unblockUser(@PathVariable Long id) {
+        userService.unblockUser(id);
+        return ResponseEntity.ok(HttpResponse.builder()
+                .message("User has been unblocked")
+                .statusCode(200)
+                .build());
+    }
+
+    /**
+     * Weryfikuje użytkownika (locked = true).
+     *
+     * @param id identyfikator użytkownika
+     * @return odpowiedź potwierdzająca zweryfikowanie użytkownika
+     */
+    @PutMapping("/{id}/verify")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<HttpResponse> verifyUser(@PathVariable Long id) {
+        userService.verifyUser(id);
+        return ResponseEntity.ok(HttpResponse.builder()
+                .message("User has been verified (unlocked)")
+                .statusCode(200)
+                .build());
+    }
 }

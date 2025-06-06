@@ -97,7 +97,17 @@ class UserServiceImpl implements UserService, UserExternalService {
             throw new UserAlreadyExistException("User already exists");
         });
 
-        return userRepository.createUser(new User(passwordEncoder.encode(userRegisterRequest.password()), userRegisterRequest.email(),userRegisterRequest.lastName(),userRegisterRequest.firstName(), userType));
+        User newUser = new User(
+                passwordEncoder.encode(userRegisterRequest.password()),
+                userRegisterRequest.email(),
+                userRegisterRequest.lastName(),
+                userRegisterRequest.firstName(),
+                userType
+        );
+
+        newUser.setLocked(true);
+
+        return userRepository.createUser(newUser);
     }
 
     /**
@@ -215,5 +225,41 @@ class UserServiceImpl implements UserService, UserExternalService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
+    }
+
+    /**
+     * Blokuje użytkownika (blocked = true).
+     *
+     * @param userId identyfikator użytkownika do zablokowania
+     */
+    @Override
+    public void blockUser(Long userId) {
+        User user = getUserById(userId);
+        user.setBlocked(true);
+        userRepository.updateUser(user);
+    }
+
+    /**
+     * Odblokowuje użytkownika (blocked = false).
+     *
+     * @param userId identyfikator użytkownika do odblokowania
+     */
+    @Override
+    public void unblockUser(Long userId) {
+        User user = getUserById(userId);
+        user.setBlocked(false);
+        userRepository.updateUser(user);
+    }
+
+    /**
+     * Weryfikuje użytkownika (locked = false).
+     *
+     * @param userId identyfikator użytkownika do zweryfikowania
+     */
+    @Override
+    public void verifyUser(Long userId) {
+        User user = getUserById(userId);
+        user.setLocked(false);
+        userRepository.updateUser(user);
     }
 }

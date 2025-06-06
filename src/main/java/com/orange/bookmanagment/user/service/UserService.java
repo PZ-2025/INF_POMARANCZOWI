@@ -114,4 +114,25 @@ public interface UserService {
      * @return lista użytkowników
      */
     List<User> getAllUsers();
+
+    /**
+     * Blokuje użytkownika (blocked = true).
+     *
+     * @param userId identyfikator użytkownika do zablokowania
+     */
+    void blockUser(Long userId);
+
+    /**
+     * Odblokowuje użytkownika (blocked = false).
+     *
+     * @param userId identyfikator użytkownika do odblokowania
+     */
+    void unblockUser(Long userId);
+
+    /**
+     * Weryfikuje użytkownika (locked = false).
+     *
+     * @param userId identyfikator użytkownika do zweryfikowania
+     */
+    void verifyUser(Long userId);
 }
