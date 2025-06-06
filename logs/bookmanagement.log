@@ -7651,3 +7651,316 @@
 2025-06-06 10:04:27.816 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@491fb5: (connection evicted)
 2025-06-06 10:04:27.817 [SpringApplicationShutdownHook] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After shutdown stats (total=0, active=0, idle=0, waiting=0)
 2025-06-06 10:04:27.817 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-06-06 10:04:31.101 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-06 10:04:31.148 [main] INFO  com.orange.bookmanagment.BookManagementApplication - Starting BookManagementApplication using Java 18.0.2 with PID 37404 (C:\Users\Piotr\Desktop\Studia\Semestr 6\PZ\Zadania\APLIKACJA\BACK-END\target\classes started by Piotr in C:\Users\Piotr\Desktop\Studia\Semestr 6\PZ\Zadania\APLIKACJA\BACK-END)
+2025-06-06 10:04:31.148 [main] DEBUG com.orange.bookmanagment.BookManagementApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-06-06 10:04:31.149 [main] INFO  com.orange.bookmanagment.BookManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-06 10:04:31.843 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-06 10:04:31.936 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 86 ms. Found 7 JPA repository interfaces.
+2025-06-06 10:04:32.685 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-06-06 10:04:32.695 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-06-06 10:04:32.697 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2025-06-06 10:04:32.697 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-06-06 10:04:32.749 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-06-06 10:04:32.750 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1562 ms
+2025-06-06 10:04:32.906 [main] DEBUG com.orange.bookmanagment.user.security.jwt.filter.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2025-06-06 10:04:32.949 [main] DEBUG com.zaxxer.hikari.HikariConfig - Driver class com.mysql.cj.jdbc.Driver found in Thread context class loader jdk.internal.loader.ClassLoaders$AppClassLoader@2f0e140b
+2025-06-06 10:04:33.082 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-06 10:04:33.127 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.8.Final
+2025-06-06 10:04:33.183 [main] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-06-06 10:04:33.363 [main] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-06 10:04:33.384 [main] DEBUG com.zaxxer.hikari.HikariConfig - HikariPool-1 - configuration:
+2025-06-06 10:04:33.387 [main] DEBUG com.zaxxer.hikari.HikariConfig - allowPoolSuspension.............false
+2025-06-06 10:04:33.387 [main] DEBUG com.zaxxer.hikari.HikariConfig - autoCommit......................true
+2025-06-06 10:04:33.387 [main] DEBUG com.zaxxer.hikari.HikariConfig - catalog.........................none
+2025-06-06 10:04:33.387 [main] DEBUG com.zaxxer.hikari.HikariConfig - connectionInitSql...............none
+2025-06-06 10:04:33.387 [main] DEBUG com.zaxxer.hikari.HikariConfig - connectionTestQuery.............none
+2025-06-06 10:04:33.388 [main] DEBUG com.zaxxer.hikari.HikariConfig - connectionTimeout...............30000
+2025-06-06 10:04:33.388 [main] DEBUG com.zaxxer.hikari.HikariConfig - dataSource......................none
+2025-06-06 10:04:33.388 [main] DEBUG com.zaxxer.hikari.HikariConfig - dataSourceClassName.............none
+2025-06-06 10:04:33.388 [main] DEBUG com.zaxxer.hikari.HikariConfig - dataSourceJNDI..................none
+2025-06-06 10:04:33.388 [main] DEBUG com.zaxxer.hikari.HikariConfig - dataSourceProperties............{password=<masked>}
+2025-06-06 10:04:33.389 [main] DEBUG com.zaxxer.hikari.HikariConfig - driverClassName................."com.mysql.cj.jdbc.Driver"
+2025-06-06 10:04:33.389 [main] DEBUG com.zaxxer.hikari.HikariConfig - exceptionOverrideClassName......none
+2025-06-06 10:04:33.389 [main] DEBUG com.zaxxer.hikari.HikariConfig - healthCheckProperties...........{}
+2025-06-06 10:04:33.389 [main] DEBUG com.zaxxer.hikari.HikariConfig - healthCheckRegistry.............none
+2025-06-06 10:04:33.390 [main] DEBUG com.zaxxer.hikari.HikariConfig - idleTimeout.....................600000
+2025-06-06 10:04:33.390 [main] DEBUG com.zaxxer.hikari.HikariConfig - initializationFailTimeout.......1
+2025-06-06 10:04:33.390 [main] DEBUG com.zaxxer.hikari.HikariConfig - isolateInternalQueries..........false
+2025-06-06 10:04:33.390 [main] DEBUG com.zaxxer.hikari.HikariConfig - jdbcUrl.........................jdbc:mysql://localhost:3306/librarydb
+2025-06-06 10:04:33.390 [main] DEBUG com.zaxxer.hikari.HikariConfig - keepaliveTime...................0
+2025-06-06 10:04:33.390 [main] DEBUG com.zaxxer.hikari.HikariConfig - leakDetectionThreshold..........0
+2025-06-06 10:04:33.390 [main] DEBUG com.zaxxer.hikari.HikariConfig - maxLifetime.....................1800000
+2025-06-06 10:04:33.390 [main] DEBUG com.zaxxer.hikari.HikariConfig - maximumPoolSize.................10
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - metricRegistry..................none
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - metricsTrackerFactory...........none
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - minimumIdle.....................10
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - password........................<masked>
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - poolName........................"HikariPool-1"
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - readOnly........................false
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - registerMbeans..................false
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - scheduledExecutor...............none
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - schema..........................none
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - threadFactory...................internal
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - transactionIsolation............default
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - username........................"root"
+2025-06-06 10:04:33.391 [main] DEBUG com.zaxxer.hikari.HikariConfig - validationTimeout...............5000
+2025-06-06 10:04:33.392 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-06 10:04:33.613 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6e66b498
+2025-06-06 10:04:33.615 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-06 10:04:33.658 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-06 10:04:33.675 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.4.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-06-06 10:04:33.684 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(12, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@14b9df65) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@3b046e64)
+2025-06-06 10:04:33.684 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(-9, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@1c43e84e) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@7bd694a5)
+2025-06-06 10:04:33.685 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(-3, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@21ce2e4d) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@3921135e)
+2025-06-06 10:04:33.685 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(4003, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@3a239dac) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@759f45f1)
+2025-06-06 10:04:33.685 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(4001, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@2573b149) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@1479ed5a)
+2025-06-06 10:04:33.685 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(4002, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@3211cc84) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@3d2eb7fa)
+2025-06-06 10:04:33.685 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(2004, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@56fa0ef) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@5e278e25)
+2025-06-06 10:04:33.685 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(2005, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@62ee1c89) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@2ab7f649)
+2025-06-06 10:04:33.685 [main] DEBUG org.hibernate.type.descriptor.sql.spi.DdlTypeRegistry - addDescriptor(2011, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@52a74328) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@3093b9ff)
+2025-06-06 10:04:33.725 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=1, active=0, idle=1, waiting=0)
+2025-06-06 10:04:33.744 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@218aa98b
+2025-06-06 10:04:33.787 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=2, active=0, idle=2, waiting=0)
+2025-06-06 10:04:33.805 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@60b7a3b0
+2025-06-06 10:04:33.849 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=3, active=0, idle=3, waiting=0)
+2025-06-06 10:04:33.866 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@519d03b9
+2025-06-06 10:04:33.896 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=4, active=0, idle=4, waiting=0)
+2025-06-06 10:04:33.913 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@985cff
+2025-06-06 10:04:33.958 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=5, active=0, idle=5, waiting=0)
+2025-06-06 10:04:33.975 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4d6a0de
+2025-06-06 10:04:34.021 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=6, active=0, idle=6, waiting=0)
+2025-06-06 10:04:34.035 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@779ba567
+2025-06-06 10:04:34.066 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=7, active=0, idle=7, waiting=0)
+2025-06-06 10:04:34.082 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5b96e4af
+2025-06-06 10:04:34.113 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=8, active=0, idle=8, waiting=0)
+2025-06-06 10:04:34.128 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@457e95b9
+2025-06-06 10:04:34.160 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=9, active=0, idle=9, waiting=0)
+2025-06-06 10:04:34.175 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@784c0d59
+2025-06-06 10:04:34.207 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=10, active=0, idle=10, waiting=0)
+2025-06-06 10:04:34.668 [main] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-06 10:04:34.756 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-06 10:04:34.960 [main] INFO  org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-06 10:04:35.878 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-06 10:04:35.903 [main] INFO  org.springframework.security.config.annotation.authentication.configuration.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Found 2 AuthenticationProvider beans, with names [accountAuthenticationProvider, jwtAuthenticationProvider]. Global Authentication Manager will not be configured with AuthenticationProviders. Consider publishing a single AuthenticationProvider bean, or wiring your Providers directly using the DSL.
+2025-06-06 10:04:35.905 [main] INFO  org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-06-06 10:04:36.807 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2025-06-06 10:04:36.824 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-06-06 10:04:36.832 [main] INFO  org.springframework.scheduling.config.TaskSchedulerRouter - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2025-06-06 10:04:36.835 [main] INFO  com.orange.bookmanagment.BookManagementApplication - Started BookManagementApplication in 6.004 seconds (process running for 6.616)
+2025-06-06 10:04:40.019 [http-nio-8080-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-06 10:04:40.020 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-06 10:04:40.021 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-06-06 10:04:40.146 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - select b1_0.id,b1_0.cover_image,b1_0.created_at,b1_0.description,b1_0.genre,b1_0.publisher_id,b1_0.status,b1_0.title,b1_0.updated_at from books b1_0 where b1_0.id=?
+2025-06-06 10:04:40.200 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:04:40.228 [http-nio-8080-exec-2] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#5]
+2025-06-06 10:04:40.228 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:04:40.355 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select count(r1_0.id) from reservations r1_0 where r1_0.book_id=? and r1_0.status in (?,?)
+2025-06-06 10:04:42.335 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - select b1_0.id,b1_0.cover_image,b1_0.created_at,b1_0.description,b1_0.genre,b1_0.publisher_id,b1_0.status,b1_0.title,b1_0.updated_at from books b1_0 where b1_0.id=?
+2025-06-06 10:04:42.342 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:04:42.345 [http-nio-8080-exec-3] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#5]
+2025-06-06 10:04:42.345 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:04:42.492 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - select count(r1_0.id) from reservations r1_0 where r1_0.book_id=? and r1_0.status in (?,?)
+2025-06-06 10:05:03.734 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-06-06 10:05:03.734 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-06-06 10:05:13.050 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - select b1_0.id,b1_0.cover_image,b1_0.created_at,b1_0.description,b1_0.genre,b1_0.publisher_id,b1_0.status,b1_0.title,b1_0.updated_at from books b1_0 where b1_0.id=?
+2025-06-06 10:05:13.056 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:13.058 [http-nio-8080-exec-5] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#5]
+2025-06-06 10:05:13.058 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:13.218 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - select count(r1_0.id) from reservations r1_0 where r1_0.book_id=? and r1_0.status in (?,?)
+2025-06-06 10:05:16.092 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - select b1_0.id,b1_0.cover_image,b1_0.created_at,b1_0.description,b1_0.genre,b1_0.publisher_id,b1_0.status,b1_0.title,b1_0.updated_at from books b1_0 where b1_0.id=?
+2025-06-06 10:05:16.099 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:16.102 [http-nio-8080-exec-7] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#5]
+2025-06-06 10:05:16.102 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:16.254 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select count(r1_0.id) from reservations r1_0 where r1_0.book_id=? and r1_0.status in (?,?)
+2025-06-06 10:05:19.594 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - SELECT genre, COUNT(*) AS count FROM books GROUP BY genre ORDER BY count DESC LIMIT 5
+2025-06-06 10:05:19.594 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - SELECT * FROM books ORDER BY RAND() LIMIT ?
+2025-06-06 10:05:19.611 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.624 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#3]
+2025-06-06 10:05:19.624 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:19.640 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.646 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.649 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#2]
+2025-06-06 10:05:19.649 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:19.652 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.655 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.658 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.660 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#1]
+2025-06-06 10:05:19.661 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:19.663 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.665 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#4]
+2025-06-06 10:05:19.665 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:19.668 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.670 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.673 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.674 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:19.676 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:20.250 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - select b1_0.id,b1_0.cover_image,b1_0.created_at,b1_0.description,b1_0.genre,b1_0.publisher_id,b1_0.status,b1_0.title,b1_0.updated_at from books b1_0 where b1_0.id=?
+2025-06-06 10:05:20.257 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:20.260 [http-nio-8080-exec-4] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#4]
+2025-06-06 10:05:20.260 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:20.278 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - select count(r1_0.id) from reservations r1_0 where r1_0.book_id=? and r1_0.status in (?,?)
+2025-06-06 10:05:21.936 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - SELECT * FROM books ORDER BY RAND() LIMIT ?
+2025-06-06 10:05:21.936 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - SELECT genre, COUNT(*) AS count FROM books GROUP BY genre ORDER BY count DESC LIMIT 5
+2025-06-06 10:05:21.942 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.945 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#3]
+2025-06-06 10:05:21.945 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:21.948 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.951 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#1]
+2025-06-06 10:05:21.951 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:21.953 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.956 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.959 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.961 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.963 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#4]
+2025-06-06 10:05:21.964 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:21.966 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.969 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.971 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.974 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.976 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#2]
+2025-06-06 10:05:21.977 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:21.979 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:21.982 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:22.516 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - select b1_0.id,b1_0.cover_image,b1_0.created_at,b1_0.description,b1_0.genre,b1_0.publisher_id,b1_0.status,b1_0.title,b1_0.updated_at from books b1_0 where b1_0.id=?
+2025-06-06 10:05:22.523 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:22.526 [http-nio-8080-exec-10] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#1]
+2025-06-06 10:05:22.526 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:22.545 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - select count(r1_0.id) from reservations r1_0 where r1_0.book_id=? and r1_0.status in (?,?)
+2025-06-06 10:05:23.770 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - SELECT genre, COUNT(*) AS count FROM books GROUP BY genre ORDER BY count DESC LIMIT 5
+2025-06-06 10:05:23.770 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - SELECT * FROM books ORDER BY RAND() LIMIT ?
+2025-06-06 10:05:23.777 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.780 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#3]
+2025-06-06 10:05:23.780 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:23.783 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.787 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.790 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#1]
+2025-06-06 10:05:23.791 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:23.793 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.796 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#2]
+2025-06-06 10:05:23.796 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:23.799 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.803 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#4]
+2025-06-06 10:05:23.803 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:23.806 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.809 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.811 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.813 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#5]
+2025-06-06 10:05:23.813 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:23.815 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.817 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.819 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:23.821 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:25.323 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - select b1_0.id,b1_0.cover_image,b1_0.created_at,b1_0.description,b1_0.genre,b1_0.publisher_id,b1_0.status,b1_0.title,b1_0.updated_at from books b1_0 where b1_0.id=?
+2025-06-06 10:05:25.330 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:25.333 [http-nio-8080-exec-4] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#3]
+2025-06-06 10:05:25.333 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:25.349 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - select count(r1_0.id) from reservations r1_0 where r1_0.book_id=? and r1_0.status in (?,?)
+2025-06-06 10:05:26.764 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - SELECT * FROM books ORDER BY RAND() LIMIT ?
+2025-06-06 10:05:26.764 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - SELECT genre, COUNT(*) AS count FROM books GROUP BY genre ORDER BY count DESC LIMIT 5
+2025-06-06 10:05:26.772 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.779 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#5]
+2025-06-06 10:05:26.779 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:26.782 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.785 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#4]
+2025-06-06 10:05:26.785 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:26.789 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.792 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.795 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.799 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#2]
+2025-06-06 10:05:26.799 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:26.802 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.805 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.808 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#1]
+2025-06-06 10:05:26.808 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:26.811 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.815 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.818 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#3]
+2025-06-06 10:05:26.818 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:26.820 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.823 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:26.826 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:27.468 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - select b1_0.id,b1_0.cover_image,b1_0.created_at,b1_0.description,b1_0.genre,b1_0.publisher_id,b1_0.status,b1_0.title,b1_0.updated_at from books b1_0 where b1_0.id=?
+2025-06-06 10:05:27.474 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:27.477 [http-nio-8080-exec-10] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#4]
+2025-06-06 10:05:27.478 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:27.498 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - select count(r1_0.id) from reservations r1_0 where r1_0.book_id=? and r1_0.status in (?,?)
+2025-06-06 10:05:28.553 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - SELECT genre, COUNT(*) AS count FROM books GROUP BY genre ORDER BY count DESC LIMIT 5
+2025-06-06 10:05:28.553 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - SELECT * FROM books ORDER BY RAND() LIMIT ?
+2025-06-06 10:05:28.560 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.563 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#2]
+2025-06-06 10:05:28.564 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:28.567 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.570 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#3]
+2025-06-06 10:05:28.570 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:28.574 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.578 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.581 [http-nio-8080-exec-1] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#4]
+2025-06-06 10:05:28.581 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:28.584 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.587 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.591 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.594 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.597 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.600 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.603 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:28.607 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:29.172 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - select b1_0.id,b1_0.cover_image,b1_0.created_at,b1_0.description,b1_0.genre,b1_0.publisher_id,b1_0.status,b1_0.title,b1_0.updated_at from books b1_0 where b1_0.id=?
+2025-06-06 10:05:29.179 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:29.182 [http-nio-8080-exec-4] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#2]
+2025-06-06 10:05:29.183 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:29.200 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - select count(r1_0.id) from reservations r1_0 where r1_0.book_id=? and r1_0.status in (?,?)
+2025-06-06 10:05:30.501 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - SELECT * FROM books ORDER BY RAND() LIMIT ?
+2025-06-06 10:05:30.501 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - SELECT genre, COUNT(*) AS count FROM books GROUP BY genre ORDER BY count DESC LIMIT 5
+2025-06-06 10:05:30.508 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.511 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#3]
+2025-06-06 10:05:30.511 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:30.514 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.517 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#2]
+2025-06-06 10:05:30.518 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:30.520 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.522 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.524 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#1]
+2025-06-06 10:05:30.525 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:30.527 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.529 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.531 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.533 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.535 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.537 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#5]
+2025-06-06 10:05:30.537 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:30.539 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.542 [http-nio-8080-exec-8] DEBUG org.hibernate.internal.SessionImpl - Initializing proxy: [com.orange.bookmanagment.book.model.Publisher#4]
+2025-06-06 10:05:30.542 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select p1_0.id,p1_0.description,p1_0.name from publishers p1_0 where p1_0.id=?
+2025-06-06 10:05:30.544 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:30.548 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - select a1_0.book_id,a1_1.id,a1_1.biography,a1_1.first_name,a1_1.last_name from book_authors a1_0 join authors a1_1 on a1_1.id=a1_0.author_id where a1_0.book_id=?
+2025-06-06 10:05:33.749 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-06-06 10:05:33.749 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-06-06 10:06:03.757 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-06-06 10:06:03.757 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-06-06 10:06:30.028 [SpringApplicationShutdownHook] INFO  org.springframework.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-06-06 10:06:30.124 [tomcat-shutdown] INFO  org.springframework.boot.web.embedded.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-06-06 10:06:30.138 [SpringApplicationShutdownHook] DEBUG org.hibernate.SQL - select djep1_0.id,djep1_0.completion_date,djep1_0.event_type,djep1_0.listener_id,djep1_0.publication_date,djep1_0.serialized_event from event_publication djep1_0 where djep1_0.completion_date is null order by djep1_0.publication_date
+2025-06-06 10:06:30.149 [SpringApplicationShutdownHook] INFO  org.springframework.modulith.events.core.DefaultEventPublicationRegistry - No publications outstanding!
+2025-06-06 10:06:30.152 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-06 10:06:30.154 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-06 10:06:30.154 [SpringApplicationShutdownHook] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Before shutdown stats (total=10, active=0, idle=10, waiting=0)
+2025-06-06 10:06:30.155 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@6e66b498: (connection evicted)
+2025-06-06 10:06:30.157 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@218aa98b: (connection evicted)
+2025-06-06 10:06:30.158 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@60b7a3b0: (connection evicted)
+2025-06-06 10:06:30.159 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@519d03b9: (connection evicted)
+2025-06-06 10:06:30.159 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@985cff: (connection evicted)
+2025-06-06 10:06:30.160 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@4d6a0de: (connection evicted)
+2025-06-06 10:06:30.161 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@779ba567: (connection evicted)
+2025-06-06 10:06:30.162 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@5b96e4af: (connection evicted)
+2025-06-06 10:06:30.163 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@457e95b9: (connection evicted)
+2025-06-06 10:06:30.164 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection com.mysql.cj.jdbc.ConnectionImpl@784c0d59: (connection evicted)
+2025-06-06 10:06:30.165 [SpringApplicationShutdownHook] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After shutdown stats (total=0, active=0, idle=0, waiting=0)
+2025-06-06 10:06:30.165 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
