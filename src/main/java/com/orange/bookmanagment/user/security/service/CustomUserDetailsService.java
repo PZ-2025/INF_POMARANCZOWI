@@ -38,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
-                user.isVerified(),
+                true,
                 true,
                 true,
                 !user.isBlocked(),

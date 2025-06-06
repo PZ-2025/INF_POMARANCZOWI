@@ -105,7 +105,7 @@ class UserServiceImpl implements UserService, UserExternalService {
                 userType
         );
 
-        newUser.setLocked(true);
+        newUser.setVerified(false);
 
         return userRepository.createUser(newUser);
     }
@@ -235,7 +235,7 @@ class UserServiceImpl implements UserService, UserExternalService {
     @Override
     public void blockUser(Long userId) {
         User user = getUserById(userId);
-        user.setBlocked(true);
+        user.setLocked(true);
         userRepository.updateUser(user);
     }
 
@@ -247,7 +247,7 @@ class UserServiceImpl implements UserService, UserExternalService {
     @Override
     public void unblockUser(Long userId) {
         User user = getUserById(userId);
-        user.setBlocked(false);
+        user.setLocked(false);
         userRepository.updateUser(user);
     }
 
@@ -259,7 +259,7 @@ class UserServiceImpl implements UserService, UserExternalService {
     @Override
     public void verifyUser(Long userId) {
         User user = getUserById(userId);
-        user.setLocked(false);
+        user.setVerified(true);
         userRepository.updateUser(user);
     }
 }

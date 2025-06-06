@@ -74,7 +74,7 @@ public class User {
         this.userType = userType;
 
         //TODO add verification system
-        this.verified = true;
+        this.verified = false;
         this.blocked = false;
         this.locked = false;
 
