@@ -408,6 +408,8 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
             updateBookStatusBasedOnReservationsAndLoans(bookId);
         }
 
+        updateBookStatusBasedOnReservationsAndLoans(bookId);
+
         return reservation;
     }
 
