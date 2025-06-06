@@ -36,6 +36,7 @@ export class BookDetailsComponent implements OnInit {
   myLoan: any = null;
   myReservation: any = null;
   hasReadyReservation: boolean = false;
+  queueLength: number = 0;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -81,6 +82,10 @@ export class BookDetailsComponent implements OnInit {
           this.fallbackUsed = true;
         }
 
+        if (this.book.status === 'RESERVED') {
+          this.loadReservationQueue(this.book.id);
+        }
+
         this.fetchRentalsAndReservations();
       },
       error: (error) => {
@@ -94,6 +99,24 @@ export class BookDetailsComponent implements OnInit {
           console.error('Inny błąd:', error);
           this.router.navigate(['/']);
         }
+      }
+    });
+  }
+
+  loadReservationQueue(bookId: number): void {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    this.http.get<any>(`http://localhost:8080/api/v1/reservations/queue-length/${bookId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
+      next: (response) => {
+        this.queueLength = response.data.queueLength;
+      },
+      error: err => {
+        console.error('Błąd przy pobieraniu kolejki rezerwacji');
       }
     });
   }

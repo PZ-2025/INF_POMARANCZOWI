@@ -12,12 +12,27 @@ import { BookService, BookDto } from '../services/book.service';
 export class HomeComponent implements OnInit {
   isDarkTheme = false;
   message: string | null = null;
-  books: BookDto[] = [];
   selectedGenre: string | null = null;
-  topGenres: string[] = [];
   genreLoadError = false;
   sectionTitle: string = 'Brak książek do wyświetlenia';
   searchQuery: string = '';
+
+  topGenres: string[] = [];
+  books: BookDto[] = [];
+  allBooks: BookDto[] = [];
+  bookStatuses: string[] = ['AVAILABLE', 'LOST', 'RESERVED', 'BORROWED'];
+  selectedStatusesMap: { [key: string]: boolean } = {
+    'AVAILABLE': false,
+    'LOST': false,
+    'RESERVED': false,
+    'BORROWED': false
+  };
+  statusTranslations: { [key: string]: string } = {
+    'AVAILABLE': 'Dostępne',
+    'LOST': 'Zagubione',
+    'RESERVED': 'Zarezerwowane',
+    'BORROWED': 'Wypożyczone'
+  };
 
   constructor(private themeService: ThemeService, private messageService: MessageService, private bookService: BookService) {}
 
@@ -54,11 +69,34 @@ export class HomeComponent implements OnInit {
 
     this.bookService.getRandomBooks().subscribe({
       next: books => {
-        this.books = books;
+        this.allBooks = books;
+        this.applyStatusFilter();
         this.sectionTitle = 'Polecane tytuły';
       },
       error: err => console.error('Błąd przy pobieraniu książek', err)
     });
+
+    const savedFilters = localStorage.getItem('book-status-filters');
+    if (savedFilters) {
+      this.selectedStatusesMap = JSON.parse(savedFilters);
+    }
+  }
+
+  applyStatusFilter(): void {
+    const selectedStatuses = Object.entries(this.selectedStatusesMap)
+      .filter(([_, checked]) => checked)
+      .map(([status]) => status);
+
+    if (selectedStatuses.length === 0) {
+      this.books = [...this.allBooks];
+    } else {
+      this.books = this.allBooks.filter(book => selectedStatuses.includes(book.status));
+    }
+  }
+
+  filterBooks(): void {
+    localStorage.setItem('book-status-filters', JSON.stringify(this.selectedStatusesMap));
+    this.applyStatusFilter();
   }
 
   autoClearMessage() {
@@ -81,13 +119,16 @@ export class HomeComponent implements OnInit {
 
   loadBooksByGenre(genre: string) {
     this.selectedGenre = genre;
+    this.searchQuery = '';
     this.bookService.getRandomBooksByGenre(genre).subscribe({
       next: books => {
-        this.books = books;
+        this.allBooks = books;
+        this.applyStatusFilter();
         this.sectionTitle = `Polecane tytuły z kategorii "${this.genreTranslations[genre] || genre}"`;
       },
       error: err => {
         console.error('Błąd przy pobieraniu książek po kategorii', err);
+        this.allBooks = [];
         this.books = [];
         this.sectionTitle = `Brak książek do wyświetlenia w kategorii "${this.genreTranslations[genre] || genre}"`;
       }
@@ -109,15 +150,18 @@ export class HomeComponent implements OnInit {
 
   searchBooks(): void {
     const query = this.searchQuery.trim();
+    this.selectedGenre = null;
 
     if (!query) {
       this.bookService.getRandomBooks().subscribe({
         next: books => {
-          this.books = books;
+          this.allBooks = books;
+          this.applyStatusFilter();
           this.sectionTitle = 'Polecane tytuły';
         },
         error: err => {
           console.error('Błąd przy ładowaniu książek', err);
+          this.allBooks = [];
           this.books = [];
           this.sectionTitle = 'Brak książek do wyświetlenia ';
         }
@@ -127,11 +171,13 @@ export class HomeComponent implements OnInit {
 
     this.bookService.searchBooks(query).subscribe({
       next: books => {
-        this.books = books;
+        this.allBooks = books;
+        this.applyStatusFilter();
         this.sectionTitle = `Wyniki wyszukiwania dla "${query}"`;
       },
       error: err => {
         console.error('Błąd przy wyszukiwaniu książek', err);
+        this.allBooks = [];
         this.books = [];
         this.sectionTitle = `Brak wyników wyszukiwania dla "${query}"`;
       }

@@ -53,6 +53,17 @@
       </ng-template>
     </div>
 
+    <!-- Filtr statusów książek -->
+    <div class="w-full flex flex-wrap justify-center items-center gap-6 text-lg pb-2 pt-2" style="color: var(--text-color);">
+      <label *ngFor="let status of bookStatuses" class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" class="w-5 h-5 cursor-pointer"
+          [value]="status"
+          [(ngModel)]="selectedStatusesMap[status]"
+          (change)="filterBooks()" />
+        {{ statusTranslations[status] || status }}
+      </label>
+    </div>
+
     <!-- KONTENT -->
     <div class="w-full flex flex-wrap justify-center gap-8">
       <!-- Lista losowych 12/6 książek lub wyszukanych książek -->
