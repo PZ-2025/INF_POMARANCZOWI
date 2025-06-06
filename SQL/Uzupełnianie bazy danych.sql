@@ -430,3 +430,22 @@ INSERT INTO loans (book_id, user_id, lending_librarian_id, borrowed_at, due_date
 INSERT INTO loans (book_id, user_id, lending_librarian_id, borrowed_at, due_date, returned_at, returning_librarian_id, updated_at, extended_count, notes, status) VALUES (73, 4, 8, '2025-03-09 11:42:06', '2025-06-02 11:42:06', NULL, NULL, '2025-03-09 11:42:06', 2, NULL, 'ACTIVE');
 INSERT INTO loans (book_id, user_id, lending_librarian_id, borrowed_at, due_date, returned_at, returning_librarian_id, updated_at, extended_count, notes, status) VALUES (96, 6, 3, '2025-05-07 11:42:06', '2025-06-06 11:42:06', NULL, NULL, '2025-05-07 11:42:06', 0, NULL, 'ACTIVE');
 INSERT INTO loans (book_id, user_id, lending_librarian_id, borrowed_at, due_date, returned_at, returning_librarian_id, updated_at, extended_count, notes, status) VALUES (98, 7, 8, '2025-04-30 11:42:06', '2025-05-30 11:42:06', NULL, NULL, '2025-04-30 11:42:06', 0, NULL, 'ACTIVE');
+
+SET @loans_max_gap := (
+  SELECT IFNULL(MAX(DATEDIFF(CURRENT_DATE(), due_date)), 0)
+  FROM loans
+  WHERE status = 'ACTIVE' AND due_date < CURRENT_DATE()
+);
+
+UPDATE loans
+SET due_date = DATE_ADD(due_date, INTERVAL (@loans_max_gap + 5) DAY)
+WHERE status = 'ACTIVE';
+
+SET @res_max_gap := (
+  SELECT IFNULL(MAX(DATEDIFF(CURRENT_DATE(), expires_at)), 0)
+  FROM reservations
+  WHERE expires_at < CURRENT_DATE()
+);
+
+UPDATE reservations
+SET expires_at = DATE_ADD(expires_at, INTERVAL (@res_max_gap + 5) DAY);
