@@ -486,8 +486,8 @@ class ReservationServiceImpl implements ReservationService, ReservationExternalS
     public Reservation extendReservation(long reservationId) {
         Reservation reservation = getReservationById(reservationId);
 
-        if (reservation.getStatus() != ReservationStatus.READY) {
-            throw new IllegalStateException("Only READY reservations can be extended.");
+        if (!(reservation.getStatus().equals(ReservationStatus.READY) || reservation.getStatus().equals(ReservationStatus.PENDING))) {
+            throw new IllegalStateException("Only READY or PENDING reservations can be extended.");
         }
 
         if (reservation.getExpiresAt() == null) {
