@@ -1240,4 +1240,25 @@ export class ProfileComponent {
       () => this.markBookAsLost(loanId)
     );
   }
+  
+  confirmBlockUser(userId: number): void {
+    this.openConfirmation(
+      'Czy na pewno chcesz zablokować tego użytkownika?',
+      () => this.blockUser(userId)
+    );
+  }
+
+  confirmUnblockUser(userId: number): void {
+    this.openConfirmation(
+      'Czy na pewno chcesz odblokować tego użytkownika?',
+      () => this.unblockUser(userId)
+    );
+  }
+
+  confirmVerifyUser(userId: number): void {
+    this.openConfirmation(
+      'Czy na pewno chcesz zweryfikować tego użytkownika?',
+      () => this.verifyUser(userId)
+    );
+  }
 }

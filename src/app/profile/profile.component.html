@@ -352,7 +352,7 @@
           <ng-container *ngIf="user.verified">
             <button
               *ngIf="!user.locked"
-              (click)="blockUser(user.id)"
+              (click)="confirmBlockUser(user.id)"
               class="w-full px-4 py-2 rounded border cursor-pointer"
               style="background-color: var(--profile-button-blocked);"
             >
@@ -361,7 +361,7 @@
 
             <button
               *ngIf="user.locked"
-              (click)="unblockUser(user.id)"
+              (click)="confirmUnblockUser(user.id)"
               class="w-full px-4 py-2 rounded border cursor-pointer"
               style="background-color: var(--profile-button-unblocked);"
             >
@@ -372,7 +372,7 @@
           <!-- Użytkownik niezweryfikowany -->
           <button
             *ngIf="!user.verified"
-            (click)="verifyUser(user.id)"
+            (click)="confirmVerifyUser(user.id)"
             class="w-full px-4 py-2 rounded border cursor-pointer"
             style="background-color: var(--profile-button-verified);"
           >
