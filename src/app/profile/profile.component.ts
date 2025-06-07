@@ -1176,4 +1176,68 @@ export class ProfileComponent {
     event.preventDefault();
     event.stopPropagation();
   }
+
+  confirmActionVisible: boolean = false;
+  confirmMessage: string = '';
+  confirmCallback: (() => void) | null = null;
+
+  openConfirmation(message: string, callback: () => void): void {
+    this.confirmMessage = message;
+    this.confirmCallback = callback;
+    this.confirmActionVisible = true;
+  }
+
+  confirmAction(): void {
+    if (this.confirmCallback) {
+      this.confirmCallback();
+    }
+    this.confirmActionVisible = false;
+  }
+
+  cancelAction(): void {
+    this.confirmActionVisible = false;
+    this.confirmCallback = null;
+  }
+
+  confirmCancelReservation(reservationId: number): void {
+    this.openConfirmation(
+      'Czy na pewno chcesz zrezygnować z rezerwacji?',
+      () => this.cancelReservation(reservationId)
+    );
+  }
+
+  confirmCompleteReservation(reservationId: number): void {
+    this.openConfirmation(
+      'Czy na pewno chcesz wypożyczyć książkę?',
+      () => this.completeReservation(reservationId)
+    );
+  }
+
+  confirmExtendReservation(reservationId: number, expiresAt: string): void {
+    this.openConfirmation(
+      'Czy na pewno chcesz przedłużyć rezerwację?',
+      () => this.extendReservation(reservationId, expiresAt)
+    );
+  }
+
+  confirmReturnBook(loanId: number): void {
+    this.openConfirmation(
+      'Czy na pewno chcesz zwrócić książkę?',
+      () => this.returnBook(loanId)
+    );
+  }
+
+  confirmExtendLoan(loanId: number, extendedCount: number, dueDate: string, isReserved: boolean): void {
+    this.openConfirmation(
+      'Czy na pewno chcesz przedłużyć wypożyczenie?',
+      () => this.extendLoan(loanId, extendedCount, dueDate, isReserved)
+    );
+  }
+
+  confirmMarkBookAsLost(loanId: number): void {
+    this.openConfirmation(
+      'Czy na pewno chcesz oznaczyć książkę jako zgubioną?',
+      () => this.markBookAsLost(loanId)
+    );
+  }
 }

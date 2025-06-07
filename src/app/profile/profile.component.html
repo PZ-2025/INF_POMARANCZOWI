@@ -440,9 +440,30 @@
             <!-- Guziki -->
             <div class="flex justify-start items-start">
               <div class="flex flex-col gap-4 justify-start items-start">
-                <button *ngIf="reservation.status !== 'CANCELLED' && reservation.status !== 'COMPLETED' && reservation.status !== 'EXPIRED'" (click)="cancelReservation(reservation.id)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zrezygnuj</button>
-                <button *ngIf="reservation.status === 'READY'" (click)="completeReservation(reservation.id)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Wypożycz</button>
-                <button *ngIf="(reservation.status === 'READY' || reservation.status === 'PENDING') && canExtendReservation(reservation.expiresAt)" (click)="extendReservation(reservation.id, reservation.expiresAt)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Przedłuż</button>
+                <button
+                  *ngIf="reservation.status !== 'CANCELLED' && reservation.status !== 'COMPLETED' && reservation.status !== 'EXPIRED'"
+                  (click)="confirmCancelReservation(reservation.id)"
+                  class="px-4 py-2 w-[110px] rounded border cursor-pointer"
+                  style="background-color: var(--profile-button-user);"
+                >
+                  Zrezygnuj
+                </button>
+                <button
+                  *ngIf="reservation.status === 'READY'"
+                  (click)="confirmCompleteReservation(reservation.id)"
+                  class="px-4 py-2 w-[110px] rounded border cursor-pointer"
+                  style="background-color: var(--profile-button-user);"
+                >
+                  Wypożycz
+                </button>
+                <button
+                  *ngIf="(reservation.status === 'READY' || reservation.status === 'PENDING') && canExtendReservation(reservation.expiresAt)"
+                  (click)="confirmExtendReservation(reservation.id, reservation.expiresAt)"
+                  class="px-4 py-2 w-[110px] rounded border cursor-pointer"
+                  style="background-color: var(--profile-button-user);"
+                >
+                  Przedłuż
+                </button>
               </div>
             </div>
           </div>
@@ -563,9 +584,28 @@
             <!-- Guziki -->
             <div class="flex justify-start items-start">
               <div class="flex flex-col gap-4 justify-start items-start">
-                <button (click)="returnBook(loan.id)" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Zwróć</button>
-                <button (click)="extendLoan(loan.id, loan.extendedCount, loan.dueDate, loan.isReserved)" *ngIf="canExtendLoan(loan.extendedCount, loan.dueDate) && !loan.isReserved" class="px-4 py-2 w-[110px] rounded border cursor-pointer" style="background-color: var(--profile-button-user);">Przedłuż</button>
-                <button (click)="markBookAsLost(loan.id)" class="w-[110px] px-4 py-2 rounded border cursor-pointer text-center" style="background-color: var(--profile-button-user);">Zgubiona</button>
+                <button
+                  (click)="confirmReturnBook(loan.id)"
+                  class="px-4 py-2 w-[110px] rounded border cursor-pointer"
+                  style="background-color: var(--profile-button-user);"
+                >
+                  Zwróć
+                </button>
+                <button
+                  (click)="confirmExtendLoan(loan.id, loan.extendedCount, loan.dueDate, loan.isReserved)"
+                  *ngIf="canExtendLoan(loan.extendedCount, loan.dueDate) && !loan.isReserved"
+                  class="px-4 py-2 w-[110px] rounded border cursor-pointer"
+                  style="background-color: var(--profile-button-user);"
+                >
+                  Przedłuż
+                </button>
+                <button
+                  (click)="confirmMarkBookAsLost(loan.id)"
+                  class="w-[110px] px-4 py-2 rounded border cursor-pointer text-center"
+                  style="background-color: var(--profile-button-user);"
+                >
+                  Zgubiona
+                </button>
               </div>
             </div>
           </div>
@@ -625,6 +665,16 @@
             (cancel)="showModal = false">
           </app-edit-user-modal>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="confirmActionVisible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl shadow-lg w-96" style="background-color: var(--edit-user-modal);">
+      <h2 class="text-2xl font-bold mb-4 text-center" style="line-height: 1.1;">{{ confirmMessage }}</h2>
+      <div class="flex justify-center gap-3">
+        <button (click)="cancelAction()" class="px-4 py-2 rounded border cursor-pointer w-[105px]" style="background-color: var(--button-cancel-bg); border-color: var(--text-color); color: var(--button-login-text);">Anuluj</button>
+        <button (click)="confirmAction()" class="px-4 py-2 rounded border cursor-pointer w-[105px]" style="background-color: var(--button-login-bg); border-color: var(--text-color); color: var(--button-login-text);">Potwierdź</button>
       </div>
     </div>
   </div>
