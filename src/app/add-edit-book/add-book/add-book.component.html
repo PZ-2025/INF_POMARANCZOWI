@@ -8,6 +8,7 @@
         <!-- Okładka - ZAKOMENTOWANE -->
 
         <div class="flex flex-col space-y-2">
+          <label for="file" class="ml-2 mb-1.5 text-3xl font-semibold">Okładka</label>
           <input
             type="file"
             (change)="onFileSelected($event)"
@@ -37,6 +38,7 @@
 
         <!-- Tytuł -->
         <div class="flex flex-col space-y-2">
+          <label for="title" class="ml-2 mb-1.5 text-3xl font-semibold">Tytuł</label>
           <input
             formControlName="title"
             type="text"
@@ -53,6 +55,7 @@
 
         <!-- Autor - Imię -->
         <div class="flex flex-col space-y-2">
+          <label for="authorFirstName" class="ml-2 mb-1.5 text-3xl font-semibold">Imię autora</label>
           <input
             formControlName="authorFirstName"
             type="text"
@@ -69,6 +72,7 @@
 
         <!-- Autor - Nazwisko -->
         <div class="flex flex-col space-y-2">
+          <label for="authorLastName" class="ml-2 mb-1.5 text-3xl font-semibold">Nazwisko autora</label>
           <input
             formControlName="authorLastName"
             type="text"
@@ -85,6 +89,7 @@
 
         <!-- Wydawca -->
         <div class="flex flex-col space-y-2">
+          <label for="publisherName" class="ml-2 mb-1.5 text-3xl font-semibold">Nazwa wydawcy</label>
           <input
             formControlName="publisherName"
             type="text"
@@ -101,6 +106,7 @@
 
         <!-- Gatunek -->
         <div class="flex flex-col space-y-2">
+          <label for="genre" class="ml-2 mb-1.5 text-3xl font-semibold">Gatunek</label>
           <input
             formControlName="genre"
             type="text"
@@ -117,6 +123,7 @@
 
         <!-- Opis -->
         <div class="flex flex-col space-y-2">
+          <label for="description" class="ml-2 mb-1.5 text-3xl font-semibold">Opis</label>
           <textarea
             formControlName="description"
             placeholder="Opis"
@@ -132,18 +139,20 @@
         </div>
 
         <!-- Przycisk submit -->
-        <button
-          type="submit"
-          [disabled]="isSubmitting || form.invalid"
-          [class.opacity-50]="isSubmitting || form.invalid"
-          [class.cursor-not-allowed]="isSubmitting || form.invalid"
-          style="background-color: var(--button-login-bg); color: var(--button-login-text)"
-          class="py-3 pb-1 px-4 rounded-lg transition-all text-3xl mt-4 cursor-pointer w-full text-center overflow-hidden hover:opacity-90"
-        >
-          <span class="inline-block w-full text-center overflow-hidden whitespace-nowrap">
+        <div class="flex flex-row justify-end gap-4 w-full mt-4">
+          <button
+            type="submit"
+            [disabled]="isSubmitting || form.invalid"
+            [class.opacity-50]="isSubmitting || form.invalid"
+            [class.cursor-not-allowed]="isSubmitting || form.invalid"
+            [class.cursor-pointer]="!isSubmitting && form.valid"
+            [class.hover\:opacity-90]="!isSubmitting && form.valid"
+            class="px-4 py-2 rounded border transition-all"
+            style="background-color: var(--button-login-bg); border-color: var(--text-color); color: var(--button-login-text);"
+          >
             {{ isSubmitting ? 'Dodawanie...' : 'Dodaj' }}
-          </span>
-        </button>
+          </button>
+        </div>
       </form>
     </div>
   </div>

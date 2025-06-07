@@ -11,12 +11,12 @@
     <!-- Main content -->
     <div *ngIf="!isLoading">
       <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Edycja książki</h1>
-
       <div class="w-full p-8 rounded-3xl shadow-lg border border-black-400 box-border mt-8" style="background-color: var(--box-color);">
         <form class="flex flex-col space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
 
           <!-- Okładka -->
           <div class="flex flex-col space-y-2">
+            <label for="file" class="ml-2 mb-1.5 text-3xl font-semibold">Okładka</label>
             <input
               type="file"
               (change)="onFileSelected($event)"
@@ -42,6 +42,7 @@
 
           <!-- Tytuł -->
           <div class="flex flex-col space-y-2">
+            <label for="title" class="ml-2 mb-1.5 text-3xl font-semibold">Tytuł</label>
             <input
               formControlName="title"
               type="text"
@@ -58,6 +59,7 @@
 
           <!-- Autor - Imię -->
           <div class="flex flex-col space-y-2">
+            <label for="authorFirstName" class="ml-2 mb-1.5 text-3xl font-semibold">Imię autora</label>
             <input
               formControlName="authorFirstName"
               type="text"
@@ -74,6 +76,7 @@
 
           <!-- Autor - Nazwisko -->
           <div class="flex flex-col space-y-2">
+            <label for="authorLastName" class="ml-2 mb-1.5 text-3xl font-semibold">Nazwisko autora</label>
             <input
               formControlName="authorLastName"
               type="text"
@@ -90,6 +93,7 @@
 
           <!-- Wydawca -->
           <div class="flex flex-col space-y-2">
+            <label for="publisherName" class="ml-2 mb-1.5 text-3xl font-semibold">Nazwa wydawcy</label>
             <input
               formControlName="publisherName"
               type="text"
@@ -106,6 +110,7 @@
 
           <!-- Gatunek -->
           <div class="flex flex-col space-y-2">
+            <label for="genre" class="ml-2 mb-1.5 text-3xl font-semibold">Gatunek</label>
             <input
               formControlName="genre"
               type="text"
@@ -122,6 +127,7 @@
 
           <!-- Opis -->
           <div class="flex flex-col space-y-2">
+            <label for="opis" class="ml-2 mb-1.5 text-3xl font-semibold">Opis</label>
             <textarea
               formControlName="description"
               placeholder="Opis"
@@ -137,26 +143,28 @@
           </div>
 
           <!-- Guziki -->
-          <div class="flex flex-col min-[900px]:flex-row gap-4 w-full mt-4">
+          <div class="flex flex-row justify-end gap-4 w-full mt-4">
+            <button
+              type="button"
+              (click)="cancelEdit()"
+              [disabled]="isSubmitting"
+              class="px-4 py-2 rounded border cursor-pointer transition-all"
+              style="background-color: var(--button-cancel-bg); border-color: var(--text-color); color: var(--button-login-text);"
+            >
+              Anuluj
+            </button>
+
             <button
               type="submit"
               [disabled]="isSubmitting || form.invalid"
               [class.opacity-50]="isSubmitting || form.invalid"
               [class.cursor-not-allowed]="isSubmitting || form.invalid"
-              class="px-4 py-2 min-[900px]:w-auto w-full rounded border cursor-pointer transition-all hover:opacity-90"
-              style="background-color: var(--button-login-bg); color: var(--button-login-text);"
+              [class.cursor-pointer]="!isSubmitting && form.valid"
+              [class.hover\:opacity-90]="!isSubmitting && form.valid"
+              class="px-4 py-2 rounded border transition-all"
+              style="background-color: var(--button-login-bg); border-color: var(--text-color); color: var(--button-login-text);"
             >
               {{ isSubmitting ? 'Zapisywanie...' : 'Zapisz zmiany' }}
-            </button>
-
-            <button
-              type="button"
-              (click)="cancelEdit()"
-              [disabled]="isSubmitting"
-              class="px-4 py-2 min-[900px]:w-auto w-full rounded border cursor-pointer transition-all hover:opacity-90"
-              style="background-color: var(--profile-button-user); color: var(--text-color);"
-            >
-              Anuluj
             </button>
           </div>
         </form>

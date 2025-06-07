@@ -4,6 +4,7 @@
     <h1 class="text-4xl font-extrabold text-center mt-4 mb-16 transition-colors duration-300" style="color: var(--text-color);">Rejestracja</h1>
     <div class="w-full p-8 rounded-3xl shadow-lg border border-black-400 box-border mt-8" style="background-color: var(--box-color);">
       <form class="flex flex-col space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <label for="firstName" class="ml-2 mb-1.5 text-3xl font-semibold">Imię</label>
         <input
           formControlName="firstName"
           type="text"
@@ -12,6 +13,7 @@
           style="background-color: var(--input-bg);"
           required
         />
+        <label for="lastName" class="ml-2 mb-1.5 text-3xl font-semibold">Nazwisko</label>
         <input
           formControlName="lastName"
           type="text"
@@ -20,6 +22,7 @@
           style="background-color: var(--input-bg);"
           required
         />
+        <label for="email" class="ml-2 mb-1.5 text-3xl font-semibold">Email</label>
         <input
           formControlName="email"
           type="email"
@@ -28,6 +31,7 @@
           style="background-color: var(--input-bg);"
           required
         />
+        <label for="password" class="ml-2 mb-1.5 text-3xl font-semibold">Hasło</label>
         <input
           formControlName="password"
           type="password"
@@ -36,6 +40,7 @@
           style="background-color: var(--input-bg);"
           required
         />
+        <label for="repeat_password" class="ml-2 mb-1.5 text-3xl font-semibold">Powtórz hasło</label>
         <input
           formControlName="repeat_password"
           type="password"

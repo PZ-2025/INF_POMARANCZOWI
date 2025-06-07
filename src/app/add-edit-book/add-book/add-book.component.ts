@@ -6,8 +6,7 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-add-book',
   templateUrl: './add-book.component.html',
-  standalone: false,
-  styleUrls: ['./add-book.component.css']
+  standalone: false
 })
 export class AddBookComponent implements OnInit {
   form: FormGroup;
